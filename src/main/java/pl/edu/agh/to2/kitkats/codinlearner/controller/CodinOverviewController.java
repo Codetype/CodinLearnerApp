@@ -2,8 +2,6 @@ package pl.edu.agh.to2.kitkats.codinlearner.controller;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,12 +15,21 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
+import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
+import pl.edu.agh.to2.kitkats.codinlearner.parser.CommandParser;
+import java.util.List;
+import java.util.HashMap;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class CodinOverviewController {
+
+    private LevelManager levelManager;
+    private CommandParser commandParser;
+
     public Arena arena;
 
     private CodinAppController appController;
@@ -57,7 +64,18 @@ public class CodinOverviewController {
     private Button moveForwardButton;
 
     @FXML
+    private Button checkButton;
+
+    @FXML
     private void initialize() {
+        levelManager = new LevelManager(0);
+        //TODO commands map parsed from JSON or level - for every level some available commands
+        HashMap<String, Command> movesMap = new HashMap<>();
+        movesMap.put("go", Command.FORWARD);
+        movesMap.put("left", Command.LEFT);
+        movesMap.put("right", Command.RIGHT);
+        commandParser = new CommandParser(movesMap);
+
         prevCommands.setMinHeight(170);
         turtleGc = turtleCanvas.getGraphicsContext2D();
         prevCommands.heightProperty().addListener(observer -> scrollPane.setVvalue(1.0));
@@ -73,46 +91,56 @@ public class CodinOverviewController {
 
                     prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
                     prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
+                    List<Command> commands = commandParser.parseCommand(commandLine.getText());
+                    levelManager.addCommands(commands);
+                    move(commands);
                     commandLine.clear();
                 }
             }
         });
     }
 
+//    @FXML
+//    private void handleLeftAction(ActionEvent event) {
+//        this.arena.getTurtle().turnLeft();
+//        clearArena();
+//        turtleGc.fillPolygon(
+//                this.arena.getTurtle().getShapePointsX(), this.arena.getTurtle().getShapePointsY(),3);
+//
+//    }
+//
+//
+//    @FXML
+//    private void handleRightAction(ActionEvent event) {
+//        this.arena.getTurtle().turnRight();
+//        clearArena();
+//        turtleGc.fillPolygon(
+//                this.arena.getTurtle().getShapePointsX(), this.arena.getTurtle().getShapePointsY(),3);
+//    }
+//
+//    @FXML
+//    private void handleAddAction(ActionEvent event) {
+//        move();
+//    }
+
     @FXML
-    private void handleLeftAction(ActionEvent event) {
-        this.arena.getTurtle().turnLeft();
-        clearArena();
-        turtleGc.fillPolygon(
-                this.arena.getTurtle().getShapePointsX(), this.arena.getTurtle().getShapePointsY(),3);
+    private void handleCheckAction(ActionEvent event) {
+        boolean passed = levelManager.checkCurrentLevel(this.prevCommands.toString());
+
 
     }
 
-    @FXML
-    private void handleRightAction(ActionEvent event) {
-        this.arena.getTurtle().turnRight();
-        clearArena();
-        turtleGc.fillPolygon(
-                this.arena.getTurtle().getShapePointsX(), this.arena.getTurtle().getShapePointsY(),3);
-    }
 
-    @FXML
-    private void handleAddAction(ActionEvent event) {
-        move();
-    }
-
-
-    private void move(){
+    private void move(List<Command> commands){
 
         clearArena();
-        System.out.println(scrollPane.getVvalue());
         DoubleProperty x  = new SimpleDoubleProperty();
         DoubleProperty y  = new SimpleDoubleProperty();
 
         float startX = arena.getTurtle().getX();
         float startY = arena.getTurtle().getY();
 
-        this.arena.getTurtle().move();
+        this.arena.getTurtle().move(commands);
 
         float endX = arena.getTurtle().getX();
         float endY = arena.getTurtle().getY();

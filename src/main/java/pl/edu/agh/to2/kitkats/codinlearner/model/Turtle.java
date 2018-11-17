@@ -88,6 +88,17 @@ public class Turtle {
 
     }
 
+    public void move(List<Command> commands){
+        for(Command command : commands){
+            switch (command){
+                case LEFT: turnLeft(); break;
+                case RIGHT: turnRight(); break;
+                case FORWARD: move(); break;
+                default: break;
+            }
+        }
+    }
+
     public void move(){
         float moveStep = 50;
         float xMove = 0;
