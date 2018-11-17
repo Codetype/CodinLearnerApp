@@ -29,7 +29,7 @@ public class CodinAppController{
             // set initial data into controller
             CodinOverviewController controller = loader.getController();
             controller.setAppController(this);
-            controller.setData(new Arena(400.0f, 400.0f));
+            controller.setData(new Arena(600.0f, 400.0f));
             // add layout to a scene and show them all
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
@@ -41,4 +41,5 @@ public class CodinAppController{
         }
 
     }
+    
 }

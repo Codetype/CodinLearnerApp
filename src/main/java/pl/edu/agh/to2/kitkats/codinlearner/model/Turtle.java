@@ -14,12 +14,13 @@ public class Turtle {
 
     private float x;
     private float y;
+    private Arena arena;
 
     private List<Double> shapePointsX;
     private List<Double> shapePointsY;
     private Direction currentDirection = Direction.EAST;
 
-    public Turtle(float x, float y) {
+    public Turtle(float x, float y, Arena arena) {
         //start coordinates, the middle point of the arena
         this.x = x/2;
         this.y = y/2;
@@ -27,6 +28,8 @@ public class Turtle {
         shapePointsX = new ArrayList<>();
         shapePointsY = new ArrayList<>();
         setShapePoints();
+
+        this.arena = arena;
     }
 
     public void turnLeft(){
@@ -108,7 +111,8 @@ public class Turtle {
                 break;
 
         }
-        if((this.x + xMove < 21.0f || this.x + xMove >379.0f) || (this.y + yMove < 21.0f || this.y + yMove >379.0f)) return;
+        if((this.x + xMove < 21.0f || this.x + xMove > this.arena.getWidth() - 21.0f) ||
+                (this.y + yMove < 21.0f || this.y + yMove >this.arena.getHeight() - 21.0f)) return;
         this.x = this.x + xMove;
         this.y = this.y + yMove;
         setShapePoints();
