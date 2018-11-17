@@ -137,13 +137,13 @@ public class CodinOverviewController {
         DoubleProperty x  = new SimpleDoubleProperty();
         DoubleProperty y  = new SimpleDoubleProperty();
 
-        float startX = arena.getTurtle().getX();
-        float startY = arena.getTurtle().getY();
+        double startX = arena.getTurtle().getX();
+        double startY = arena.getTurtle().getY();
 
         this.arena.getTurtle().move(commands);
 
-        float endX = arena.getTurtle().getX();
-        float endY = arena.getTurtle().getY();
+        double endX = arena.getTurtle().getX();
+        double endY = arena.getTurtle().getY();
 
         lineGc.strokeLine( startX,  startY, endX, endY);
 

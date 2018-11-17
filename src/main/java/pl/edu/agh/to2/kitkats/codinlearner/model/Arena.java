@@ -9,7 +9,7 @@ public class Arena {
     private FloatProperty height;
 
     public Arena(float width, float height) {
-        this.turtle = new SimpleObjectProperty<Turtle>(new Turtle(width, height, this));
+        this.turtle = new SimpleObjectProperty<Turtle>(new Turtle(width, height, this, 50.0f));
         this.width = new SimpleFloatProperty(width);
         this.height = new SimpleFloatProperty(height);
     }
