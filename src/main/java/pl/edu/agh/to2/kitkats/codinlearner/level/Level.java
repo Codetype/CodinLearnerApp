@@ -18,7 +18,8 @@ public class Level {
         return bestSollution;
     }
 
-    public void setBestSollution(int bestSollution) {
-        this.bestSollution = bestSollution;
+    public void addSollution(int newSollution) {
+        if(newSollution < this.bestSollution)
+            this.bestSollution = bestSollution;
     }
 }
