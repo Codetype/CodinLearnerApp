@@ -132,6 +132,7 @@ public class CodinOverviewController {
     public void resetDrawing() {
         clearTurtle();
         clearLine();
+        this.prevCommands.setText("");
         arena.getTurtle().reset();
         drawTurtle();
     }

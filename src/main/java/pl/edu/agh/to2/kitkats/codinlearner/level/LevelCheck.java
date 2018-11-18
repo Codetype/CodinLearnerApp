@@ -9,7 +9,13 @@ public class LevelCheck {
         //TODO commands validation for level
 
         //simple check for now
-        return level.task.equals(commands);
+        int index = 0;
+        for(Command command : commands){
+            if(level.task.get(index).equals(command)) index++;
+            else index = 0;
+            if(index == level.task.size()) return true;
+        }
+        return false;
 //        return true;
     }
 }

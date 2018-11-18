@@ -105,6 +105,10 @@ public class Turtle {
     public void reset() {
         x = arena.getWidth() / 2;
         y = arena.getHeight() / 2;
+        alongVector = new Vector2D(21,0);
+        acrossVector = new Vector2D(0, 8);
+        moveVector = new Vector2D(moveStep, 0);
+
         setShapePoints();
     }
 
