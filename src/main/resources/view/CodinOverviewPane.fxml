@@ -7,6 +7,7 @@
 
 
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 <BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="pl.edu.agh.to2.kitkats.codinlearner.controller.CodinOverviewController">
@@ -41,6 +42,7 @@
                         <!--<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />-->
                     <!--</VBox.margin>-->
                 <!--</Button>-->
+                <TextArea fx:id="levelInfo" editable="false" wrapText="true"></TextArea>
                 <Button fx:id="checkButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
                 mnemonicParsing="false" onAction="#handleCheckAction" text="Check">
                     <VBox.margin>

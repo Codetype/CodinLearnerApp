@@ -102,6 +102,12 @@ public class Turtle {
         setShapePoints();
     }
 
+    public void reset() {
+        x = arena.getWidth() / 2;
+        y = arena.getHeight() / 2;
+        setShapePoints();
+    }
+
     public double[] getShapePointsX() {
         return shapePointsX.stream().mapToDouble(Double::doubleValue).toArray();
     }

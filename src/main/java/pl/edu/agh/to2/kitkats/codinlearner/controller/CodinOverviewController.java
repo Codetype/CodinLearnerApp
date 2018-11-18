@@ -1,5 +1,6 @@
 package pl.edu.agh.to2.kitkats.codinlearner.controller;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
@@ -7,10 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
@@ -21,7 +19,6 @@ import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
 import pl.edu.agh.to2.kitkats.codinlearner.parser.CommandParser;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.HashMap;
@@ -71,6 +68,9 @@ public class CodinOverviewController {
     private Button checkButton;
 
     @FXML
+    private TextArea levelInfo;
+
+    @FXML
     private void initialize() {
         levelManager = new LevelManager(0);
         //TODO commands map parsed from JSON or level - for every level some available commands
@@ -111,6 +111,29 @@ public class CodinOverviewController {
         List<Command> task = Collections.nCopies(commandNumber, Command.FORWARD);
         Level l1 = new Level(task, "Draw a line (length: " + lineLength + ")");
         levelManager.addLevel(l1);
+
+        // TODO: check if levels exist
+//        checkButton.disableProperty().bind(Bindings.createBooleanBinding(() -> levelManager.currentLevelExists()));
+    }
+
+    public void initializeDrawing() {
+        drawTurtle();
+    }
+
+    public void showLevelInfo() {
+        Level currentLevel = levelManager.getCurrentLevel();
+        if (currentLevel != null) {
+            levelInfo.setText(currentLevel.taskDescription);
+        } else {
+            levelInfo.setText("All levels completed. Congratulations!");
+        }
+    }
+
+    public void resetDrawing() {
+        clearTurtle();
+        clearLine();
+        arena.getTurtle().reset();
+        drawTurtle();
     }
 
 //    @FXML
@@ -139,20 +162,32 @@ public class CodinOverviewController {
     @FXML
     private void handleCheckAction(ActionEvent event) {
         boolean passed = levelManager.checkCurrentLevel(this.prevCommands.toString());
-        // Temporarily print result to stdout
-//        System.out.println(levelManage);
+        Alert alert;
+
         if (passed) {
-            System.out.print("Level passed!");
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("Level passed!");
+
+            levelManager.nextLevel();
         } else {
-            System.out.println("There are some errors in your solution...");
+            alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("There were some errors in your solution. Try again...");
+
+            levelManager.resetLevel();
         }
 
+        alert.setTitle(null);
+        alert.setHeaderText(null);
+        alert.showAndWait();
+
+        resetDrawing();
+        showLevelInfo();
     }
 
 
     private void move(List<Command> commands){
 
-        clearArena();
+        clearTurtle();
         DoubleProperty x  = new SimpleDoubleProperty();
         DoubleProperty y  = new SimpleDoubleProperty();
 
@@ -166,25 +201,32 @@ public class CodinOverviewController {
 
         lineGc.strokeLine( startX,  startY, endX, endY);
 
-        turtleGc.fillPolygon(
-                arena.getTurtle().getShapePointsX(), arena.getTurtle().getShapePointsY(),3);
-
+        drawTurtle();
     }
 
 
-    public void setData(Arena arena) {
+    public void setArena(Arena arena) {
         this.arena = arena;
-        turtleGc.fillPolygon(
-                this.arena.getTurtle().getShapePointsX(), this.arena.getTurtle().getShapePointsY(),3);
-
     }
 
     public void setAppController(CodinAppController appController) {
         this.appController = appController;
     }
 
-    private void clearArena(){
+    private void clearLine() {
+        lineGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
+    }
+
+    private void drawLine() {
+
+    }
+
+    private void clearTurtle(){
         turtleGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
+    }
+
+    private void drawTurtle() {
+        turtleGc.fillPolygon(arena.getTurtle().getShapePointsX(), arena.getTurtle().getShapePointsY(), 3);
     }
 }
 
