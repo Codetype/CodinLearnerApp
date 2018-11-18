@@ -109,11 +109,14 @@ public class CodinOverviewController {
         int commandNumber = 2;
         float lineLength = commandNumber * arena.getTurtle().getMoveStep();
         List<Command> task = Collections.nCopies(commandNumber, Command.FORWARD);
-        Level l1 = new Level(task, "Draw a line (length: " + lineLength + ")");
+        Level l1 = new Level(task, "Draw a line (length: " + commandNumber + ")");
         levelManager.addLevel(l1);
+    }
 
-        // TODO: check if levels exist
-//        checkButton.disableProperty().bind(Bindings.createBooleanBinding(() -> levelManager.currentLevelExists()));
+    public void initializeProperties() {
+        checkButton.disableProperty().bind(Bindings.createBooleanBinding(
+                () -> !levelManager.currentLevelExists(), levelManager.currentLevelNumberProperty())
+        );
     }
 
     public void initializeDrawing() {

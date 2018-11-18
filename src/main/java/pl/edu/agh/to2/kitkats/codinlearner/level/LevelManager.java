@@ -1,45 +1,46 @@
 package pl.edu.agh.to2.kitkats.codinlearner.level;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
 
 import java.util.ArrayList;
 import java.util.List;
 public class LevelManager {
 
+    // TODO: Maybe replace IntegerProperty with ObjectProperty<Level>
+    private IntegerProperty currentLevelNumber;
     private List<Level> levels;
-    private int currentLevelNumber;
     private List<Command> currentLevelCommands;
     private int currentLevelCommandNumber;
-//    private ObjectProperty<Level> currentLevel;
 
-
-    public LevelManager( int currentLevelNumber) {
+    public LevelManager (int currentLevelNumber) {
         this.levels = new ArrayList<>();
-        this.currentLevelNumber = currentLevelNumber;
+        this.currentLevelNumber = new SimpleIntegerProperty(currentLevelNumber);
         this.currentLevelCommands = new ArrayList<>();
         this.currentLevelCommandNumber = 0;
 
     }
 
     public boolean checkCurrentLevel(String stringCommands){
-        boolean passed = LevelCheck.check(levels.get(currentLevelNumber), this.currentLevelCommands);
+        boolean passed = LevelCheck.check(levels.get(getCurrentLevelNumber()), this.currentLevelCommands);
         if(passed) {
-            levels.get(this.currentLevelNumber).addSollution(this.currentLevelCommandNumber);
+            levels.get(this.getCurrentLevelNumber()).addSollution(this.currentLevelCommandNumber);
             return true;
         }
         else return false;
     }
 
     public boolean currentLevelExists() {
-        return (currentLevelNumber < levels.size());
+        return (getCurrentLevelNumber() < levels.size());
     }
 
     public void nextLevel() {
         if (currentLevelExists()) {
             this.currentLevelCommands.clear();
             this.currentLevelCommandNumber = 0;
-            this.currentLevelNumber += 1;
+            this.currentLevelNumber.set(this.getCurrentLevelNumber() + 1);
         }
     }
 
@@ -59,9 +60,17 @@ public class LevelManager {
 
     public Level getCurrentLevel() {
         if (currentLevelExists()) {
-            return levels.get(currentLevelNumber);
+            return levels.get(getCurrentLevelNumber());
         } else {
             return null;
         }
+    }
+
+    public int getCurrentLevelNumber() {
+        return currentLevelNumber.get();
+    }
+
+    public IntegerProperty currentLevelNumberProperty() {
+        return currentLevelNumber;
     }
 }
