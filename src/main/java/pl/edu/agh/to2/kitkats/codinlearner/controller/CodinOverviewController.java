@@ -15,10 +15,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
 import pl.edu.agh.to2.kitkats.codinlearner.parser.CommandParser;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.HashMap;
 
@@ -100,6 +104,15 @@ public class CodinOverviewController {
         });
     }
 
+    public void initializeLevels() {
+        // level 1
+        int commandNumber = 2;
+        float lineLength = commandNumber * arena.getTurtle().getMoveStep();
+        List<Command> task = Collections.nCopies(commandNumber, Command.FORWARD);
+        Level l1 = new Level(task, "Draw a line (length: " + lineLength + ")");
+        levelManager.addLevel(l1);
+    }
+
 //    @FXML
 //    private void handleLeftAction(ActionEvent event) {
 //        this.arena.getTurtle().turnLeft();
@@ -126,7 +139,13 @@ public class CodinOverviewController {
     @FXML
     private void handleCheckAction(ActionEvent event) {
         boolean passed = levelManager.checkCurrentLevel(this.prevCommands.toString());
-
+        // Temporarily print result to stdout
+//        System.out.println(levelManage);
+        if (passed) {
+            System.out.print("Level passed!");
+        } else {
+            System.out.println("There are some errors in your solution...");
+        }
 
     }
 

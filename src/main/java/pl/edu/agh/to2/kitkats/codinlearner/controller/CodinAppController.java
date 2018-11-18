@@ -30,6 +30,7 @@ public class CodinAppController{
             CodinOverviewController controller = loader.getController();
             controller.setAppController(this);
             controller.setData(new Arena(600.0f, 400.0f));
+            controller.initializeLevels();
             // add layout to a scene and show them all
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);

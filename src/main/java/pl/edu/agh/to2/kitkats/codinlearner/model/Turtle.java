@@ -21,6 +21,12 @@ public class Turtle {
     private Vector2D acrossVector;
     private Vector2D moveVector;
 
+    public float getMoveStep() {
+        return moveStep;
+    }
+
+    private float moveStep;
+
     private List<Double> shapePointsX;
     private List<Double> shapePointsY;
 
@@ -37,6 +43,7 @@ public class Turtle {
         shapePointsY = new ArrayList<>();
         setShapePoints();
 
+        this.moveStep = moveStep;
         this.arena = arena;
     }
 

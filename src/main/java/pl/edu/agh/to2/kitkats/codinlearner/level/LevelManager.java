@@ -41,4 +41,8 @@ public class LevelManager {
         this.currentLevelCommandNumber++;
     }
 
+    public void addLevel(Level level) {
+        this.levels.add(level);
+    }
+
 }

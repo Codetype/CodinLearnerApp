@@ -8,8 +8,8 @@ public class LevelCheck {
     public static boolean check(Level level, List<Command> commands){
         //TODO commands validation for level
 
-
-
-        return true;
+        //simple check for now
+        return level.task.equals(commands);
+//        return true;
     }
 }
