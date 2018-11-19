@@ -139,7 +139,7 @@ public class CodinOverviewController {
 
     @FXML
     private void handleCheckAction(ActionEvent event) {
-        boolean passed = levelManager.checkCurrentLevel(this.prevCommands.toString());
+        boolean passed = levelManager.checkCurrentLevel();
         Alert alert;
 
         if (passed) {
