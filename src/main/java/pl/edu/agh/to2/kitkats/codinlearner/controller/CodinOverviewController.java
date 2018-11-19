@@ -75,9 +75,10 @@ public class CodinOverviewController {
         levelManager = new LevelManager(0);
         //TODO commands map parsed from JSON or level - for every level some available commands
         HashMap<String, Command> movesMap = new HashMap<>();
-        movesMap.put("go", Command.FORWARD);
-        movesMap.put("left", Command.LEFT);
-        movesMap.put("right", Command.RIGHT);
+        movesMap.put("go", Command.FORWARD);     // movesMap.put("GO", Command.FORWARD);
+        movesMap.put("left", Command.LEFT);      // movesMap.put("LEFT", Command.LEFT);
+        movesMap.put("right", Command.RIGHT);    // movesMap.put("RIGHT", Command.RIGHT);
+        movesMap.put("", Command.EMPTY);
         commandParser = new CommandParser(movesMap);
 
         prevCommands.setMinHeight(170);
@@ -93,9 +94,14 @@ public class CodinOverviewController {
             public void handle(KeyEvent ke){
                 if (ke.getCode().equals(KeyCode.ENTER)){
 
-                    prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
-                    prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
                     List<Command> commands = commandParser.parseCommand(commandLine.getText());
+
+                    prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
+                    if(handleOperation(commands)){
+                        prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
+                    } else {
+                        prevCommands.setText(prevCommands.getText() + "\n>>> '" + commandLine.getText() + "' is incorrect operation!");
+                    }
                     levelManager.addCommands(commands);
                     move(commands);
                     commandLine.clear();
@@ -188,6 +194,10 @@ public class CodinOverviewController {
         showLevelInfo();
     }
 
+    public boolean handleOperation(List<Command> Commands){
+        if(Commands.get(0).equals(Command.WRONG)) return false;
+        return true;
+    }
 
     private void move(List<Command> commands){
 
