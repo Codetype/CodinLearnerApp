@@ -1,11 +1,11 @@
 package pl.edu.agh.to2.kitkats.codinlearner.model;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 
 public class TurtleTest {
+
     @Test
     public void testInitTurtle() {
         Arena arena = new Arena(600.0f, 400.0f);
@@ -13,9 +13,10 @@ public class TurtleTest {
 
         double x1 = turtle.getX();
         double y1 = turtle.getY();
-        assertEquals(150, x1);
-        assertEquals(100, y1);
+        assertEquals(x1, 150, 0.0);
+        assertEquals(100, y1, 0.0);
     }
+
 
     @Test
     public void testResetTurtlePosition() {
@@ -32,8 +33,8 @@ public class TurtleTest {
 
         double x1 = turtle.getX();
         double y1 = turtle.getY();
-        assertEquals(300, x1);
-        assertEquals(200, y1);
+        assertEquals(300, x1, 0.0);
+        assertEquals(200, y1, 0.0);
     }
 
 
@@ -46,8 +47,8 @@ public class TurtleTest {
 
         double x1 = turtle.getX();
         double y1 = turtle.getY();
-        assertEquals(160, x1);
-        assertEquals(100, y1);
+        assertEquals(160, x1, 0.0);
+        assertEquals(100, y1, 0.0);
     }
 
     @Test
@@ -60,8 +61,8 @@ public class TurtleTest {
 
         double x1 = turtle.getX();
         double y1 = turtle.getY();
-        assertEquals(150, x1);
-        assertEquals(80, y1);
+        assertEquals(150, x1, 0.0);
+        assertEquals(80, y1, 0.0);
     }
 
     @Test
@@ -74,8 +75,8 @@ public class TurtleTest {
 
         double x1 = turtle.getX();
         double y1 = turtle.getY();
-        assertEquals(150, x1);
-        assertEquals(130, y1);
+        assertEquals(150, x1, 0.0);
+        assertEquals(130, y1, 0.0);
     }
 
     @Test
@@ -92,8 +93,7 @@ public class TurtleTest {
 
         double x1 = turtle.getX();
         double y1 = turtle.getY();
-        assertEquals(150, x1);
-        assertEquals(100, y1);
+        assertEquals(150, x1, 0.0);
+        assertEquals(100, y1, 0.0);
     }
-
 }

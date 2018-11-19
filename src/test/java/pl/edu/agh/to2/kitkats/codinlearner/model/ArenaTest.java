@@ -2,10 +2,9 @@ package pl.edu.agh.to2.kitkats.codinlearner.model;
 ;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import org.junit.Test;
 
 public class ArenaTest {
 
@@ -14,7 +13,7 @@ public class ArenaTest {
         Arena arena = new Arena(600.0f, 400.0f);
         float w = arena.getWidth();
 
-        assertEquals(w, 600);
+        assertEquals(w, 600,  0.0);
     }
 
     @Test
@@ -22,7 +21,7 @@ public class ArenaTest {
         Arena arena = new Arena(600.0f, 400.0f);
         float h = arena.getHeight();
 
-        assertEquals(h, 400);
+        assertEquals(h, 400, 0.0);
     }
 
     @Test
