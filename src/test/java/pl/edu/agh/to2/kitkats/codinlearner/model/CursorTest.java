@@ -1,4 +1,5 @@
 package pl.edu.agh.to2.kitkats.codinlearner.model;
+import static org.mockito.Mockito.*;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

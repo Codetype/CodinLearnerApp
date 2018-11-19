@@ -36,19 +36,19 @@ Program contains a simple Command Interpreter
 
 To go forward type:
 ```
->>> go <numbers of steps>
+go <numbers of steps>
 ```
 For example:
 ```
->>> go 10
+go 10
 ```
 
 To turn left type:
 ```
->>> left
+left
 ```
 
 To turn right type:
 ```
->>> right
+right
 ```

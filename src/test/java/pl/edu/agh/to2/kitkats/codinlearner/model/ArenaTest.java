@@ -1,4 +1,5 @@
 package pl.edu.agh.to2.kitkats.codinlearner.model;
+
 ;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -28,10 +29,10 @@ public class ArenaTest {
     public void testArenaTurtle() {
         Arena arena = new Arena(600.0f, 400.0f);
 
-        Cursor t1 = arena.getTurtle();
-        ObjectProperty<Cursor> turtle = new SimpleObjectProperty<Cursor>(new Cursor(600.0f, 400.0f, arena, 50.0f));
+        Cursor t1 = arena.getCursor();
+        ObjectProperty<Cursor> cursor = new SimpleObjectProperty<Cursor>(new Cursor(600.0f, 400.0f, arena, 50.0f));
 
-        assertNotEquals(turtle, t1);
+        assertNotEquals(cursor, t1);
     }
 
 }
