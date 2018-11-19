@@ -27,6 +27,8 @@ public class CommandParser {
                 commands.add(commandMap.getOrDefault(parts.get(0), Command.WRONG));
             }
         }
+        else
+            commands.add(commandMap.getOrDefault(commandAsString, Command.WRONG));
 
         return commands;
     }
