@@ -6,20 +6,33 @@ public class Level {
 
     public final List<Command> task;
     public final String taskDescription;
-    private int bestSollution;
+    private int bestSolution;
 
     public Level(List<Command> task, String taskDescription) {
         this.task = task;
         this.taskDescription = taskDescription;
-        this.bestSollution = 999;
+        this.bestSolution = 999;
     }
 
-    public int getBestSollution() {
-        return bestSollution;
+    public int getBestSolution() {
+        return bestSolution;
     }
 
-    public void addSollution(int newSollution) {
-        if(newSollution < this.bestSollution)
-            this.bestSollution = bestSollution;
+    public void addSolution(int newSolution) {
+        if(newSolution < this.bestSolution)
+            this.bestSolution = bestSolution;
+    }
+
+    public boolean check( List<Command> commands){
+        //TODO commands validation for level
+
+        //simple check for now
+        int index = 0;
+        for(Command command : commands){
+            if(this.task.get(index).equals(command)) index++;
+            else index = 0;
+            if(index == this.task.size()) return true;
+        }
+        return false;
     }
 }

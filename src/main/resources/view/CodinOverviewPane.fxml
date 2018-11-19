@@ -14,7 +14,7 @@
     <center>
         <Pane prefHeight="400.0" prefWidth="600.0"
               style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
-            <Canvas fx:id="turtleCanvas" height="400.0" width="600.0"/>
+            <Canvas fx:id="cursorCanvas" height="400.0" width="600.0"/>
             <Canvas fx:id="lineCanvas" height="400.0" width="600.0"  />
         </Pane>
     </center>

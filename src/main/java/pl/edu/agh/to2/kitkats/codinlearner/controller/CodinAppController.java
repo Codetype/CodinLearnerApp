@@ -29,7 +29,7 @@ public class CodinAppController{
             CodinOverviewController controller = loader.getController();
             controller.setAppController(this);
             controller.setArena(new Arena(600.0f, 400.0f));
-//            controller.initializeLevels();
+            controller.initializeLevels();
             controller.initializeProperties();
             controller.initializeDrawing();
             controller.showLevelInfo();

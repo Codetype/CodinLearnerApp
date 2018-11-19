@@ -1,7 +1,6 @@
 package pl.edu.agh.to2.kitkats.codinlearner.level;
 
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
 
@@ -23,10 +22,10 @@ public class LevelManager {
 
     }
 
-    public boolean checkCurrentLevel(String stringCommands){
-        boolean passed = LevelCheck.check(levels.get(getCurrentLevelNumber()), this.currentLevelCommands);
+    public boolean checkCurrentLevel(){
+        boolean passed = levels.get(getCurrentLevelNumber()).check(this.currentLevelCommands);
         if(passed) {
-            levels.get(this.getCurrentLevelNumber()).addSollution(this.currentLevelCommandNumber);
+            levels.get(this.getCurrentLevelNumber()).addSolution(this.currentLevelCommandNumber);
             return true;
         }
         else return false;

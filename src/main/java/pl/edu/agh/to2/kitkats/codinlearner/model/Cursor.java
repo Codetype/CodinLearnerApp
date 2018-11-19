@@ -12,7 +12,7 @@ import java.util.List;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-public class Turtle {
+public class Cursor {
 
     private double x;
     private double y;
@@ -30,7 +30,7 @@ public class Turtle {
     private List<Double> shapePointsX;
     private List<Double> shapePointsY;
 
-    public Turtle(float x, float y, Arena arena, float moveStep) {
+    public Cursor(float x, float y, Arena arena, float moveStep) {
         //start coordinates, the middle point of the arena
         this.x = x/2;
         this.y = y/2;

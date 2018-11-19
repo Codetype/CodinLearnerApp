@@ -45,24 +45,14 @@ public class CodinOverviewController {
     private TextField commandLine;
 
     @FXML
-    private Canvas turtleCanvas;
+    private Canvas cursorCanvas;
 
-    private GraphicsContext turtleGc;
+    private GraphicsContext cursorGc;
 
     @FXML
     private Canvas lineCanvas;
 
     private GraphicsContext lineGc;
-
-
-    @FXML
-    private Button leftButton;
-
-    @FXML
-    private Button rightButton;
-
-    @FXML
-    private Button moveForwardButton;
 
     @FXML
     private Button checkButton;
@@ -82,9 +72,9 @@ public class CodinOverviewController {
         commandParser = new CommandParser(movesMap);
 
         prevCommands.setMinHeight(170);
-        turtleGc = turtleCanvas.getGraphicsContext2D();
+        cursorGc = cursorCanvas.getGraphicsContext2D();
         prevCommands.heightProperty().addListener(observer -> scrollPane.setVvalue(1.0));
-        turtleGc.setFill(Color.BLACK);
+        cursorGc.setFill(Color.BLACK);
 
         lineGc = lineCanvas.getGraphicsContext2D();
         lineGc.setStroke(Color.RED);
@@ -113,7 +103,7 @@ public class CodinOverviewController {
     public void initializeLevels() {
         // level 1
         int commandNumber = 2;
-        float lineLength = commandNumber * arena.getTurtle().getMoveStep();
+        float lineLength = commandNumber * arena.getCursor().getMoveStep();
         List<Command> task = Collections.nCopies(commandNumber, Command.FORWARD);
         Level l1 = new Level(task, "Draw a line (length: " + commandNumber + ")");
         levelManager.addLevel(l1);
@@ -126,7 +116,7 @@ public class CodinOverviewController {
     }
 
     public void initializeDrawing() {
-        drawTurtle();
+        drawCursor();
     }
 
     public void showLevelInfo() {
@@ -139,35 +129,13 @@ public class CodinOverviewController {
     }
 
     public void resetDrawing() {
-        clearTurtle();
+        clearCursor();
         clearLine();
         this.prevCommands.setText("");
-        arena.getTurtle().reset();
-        drawTurtle();
+        arena.getCursor().reset();
+        drawCursor();
     }
 
-//    @FXML
-//    private void handleLeftAction(ActionEvent event) {
-//        this.arena.getTurtle().turnLeft();
-//        clearArena();
-//        turtleGc.fillPolygon(
-//                this.arena.getTurtle().getShapePointsX(), this.arena.getTurtle().getShapePointsY(),3);
-//
-//    }
-//
-//
-//    @FXML
-//    private void handleRightAction(ActionEvent event) {
-//        this.arena.getTurtle().turnRight();
-//        clearArena();
-//        turtleGc.fillPolygon(
-//                this.arena.getTurtle().getShapePointsX(), this.arena.getTurtle().getShapePointsY(),3);
-//    }
-//
-//    @FXML
-//    private void handleAddAction(ActionEvent event) {
-//        move();
-//    }
 
     @FXML
     private void handleCheckAction(ActionEvent event) {
@@ -201,21 +169,19 @@ public class CodinOverviewController {
 
     private void move(List<Command> commands){
 
-        clearTurtle();
-        DoubleProperty x  = new SimpleDoubleProperty();
-        DoubleProperty y  = new SimpleDoubleProperty();
+        clearCursor();
 
-        double startX = arena.getTurtle().getX();
-        double startY = arena.getTurtle().getY();
+        double startX = arena.getCursor().getX();
+        double startY = arena.getCursor().getY();
 
-        this.arena.getTurtle().move(commands);
+        this.arena.getCursor().move(commands);
 
-        double endX = arena.getTurtle().getX();
-        double endY = arena.getTurtle().getY();
+        double endX = arena.getCursor().getX();
+        double endY = arena.getCursor().getY();
 
         lineGc.strokeLine( startX,  startY, endX, endY);
 
-        drawTurtle();
+        drawCursor();
     }
 
 
@@ -231,16 +197,13 @@ public class CodinOverviewController {
         lineGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
     }
 
-    private void drawLine() {
 
+    private void clearCursor(){
+        cursorGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
     }
 
-    private void clearTurtle(){
-        turtleGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
-    }
-
-    private void drawTurtle() {
-        turtleGc.fillPolygon(arena.getTurtle().getShapePointsX(), arena.getTurtle().getShapePointsY(), 3);
+    private void drawCursor() {
+        cursorGc.fillPolygon(arena.getCursor().getShapePointsX(), arena.getCursor().getShapePointsY(), 3);
     }
 }
 

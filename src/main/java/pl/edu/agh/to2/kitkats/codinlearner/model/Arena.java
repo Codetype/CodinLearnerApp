@@ -4,26 +4,26 @@ import javafx.beans.property.*;
 
 public class Arena {
 
-    private ObjectProperty<Turtle> turtle;
+    private ObjectProperty<Cursor> cursor;
     private FloatProperty width;
     private FloatProperty height;
 
     public Arena(float width, float height) {
-        this.turtle = new SimpleObjectProperty<Turtle>(new Turtle(width, height, this, 50.0f));
+        this.cursor = new SimpleObjectProperty<Cursor>(new Cursor(width, height, this, 50.0f));
         this.width = new SimpleFloatProperty(width);
         this.height = new SimpleFloatProperty(height);
     }
 
-    public Turtle getTurtle() {
-        return turtle.get();
+    public Cursor getCursor() {
+        return cursor.get();
     }
 
-    public ObjectProperty<Turtle> turtleProperty() {
-        return turtle;
+    public ObjectProperty<Cursor> cursorProperty() {
+        return cursor;
     }
 
-    public void setTurtle(Turtle turtle) {
-        this.turtle.set(turtle);
+    public void setCursor(Cursor cursor) {
+        this.cursor.set(cursor);
     }
 
     public float getWidth() {

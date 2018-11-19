@@ -28,8 +28,8 @@ public class ArenaTest {
     public void testArenaTurtle() {
         Arena arena = new Arena(600.0f, 400.0f);
 
-        Turtle t1 = arena.getTurtle();
-        ObjectProperty<Turtle> turtle = new SimpleObjectProperty<Turtle>(new Turtle(600.0f, 400.0f, arena, 50.0f));
+        Cursor t1 = arena.getTurtle();
+        ObjectProperty<Cursor> turtle = new SimpleObjectProperty<Cursor>(new Cursor(600.0f, 400.0f, arena, 50.0f));
 
         assertNotEquals(turtle, t1);
     }
