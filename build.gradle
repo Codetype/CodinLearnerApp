@@ -19,12 +19,18 @@ version = '0.1'
 
 mainClassName = 'pl.edu.agh.to2.kitkats.codinlearner.Main'
 
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.+'
+    compile group: 'com.vividsolutions', name: 'jts', version: '1.13'
+    compile 'org.mockito:mockito-core:2.23.0'
+
 }
+
+
 
 

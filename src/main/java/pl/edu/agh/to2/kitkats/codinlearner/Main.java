@@ -1,14 +1,29 @@
 package pl.edu.agh.to2.kitkats.codinlearner;
 
-import java.util.logging.Logger;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import pl.edu.agh.to2.kitkats.codinlearner.controller.CodinAppController;
 
-public class Main {
+public class Main extends Application {
 
-	private static final Logger log = Logger.getLogger(Main.class.toString());
-	
-	public static void main(String[] args) {
-		log.info("Hello world");
+    private Stage primaryStage;
 
-	}
+    private CodinAppController appController;
+
+    @Override
+    public void start(Stage primaryStage) {
+
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("Codin Learner");
+
+        this.appController = new CodinAppController(primaryStage);
+        this.appController.initRootLayout();
+
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
 
 }

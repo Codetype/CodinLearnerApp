@@ -1,5 +1,10 @@
 .gradle/
 /build/
+/classes/
+/out/
 /bin/
 *.iml
 .idea/
+gradlew
+gradlew.bat
+gradle/wrapper
