@@ -13,9 +13,9 @@ public class CursorTest {
     @Before
     public void beforeEachTest(){
         arena = Mockito.mock(Arena.class);
-        arena = new Arena(600.0f, 400.0f);
+        arena = new Arena(600.0f, 400.0f,21.0f, 8.0f);
         cursor = Mockito.mock(Cursor.class);
-        cursor = new Cursor(300.0f, 200.0f, arena, 10.0f);
+        cursor = new Cursor(300.0f, 200.0f,21.0f, 8.0f , arena, 10.0f);
     }
 
     @Test

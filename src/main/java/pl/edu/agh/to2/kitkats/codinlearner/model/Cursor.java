@@ -20,6 +20,8 @@ public class Cursor {
     private Vector2D alongVector;
     private Vector2D acrossVector;
     private Vector2D moveVector;
+    public final float length;
+    public final float width;
 
     public float getMoveStep() {
         return moveStep;
@@ -30,19 +32,21 @@ public class Cursor {
     private List<Double> shapePointsX;
     private List<Double> shapePointsY;
 
-    public Cursor(float x, float y, Arena arena, float moveStep) {
+    public Cursor(float x, float y, float length, float width, Arena arena, float moveStep) {
         //start coordinates, the middle point of the arena
         this.x = x/2;
         this.y = y/2;
         //initialization of vectors
-        alongVector = new Vector2D(21,0);
-        acrossVector = new Vector2D(0, 8);
+        alongVector = new Vector2D(length,0);
+        acrossVector = new Vector2D(0, width);
         moveVector = new Vector2D(moveStep, 0);
        //three points of triangular shape
         shapePointsX = new ArrayList<>();
         shapePointsY = new ArrayList<>();
         setShapePoints();
 
+        this.length = length;
+        this.width = width;
         this.moveStep = moveStep;
         this.arena = arena;
     }
@@ -71,13 +75,13 @@ public class Cursor {
 
     private void setShapePoints(){
             shapePointsX.clear();
-            shapePointsX.add((double)this.x + acrossVector.getX());
-            shapePointsX.add((double)this.x - acrossVector.getX());
+            shapePointsX.add(this.x + acrossVector.getX());
+            shapePointsX.add(this.x - acrossVector.getX());
             shapePointsX.add(this.x + alongVector.getX());
             shapePointsY.clear();
             shapePointsY.add(this.y + acrossVector.getY());
             shapePointsY.add(this.y - acrossVector.getY());
-            shapePointsY.add((double)this.y + alongVector.getY());
+            shapePointsY.add(this.y + alongVector.getY());
     }
 
     public void move(List<Command> commands){
@@ -95,8 +99,7 @@ public class Cursor {
         double xMove = this.moveVector.getX();
         double yMove = this.moveVector.getY();
 
-        if((this.x + xMove < 21.0f || this.x + xMove > this.arena.getWidth() - 21.0f) ||
-                (this.y + yMove < 21.0f || this.y + yMove >this.arena.getHeight() - 21.0f)) return;
+        if(!this.arena.canMove(this.x + xMove, this.y + yMove)) return;
         this.x = this.x + xMove;
         this.y = this.y + yMove;
         setShapePoints();

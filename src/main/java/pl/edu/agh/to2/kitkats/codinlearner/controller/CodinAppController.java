@@ -28,7 +28,7 @@ public class CodinAppController{
             // set initial data into controller
             CodinOverviewController controller = loader.getController();
             controller.setAppController(this);
-            controller.setArena(new Arena(600.0f, 400.0f));
+            controller.setArena(new Arena(600.0f, 400.0f, 21f, 8f));
             controller.initializeLevels();
             controller.initializeProperties();
             controller.initializeDrawing();

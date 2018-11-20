@@ -14,7 +14,7 @@ public class ArenaTest {
     @Before
     public void beforeEachTest(){
         arena = Mockito.mock(Arena.class);
-        arena = new Arena(600.0f, 400.0f);
+        arena = new Arena(600.0f, 400.0f, 21.0f, 8.0f);
     }
 
     @Test
@@ -34,7 +34,8 @@ public class ArenaTest {
     @Test
     public void testArenaTurtle() {
         Cursor t1 = arena.getCursor();
-        ObjectProperty<Cursor> cursor = new SimpleObjectProperty<Cursor>(new Cursor(600.0f, 400.0f, arena, 50.0f));
+        ObjectProperty<Cursor> cursor = new SimpleObjectProperty<Cursor>(
+                new Cursor(600.0f, 400.0f,21.0f, 8.0f, arena, 50.0f));
 
         assertNotEquals(cursor, t1);
     }
