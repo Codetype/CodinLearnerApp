@@ -43,6 +43,14 @@ public class MoveGraph {
     }
 
 
+    public void removeVertex(double fromX, double fromY, double toX, double toY){
+        Vertex vertexToDelete = new Vertex(toX, toY);
+        this.vertexList.remove(vertexToDelete);
+        Vertex vertexInEdge = new Vertex(fromX, fromY);
+        Edge edge = new Edge(vertexInEdge, vertexToDelete);
+        this.edgeList.remove(edge);
+    }
+
 
 
     public DoublePoint getTheMostLeftBottomPoint(){

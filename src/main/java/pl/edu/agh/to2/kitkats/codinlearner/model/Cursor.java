@@ -51,6 +51,11 @@ public class Cursor {
         this.arena = arena;
     }
 
+    public void setArenaStartPoints(){
+        this.arena.setStartX(this.x);
+        this.arena.setStartY(this.y);
+    }
+
     public void turnLeft(){
         rotateLeft(90.0);
         setShapePoints();
@@ -84,7 +89,7 @@ public class Cursor {
             shapePointsY.add(this.y + alongVector.getY());
     }
 
-    public void move(List<Command> commands){
+    public void move(int mode, List<Command> commands){
 
         for(Command command : commands){
             double oldX = this.x;
@@ -92,25 +97,41 @@ public class Cursor {
             switch (command){
                 case LEFT: turnLeft(); break;
                 case RIGHT: turnRight(); break;
-                case FORWARD: move(); break;
+                case FORWARD: move(false); break;
+                case BACK: move(true); break;
                 default: break;
             }
             double newX = this.x;
             double newY = this.y;
-            this.arena.getMoveGraph().addVertex(oldX, oldY, newX, newY);
+            if(mode == 1)
+                this.arena.getMoveGraph().addVertex(oldX, oldY, newX, newY);
+            if(mode == -1)
+                this.arena.getMoveGraph().removeVertex(oldX, oldY, newX, newY);
+
         }
 
     }
 
-    public void move(){
+    public void moveBack(List<Command> commands){
+        move(-1, reverseCommands(commands));
+    }
+
+    private void move(boolean backward){
         double xMove = this.moveVector.getX();
         double yMove = this.moveVector.getY();
+
+        if(backward){
+            xMove = -xMove;
+            yMove = -yMove;
+        }
 
         if(!this.arena.canMove(this.x + xMove, this.y + yMove)) return;
         this.x = this.x + xMove;
         this.y = this.y + yMove;
         setShapePoints();
     }
+
+
 
     public void reset() {
         x = arena.getWidth() / 2;
@@ -120,6 +141,14 @@ public class Cursor {
         moveVector = new Vector2D(moveStep, 0);
 
         setShapePoints();
+    }
+
+    private List<Command> reverseCommands(List<Command> commands){
+        List<Command> commandList = new ArrayList<>();
+        for(int i = commands.size() -1; i >= 0; i--){
+            commandList.add(commands.get(i).oppositeCommand());
+        }
+        return commandList;
     }
 
     public double[] getShapePointsX() {

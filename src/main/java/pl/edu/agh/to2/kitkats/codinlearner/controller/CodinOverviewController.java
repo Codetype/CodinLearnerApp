@@ -13,6 +13,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import pl.edu.agh.to2.kitkats.codinlearner.command.CommandRegistry;
+import pl.edu.agh.to2.kitkats.codinlearner.command.MoveCommand;
 import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
@@ -29,6 +31,7 @@ import static java.lang.Math.min;
 
 public class CodinOverviewController {
 
+    private CommandRegistry commandRegistry;
     private LevelManager levelManager;
     private CommandParser commandParser;
 
@@ -62,6 +65,12 @@ public class CodinOverviewController {
     private TextArea levelInfo;
 
     @FXML
+    private Button undoButton;
+
+    @FXML
+    private Button redoButton;
+
+    @FXML
     private void initialize() {
         levelManager = new LevelManager(0);
         //TODO commands map parsed from JSON or level - for every level some available commands
@@ -71,6 +80,8 @@ public class CodinOverviewController {
         movesMap.put("right", Command.RIGHT);    // movesMap.put("RIGHT", Command.RIGHT);
         movesMap.put("", Command.EMPTY);
         commandParser = new CommandParser(movesMap);
+
+        commandRegistry = new CommandRegistry();
 
         prevCommands.setMinHeight(170);
         cursorGc = cursorCanvas.getGraphicsContext2D();
@@ -100,6 +111,8 @@ public class CodinOverviewController {
             }
         });
     }
+
+
 
     public void initializeLevels() {
         // level 1
@@ -146,6 +159,22 @@ public class CodinOverviewController {
         drawCursor();
     }
 
+    @FXML
+    private void handleUndoAction(ActionEvent event) {
+        clearCursor();
+        commandRegistry.undo();
+        this.arena.getCursor().reset();
+        commandRegistry.redraw();
+        drawCursor();
+    }
+
+    @FXML
+    private void handleRedoAction(ActionEvent event) {
+        clearCursor();
+        commandRegistry.redo();
+        drawCursor();
+    }
+
 
     @FXML
     private void handleCheckAction(ActionEvent event) {
@@ -181,15 +210,13 @@ public class CodinOverviewController {
 
         clearCursor();
 
-        double startX = arena.getCursor().getX();
-        double startY = arena.getCursor().getY();
-
-        this.arena.getCursor().move(commands);
-
-        double endX = arena.getCursor().getX();
-        double endY = arena.getCursor().getY();
-
-        lineGc.strokeLine( startX,  startY, endX, endY);
+        commandRegistry.executeCommand(
+                new MoveCommand(
+                        this.lineGc,
+                        commands,
+                        this.arena
+                )
+        );
 
         drawCursor();
     }
@@ -197,6 +224,7 @@ public class CodinOverviewController {
 
     public void setArena(Arena arena) {
         this.arena = arena;
+        this.arena.getCursor().setArenaStartPoints();
     }
 
     public void setAppController(CodinAppController appController) {

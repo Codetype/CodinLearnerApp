@@ -10,6 +10,8 @@ public class Arena {
     private FloatProperty width;
     private FloatProperty height;
     private MoveGraph moveGraph;
+    private double startX;
+    private double startY;
 
     public Arena(float width, float height, float cursorLength, float cursotWidth) {
         this.cursor = new SimpleObjectProperty<Cursor>(
@@ -68,5 +70,13 @@ public class Arena {
 
     public MoveGraph getMoveGraph() {
         return moveGraph;
+    }
+
+    public void setStartX(double startX) {
+        this.startX = startX;
+    }
+
+    public void setStartY(double startY) {
+        this.startY = startY;
     }
 }
