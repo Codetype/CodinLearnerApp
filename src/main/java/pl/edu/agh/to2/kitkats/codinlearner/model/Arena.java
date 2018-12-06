@@ -17,6 +17,7 @@ public class Arena {
         this.width = new SimpleFloatProperty(width);
         this.height = new SimpleFloatProperty(height);
         moveGraph = new MoveGraph();
+
     }
 
     public void clearMoveGraph(){

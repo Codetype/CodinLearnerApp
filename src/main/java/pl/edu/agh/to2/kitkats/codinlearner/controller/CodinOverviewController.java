@@ -106,7 +106,6 @@ public class CodinOverviewController {
         int commandNumber = 2;
         float lineLength = commandNumber * arena.getCursor().getMoveStep();
         MoveGraph task1 = new MoveGraph();
-        task1.addVertex(0.0, 0.0, 0.0, 0.0);
         task1.addVertex(0.0, 0.0, 50.0, 0.0);
         task1.addVertex(50.0, 0.0, 100.0, 0.0);
         task1.addVertex(100.0, 0.0, 100.0, 50.0);

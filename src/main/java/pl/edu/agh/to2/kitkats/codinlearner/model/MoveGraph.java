@@ -31,8 +31,13 @@ public class MoveGraph {
             this.vertexList.add(newVertex);
         }
 
+        if(!this.vertexList.contains(oldVertex)){
+            this.vertexList.add(oldVertex);
+        }
+
+        Vertex oldEdgeVertex = new Vertex(fromX, fromY);
         Vertex newEdgeVertex = new Vertex(toX, toY);
-        Edge newEdge = new Edge(oldVertex, newEdgeVertex);
+        Edge newEdge = new Edge(oldEdgeVertex, newEdgeVertex);
         if(!this.edgeList.contains(newEdge) && ( fromX != toX || fromY != toY))
             this.edgeList.add(newEdge);
     }
