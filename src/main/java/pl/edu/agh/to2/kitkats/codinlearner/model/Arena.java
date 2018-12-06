@@ -9,12 +9,18 @@ public class Arena {
     private ObjectProperty<Cursor> cursor;
     private FloatProperty width;
     private FloatProperty height;
+    private MoveGraph moveGraph;
 
     public Arena(float width, float height, float cursorLength, float cursotWidth) {
         this.cursor = new SimpleObjectProperty<Cursor>(
                 new Cursor(width, height, cursorLength, cursotWidth, this, 50.0f));
         this.width = new SimpleFloatProperty(width);
         this.height = new SimpleFloatProperty(height);
+        moveGraph = new MoveGraph();
+    }
+
+    public void clearMoveGraph(){
+        moveGraph = new MoveGraph();
     }
 
     public boolean canMove(double newX, double newY){
@@ -57,5 +63,9 @@ public class Arena {
 
     public void setHeight(float height) {
         this.height.set(height);
+    }
+
+    public MoveGraph getMoveGraph() {
+        return moveGraph;
     }
 }

@@ -3,6 +3,7 @@ package pl.edu.agh.to2.kitkats.codinlearner.level;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
+import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +23,8 @@ public class LevelManager {
 
     }
 
-    public boolean checkCurrentLevel(){
-        boolean passed = levels.get(getCurrentLevelNumber()).check(this.currentLevelCommands);
+    public boolean checkCurrentLevel(MoveGraph graph){
+        boolean passed = levels.get(getCurrentLevelNumber()).check(graph);
         if(passed) {
             levels.get(this.getCurrentLevelNumber()).addSolution(this.currentLevelCommandNumber);
             return true;

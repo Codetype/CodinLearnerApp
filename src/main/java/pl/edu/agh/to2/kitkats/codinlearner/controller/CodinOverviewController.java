@@ -17,6 +17,7 @@ import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
+import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
 import pl.edu.agh.to2.kitkats.codinlearner.parser.CommandParser;
 
 import java.util.Collections;
@@ -104,8 +105,17 @@ public class CodinOverviewController {
         // level 1
         int commandNumber = 2;
         float lineLength = commandNumber * arena.getCursor().getMoveStep();
-        List<Command> task = Collections.nCopies(commandNumber, Command.FORWARD);
-        Level l1 = new Level(task, "Draw a line (length: " + commandNumber + ")");
+        MoveGraph task1 = new MoveGraph();
+        task1.addVertex(0.0, 0.0, 0.0, 0.0);
+        task1.addVertex(0.0, 0.0, 50.0, 0.0);
+        task1.addVertex(50.0, 0.0, 100.0, 0.0);
+        task1.addVertex(100.0, 0.0, 100.0, 50.0);
+        task1.addVertex(100.0, 50.0, 100.0, 100.0);
+        task1.addVertex(100.0, 100.0, 50.0, 100.0);
+        task1.addVertex(50.0, 100.0, 0.0, 100.0);
+        task1.addVertex(0.0, 100.0, 0.0, 50.0);
+        task1.addVertex(0.0, 50.0, 0.0, 0.0);
+        Level l1 = new Level(task1, "Draw a line (length: " + commandNumber + ")");
         levelManager.addLevel(l1);
     }
 
@@ -133,13 +143,14 @@ public class CodinOverviewController {
         clearLine();
         this.prevCommands.setText("");
         arena.getCursor().reset();
+        arena.clearMoveGraph();
         drawCursor();
     }
 
 
     @FXML
     private void handleCheckAction(ActionEvent event) {
-        boolean passed = levelManager.checkCurrentLevel();
+        boolean passed = levelManager.checkCurrentLevel(this.arena.getMoveGraph());
         Alert alert;
 
         if (passed) {

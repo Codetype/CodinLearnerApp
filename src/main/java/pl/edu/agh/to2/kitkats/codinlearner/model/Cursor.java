@@ -85,14 +85,21 @@ public class Cursor {
     }
 
     public void move(List<Command> commands){
+
         for(Command command : commands){
+            double oldX = this.x;
+            double oldY = this.y;
             switch (command){
                 case LEFT: turnLeft(); break;
                 case RIGHT: turnRight(); break;
                 case FORWARD: move(); break;
                 default: break;
             }
+            double newX = this.x;
+            double newY = this.y;
+            this.arena.getMoveGraph().addVertex(oldX, oldY, newX, newY);
         }
+
     }
 
     public void move(){
