@@ -2,7 +2,6 @@ package pl.edu.agh.to2.kitkats.codinlearner.model;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -85,7 +84,7 @@ public class CursorTest {
     }
 
     @Test
-    public void testRotateCursor() {
+    public void testTrianglePath() {
         commands.add(new ParameterizedCommand(Command.LEFT, 60));
         commands.add(new ParameterizedCommand(Command.FORWARD, 1));
         commands.add(new ParameterizedCommand(Command.LEFT, 120));
