@@ -6,6 +6,7 @@ import com.vividsolutions.jts.math.Vector2D;
 import javafx.util.Pair;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
 import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
+import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedCommand;
 import pl.edu.agh.to2.kitkats.codinlearner.model.RepeatedCommands;
 
 import java.util.ArrayList;
@@ -23,14 +24,15 @@ public class LevelProvider {
         this.levels = new ArrayList<>();
     }
 
-    private void newLevel(List<Command> commands, String description) {
+    private void newLevel(List<ParameterizedCommand> commands, String description) {
         MoveGraph graph = new MoveGraph();
         Coordinate from = new Coordinate(0.0, 0.0);
         Coordinate to = new Coordinate(0.0, 0.0);
         Vector2D moveVector = new Vector2D(moveStep, 0);
 
-        for (Command command : commands) {
-            int value = command.getValue();
+        for (ParameterizedCommand parameterizedCommand : commands) {
+            Command command = parameterizedCommand.getCommand();
+            int value = parameterizedCommand.getParameter();
 
             if (command == Command.LEFT) {
                 moveVector = moveVector.rotate(Angle.toRadians(-value));

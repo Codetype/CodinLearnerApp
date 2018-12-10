@@ -7,16 +7,15 @@ import java.util.List;
 
 public class RepeatedCommands {
 
-    private List<Command> commands;
+    private List<ParameterizedCommand> commands;
     private final int repeat;
 
     public void add(Command command, int commandValue) {
-        command.setValue(commandValue);
-        commands.add(command);
+        commands.add(new ParameterizedCommand(command, commandValue));
     }
 
-    public List<Command> getAll() {
-        List<Command> result = new LinkedList<>();
+    public List<ParameterizedCommand> getAll() {
+        List<ParameterizedCommand> result = new LinkedList<>();
         for (int i = 0; i < repeat; i++) {
             result.addAll(commands);
         }
@@ -33,7 +32,7 @@ public class RepeatedCommands {
         this.repeat = repeat;
     }
 
-    public List<Command> getCommands() {
+    public List<ParameterizedCommand> getCommands() {
         return commands;
     }
 
