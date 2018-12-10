@@ -78,6 +78,7 @@ public class CodinOverviewController {
         movesMap.put("go", Command.FORWARD);     // movesMap.put("GO", Command.FORWARD);
         movesMap.put("left", Command.LEFT);      // movesMap.put("LEFT", Command.LEFT);
         movesMap.put("right", Command.RIGHT);    // movesMap.put("RIGHT", Command.RIGHT);
+        movesMap.put("repeat", Command.REPEAT);
         movesMap.put("", Command.EMPTY);
         commandParser = new CommandParser(movesMap);
 
