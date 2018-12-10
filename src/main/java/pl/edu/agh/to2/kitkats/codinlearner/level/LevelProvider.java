@@ -6,6 +6,7 @@ import com.vividsolutions.jts.math.Vector2D;
 import javafx.util.Pair;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
 import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
+import pl.edu.agh.to2.kitkats.codinlearner.model.RepeatedCommands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,15 +23,14 @@ public class LevelProvider {
         this.levels = new ArrayList<>();
     }
 
-    private void newLevel(List<Pair<Command, Integer>> commands, String description) {
+    private void newLevel(List<Command> commands, String description) {
         MoveGraph graph = new MoveGraph();
         Coordinate from = new Coordinate(0.0, 0.0);
         Coordinate to = new Coordinate(0.0, 0.0);
         Vector2D moveVector = new Vector2D(moveStep, 0);
 
-        for (Pair<Command, Integer> pair : commands) {
-            Command command = pair.getKey();
-            int value = pair.getValue();
+        for (Command command : commands) {
+            int value = command.getValue();
 
             if (command == Command.LEFT) {
                 moveVector = moveVector.rotate(Angle.toRadians(-value));
@@ -61,65 +61,44 @@ public class LevelProvider {
     }
 
     public List<Level> getLevels() {
+        RepeatedCommands level1 = new RepeatedCommands();
+        level1.add(Command.FORWARD, 2);
         newLevel(
-                Collections.singletonList(new Pair<>(Command.FORWARD, 2)),
+                level1.getAll(),
                 "Draw a line (length: 2)"
         );
+
+        RepeatedCommands level2 = new RepeatedCommands(2);
+        level2.add(Command.FORWARD, 2);
+        level2.add(Command.LEFT, 90);
+        level2.add(Command.FORWARD, 1);
         newLevel(
-                Arrays.asList(
-                        new Pair<>(Command.FORWARD, 2),
-                        new Pair<>(Command.LEFT, 90),
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.LEFT, 90),
-                        new Pair<>(Command.FORWARD, 2),
-                        new Pair<>(Command.LEFT, 90),
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.LEFT, 90)
-                ),
+                level2.getAll(),
                 "Draw a rectangle (width: 2, height: 1)"
         );
+
+        RepeatedCommands level3 = new RepeatedCommands(4);
+        level3.add(Command.FORWARD, 1);
+        level3.add(Command.LEFT, 90);
         newLevel(
-                Arrays.asList(
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.LEFT, 90),
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.LEFT, 90),
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.LEFT, 90),
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.LEFT, 90)
-                ),
+                level3.getAll(),
                 "Draw a square (size: 1)"
         );
+
+        RepeatedCommands level4 = new RepeatedCommands(3);
+        level4.add(Command.FORWARD, 1);
+        level4.add(Command.LEFT, 120);
         newLevel(
-                Arrays.asList(
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.LEFT, 120),
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.LEFT, 120),
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.LEFT, 120)
-                ),
+                level4.getAll(),
                 "Draw an equilateral triangle (size: 1)"
         );
+
+        RepeatedCommands level5 = new RepeatedCommands(5);
+        level5.add(Command.FORWARD, 1);
+        level5.add(Command.BACK, 1);
+        level5.add(Command.RIGHT, 72);
         newLevel(
-                Arrays.asList(
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.BACK, 1),
-                        new Pair<>(Command.RIGHT, 72),
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.BACK, 1),
-                        new Pair<>(Command.RIGHT, 72),
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.BACK, 1),
-                        new Pair<>(Command.RIGHT, 72),
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.BACK, 1),
-                        new Pair<>(Command.RIGHT, 72),
-                        new Pair<>(Command.FORWARD, 1),
-                        new Pair<>(Command.BACK, 1),
-                        new Pair<>(Command.RIGHT, 72)
-                ),
+                level5.getAll(),
                 "Draw an asterisk (size: 1, arms: 5)"
         );
 
