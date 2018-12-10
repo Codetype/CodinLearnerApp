@@ -94,33 +94,40 @@ public class Cursor {
     }
 
     public void move(int mode, List<Command> commands){
-
+        System.out.println("SIZE : " + commands.size());
         for(Command command : commands){
-            double oldX = this.x;
-            double oldY = this.y;
             switch (command){
                 case LEFT: rotateLeft(command.getValue()); break;
                 case RIGHT: rotateRight(command.getValue()); break;
                 case FORWARD:
                     System.out.println("GO " + command.getValue());
                     for(int i=0; i<command.getValue(); i++) {
+                        double oldX = this.x;
+                        double oldY = this.y;
                         move(false);
+                        double newX = this.x;
+                        double newY = this.y;
+                        if(mode == 1)
+                            this.arena.getMoveGraph().addVertex(oldX, oldY, newX, newY);
+                        if(mode == -1)
+                            this.arena.getMoveGraph().removeVertex(oldX, oldY, newX, newY);
                     }
                     break;
                 case BACK:
                     for(int i=0; i<command.getValue(); i++){
+                        double oldX = this.x;
+                        double oldY = this.y;
                         move(true);
+                        double newX = this.x;
+                        double newY = this.y;
+                        if(mode == 1)
+                            this.arena.getMoveGraph().addVertex(oldX, oldY, newX, newY);
+                        if(mode == -1)
+                            this.arena.getMoveGraph().removeVertex(oldX, oldY, newX, newY);
                     }
                 break;
                 default: break;
             }
-            double newX = this.x;
-            double newY = this.y;
-            if(mode == 1)
-                this.arena.getMoveGraph().addVertex(oldX, oldY, newX, newY);
-            if(mode == -1)
-                this.arena.getMoveGraph().removeVertex(oldX, oldY, newX, newY);
-
         }
         setShapePoints();
 
