@@ -93,15 +93,15 @@ public class Cursor {
             shapePointsY.add(this.y + alongVector.getY());
     }
 
-    public void move(int mode, List<Command> commands){
+    public void move(int mode, List<ParameterizedCommand> commands){
         System.out.println("SIZE : " + commands.size());
-        for(Command command : commands){
-            switch (command){
-                case LEFT: rotateLeft(command.getValue()); break;
-                case RIGHT: rotateRight(command.getValue()); break;
+        for(ParameterizedCommand command : commands){
+            switch (command.getCommand()){
+                case LEFT: rotateLeft(command.getParameter()); break;
+                case RIGHT: rotateRight(command.getParameter()); break;
                 case FORWARD:
-                    System.out.println("GO " + command.getValue());
-                    for(int i=0; i<command.getValue(); i++) {
+                    System.out.println("GO " + command.getParameter());
+                    for(int i=0; i<command.getParameter(); i++) {
                         double oldX = this.x;
                         double oldY = this.y;
                         move(false);
@@ -114,7 +114,7 @@ public class Cursor {
                     }
                     break;
                 case BACK:
-                    for(int i=0; i<command.getValue(); i++){
+                    for(int i=0; i<command.getParameter(); i++){
                         double oldX = this.x;
                         double oldY = this.y;
                         move(true);
@@ -133,7 +133,7 @@ public class Cursor {
 
     }
 
-    public void moveBack(List<Command> commands){
+    public void moveBack(List<ParameterizedCommand> commands){
         move(-1, reverseCommands(commands));
     }
 
@@ -164,10 +164,13 @@ public class Cursor {
         setShapePoints();
     }
 
-    private List<Command> reverseCommands(List<Command> commands){
-        List<Command> commandList = new ArrayList<>();
+    private List<ParameterizedCommand> reverseCommands(List<ParameterizedCommand> commands){
+        List<ParameterizedCommand> commandList = new ArrayList<>();
         for(int i = commands.size()-1; i >= 0; i--){
-            commandList.add(commands.get(i).oppositeCommand());
+
+            Command newCommand = commands.get(i).getCommand().oppositeCommand();
+            int parameter = commands.get(i).getParameter();
+            ParameterizedCommand newCom = new ParameterizedCommand(newCommand,parameter);
         }
         return commandList;
     }

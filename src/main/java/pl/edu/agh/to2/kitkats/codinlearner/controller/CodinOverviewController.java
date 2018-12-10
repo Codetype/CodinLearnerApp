@@ -21,6 +21,7 @@ import pl.edu.agh.to2.kitkats.codinlearner.level.LevelProvider;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
 import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
+import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedCommand;
 import pl.edu.agh.to2.kitkats.codinlearner.parser.CommandParser;
 
 import java.util.Collections;
@@ -202,7 +203,7 @@ public class CodinOverviewController {
         return true;
     }
 
-    private void move(List<Command> commands){
+    private void move(List<ParameterizedCommand> commands){
 
         clearCursor();
 
