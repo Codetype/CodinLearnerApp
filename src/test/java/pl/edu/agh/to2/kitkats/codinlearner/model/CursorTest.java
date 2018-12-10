@@ -1,14 +1,20 @@
 package pl.edu.agh.to2.kitkats.codinlearner.model;
 
 import static org.junit.Assert.assertEquals;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CursorTest {
     private Arena arena = null;
     private Cursor cursor = null;
+    private List<ParameterizedCommand> commands;
 
     @Before
     public void beforeEachTest(){
@@ -16,6 +22,7 @@ public class CursorTest {
         arena = new Arena(600.0f, 400.0f,21.0f, 8.0f);
         cursor = Mockito.mock(Cursor.class);
         cursor = new Cursor(300.0f, 200.0f,21.0f, 8.0f , arena, 10.0f);
+        commands = new ArrayList<>();
     }
 
     @Test
@@ -26,14 +33,13 @@ public class CursorTest {
         assertEquals(100, y1, 0.0);
     }
 
-
     @Test
     public void testResetCursorPosition() {
-        cursor.move();
-        cursor.turnLeft();
-        cursor.move();
-        cursor.turnRight();
-        cursor.move();
+        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
+        commands.add(new ParameterizedCommand(Command.LEFT, 90));
+        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
+        commands.add(new ParameterizedCommand(Command.RIGHT, 90));
+        cursor.move(1,commands);
         cursor.reset();
 
         double x1 = cursor.getX();
@@ -45,7 +51,8 @@ public class CursorTest {
 
     @Test
     public void testGoForwardCursor() {
-        cursor.move();
+        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
+        cursor.move(1,commands);
 
         double x1 = cursor.getX();
         double y1 = cursor.getY();
@@ -55,8 +62,9 @@ public class CursorTest {
 
     @Test
     public void testGoLeftCursor() {
-        cursor.turnLeft();
-        cursor.move();
+        commands.add(new ParameterizedCommand(Command.LEFT, 90));
+        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
+        cursor.move(1,commands);
 
         double x1 = cursor.getX();
         double y1 = cursor.getY();
@@ -66,8 +74,9 @@ public class CursorTest {
 
     @Test
     public void testGoRightCursor() {
-        cursor.turnRight();
-        cursor.move();
+        commands.add(new ParameterizedCommand(Command.RIGHT, 90));
+        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
+        cursor.move(1,commands);
 
         double x1 = cursor.getX();
         double y1 = cursor.getY();
@@ -77,12 +86,13 @@ public class CursorTest {
 
     @Test
     public void testRotateCursor() {
-        cursor.rotateLeft(60);
-        cursor.move();
-        cursor.rotateLeft(120);
-        cursor.move();
-        cursor.rotateLeft(120);
-        cursor.move();
+        commands.add(new ParameterizedCommand(Command.LEFT, 60));
+        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
+        commands.add(new ParameterizedCommand(Command.LEFT, 120));
+        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
+        commands.add(new ParameterizedCommand(Command.LEFT, 120));
+        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
+        cursor.move(1,commands);
 
         double x1 = cursor.getX();
         double y1 = cursor.getY();
