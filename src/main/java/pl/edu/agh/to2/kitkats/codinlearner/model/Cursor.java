@@ -67,7 +67,6 @@ public class Cursor {
     }
 
     public void rotateLeft(double angle){
-        System.out.println(angle);
         this.alongVector = this.alongVector.rotate(Angle.toRadians(-angle));
         this.acrossVector = this.acrossVector.rotate(Angle.toRadians(-angle));
         this.moveVector = this.moveVector.rotate(Angle.toRadians(-angle));
@@ -76,7 +75,6 @@ public class Cursor {
     }
 
     public void rotateRight(double angle){
-        System.out.println(angle);
         this.alongVector = this.alongVector.rotate(Angle.toRadians(angle));
         this.acrossVector = this.acrossVector.rotate(Angle.toRadians(angle));
         this.moveVector = this.moveVector.rotate(Angle.toRadians(angle));
@@ -104,7 +102,8 @@ public class Cursor {
                 case LEFT: rotateLeft(command.getValue()); break;
                 case RIGHT: rotateRight(command.getValue()); break;
                 case FORWARD:
-                    for(int i=0; i<command.getValue(); i++){
+                    System.out.println("GO " + command.getValue());
+                    for(int i=0; i<command.getValue(); i++) {
                         move(false);
                     }
                     break;
@@ -124,7 +123,7 @@ public class Cursor {
 
         }
         setShapePoints();
-        System.out.println(x + " " + y);
+
     }
 
     public void moveBack(List<Command> commands){
@@ -164,13 +163,6 @@ public class Cursor {
             commandList.add(commands.get(i).oppositeCommand());
         }
         return commandList;
-    }
-
-    private void setDefaultCommands(){
-        Command.LEFT.setValue(90);
-        Command.RIGHT.setValue(90);
-        Command.FORWARD.setValue(1);
-        Command.BACK.setValue(1);
     }
 
     public double[] getShapePointsX() {

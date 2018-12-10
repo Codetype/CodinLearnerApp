@@ -17,41 +17,38 @@ public class CommandParser {
         this.commandMap = commandMap;
     }
 
-    public List<Command> parseCommand(String commandAsString){
-        List<Command> commands = new ArrayList<>();
-        List<String> parts = Arrays.asList(commandAsString.split("\\s"));
+    public List<List<Command>> parseCommand(String commandAsString){
+        List<List<Command>> commands = new ArrayList<>();
+        List<String> parts = Arrays.asList(commandAsString.split(" "));
 
         for(int i=0; i<parts.size(); i++){
-            if(commandMap.containsKey(parts.get(i))){
-                String currentCommand = parts.get(i);
-                Command comm;
-                //temporary loop parser
-                if(currentCommand.equals("repeat")){
-                    i++;
-                    try {
-                        Integer repeats = 0;
-                        if(i < parts.size()){ repeats = Integer.parseInt(parts.get(i)); i++; }
-                        String loopContent = commandAsString.substring(commandAsString.indexOf("[")+1,commandAsString.indexOf("]"));
-                        for(int r=0; r<repeats; r++) commands.addAll(parseCommand(loopContent));
-                        i = commandAsString.indexOf("[");
-                    } catch(NumberFormatException e){
-                        commands.add(Command.WRONG);
-                        return commands;
-                    }
-                }
-                //check next string
-                if(i+1 < parts.size() && !commandMap.containsKey(parts.get(i+1))){
-                    comm = parseComplexCommand(currentCommand, parts.get(i+1));
-                    commands.add(comm); i++;
-                } else {
-                    comm = parseSimpleCommand(currentCommand);
-                    commands.add(comm);
-                }
-            } else {
-                commands.add(Command.WRONG);
-            }
-        }
+            String currentCommand = parts.get(i);
 
+            if(currentCommand.equals("repeat")){
+                List<Command> lineCommands = new ArrayList<>();
+                i++;
+                try {
+                    Integer repeats = 0;
+                    if(i < parts.size()){ repeats = Integer.parseInt(parts.get(i)); i++; }
+                    String loopContent = commandAsString.substring(commandAsString.indexOf("[")+1,commandAsString.indexOf("]"));
+                    for(int r=0; r<repeats; r++) {
+                        commands.addAll(parseLineCommand(loopContent));
+                    }
+                    i = commandAsString.indexOf("]");
+                } catch(NumberFormatException e){
+                    lineCommands.add(Command.WRONG);
+                    commands.add(lineCommands);
+                    //return if we have loop
+                    return commands;
+                }
+            }
+            else{
+                commands.addAll(parseLineCommand(commandAsString));
+                return commands;
+            }
+
+        }
+        //return if empty
         return commands;
     }
 
@@ -70,4 +67,36 @@ public class CommandParser {
 
         return comm;
     }
+
+    public List<List<Command>> parseLineCommand(String commandAsString){
+        List<List<Command>> commands = new ArrayList<>();
+        List<String> parts = Arrays.asList(commandAsString.split(" "));
+
+
+        for(int i=0; i<parts.size(); i++){
+            List<Command> lineCommands = new ArrayList<>();
+            if(commandMap.containsKey(parts.get(i))){
+                String currentCommand = parts.get(i);
+                Command comm;
+                //check next string
+                if(i+1 < parts.size() && !commandMap.containsKey(parts.get(i+1))){
+                    comm = parseComplexCommand(currentCommand, parts.get(i+1));
+                    lineCommands.add(comm);
+                    commands.add(lineCommands);
+                    i++;
+                } else {
+                    comm = parseSimpleCommand(currentCommand);
+                    if(currentCommand.equals("go")) comm.setDefaultsValues();
+                    lineCommands.add(comm);
+                    commands.add(lineCommands);
+                }
+            } else {
+                lineCommands.add(Command.WRONG);
+                commands.add(lineCommands);
+            }
+        }
+
+        return commands;
+    }
+
 }

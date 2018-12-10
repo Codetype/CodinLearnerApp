@@ -97,17 +97,20 @@ public class CodinOverviewController {
             public void handle(KeyEvent ke){
                 if (ke.getCode().equals(KeyCode.ENTER)){
 
-                    List<Command> commands = commandParser.parseCommand(commandLine.getText());
-
+                    List<List<Command>> commands = commandParser.parseCommand(commandLine.getText());
                     prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
-                    if(handleOperation(commands)){
-                        prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
-                    } else {
-                        prevCommands.setText(prevCommands.getText() + "\n>>> '" + commandLine.getText() + "' is incorrect operation!");
+                    prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
+
+                    for(List<Command> lineCommands : commands) {
+                        if (handleOperation(lineCommands)) {
+                            levelManager.addCommands(lineCommands);
+                            move(lineCommands);
+                            commandLine.clear();
+                        } else {
+                            prevCommands.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
+                        }
+
                     }
-                    levelManager.addCommands(commands);
-                    move(commands);
-                    commandLine.clear();
                 }
             }
         });
