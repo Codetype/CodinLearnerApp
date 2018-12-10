@@ -1,6 +1,7 @@
 package pl.edu.agh.to2.kitkats.codinlearner.parser;
 
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
+import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedCommand;
 
 import java.awt.event.ComponentAdapter;
 import java.util.Arrays;
@@ -17,16 +18,16 @@ public class CommandParser {
         this.commandMap = commandMap;
     }
 
-    public List<List<Command>> parseCommand(String commandAsString) {
+    public List<List<ParameterizedCommand>> parseCommand(String commandAsString) {
         System.out.println(commandAsString);
-        List<List<Command>> commands = new ArrayList<>();
+        List<List<ParameterizedCommand>> commands = new ArrayList<>();
         List<String> parts = Arrays.asList(commandAsString.split("\\s"));
 
         for (int i = 0; i < parts.size(); i++) {
             String currentCommand = parts.get(i);
 
             if (currentCommand.equals("repeat")) {
-                List<Command> lineCommands = new ArrayList<>();
+                List<ParameterizedCommand> lineCommands = new ArrayList<>();
                 i++;
                 try {
                     Integer repeats = 0;
@@ -40,16 +41,17 @@ public class CommandParser {
                     }
                     i = commandAsString.indexOf("]");
                 } catch (NumberFormatException e) {
-                    lineCommands.add(Command.WRONG);
+                    ParameterizedCommand parComm = new ParameterizedCommand(Command.WRONG, 0);
+                    lineCommands.add(parComm);
                     commands.add(lineCommands);
                     //return if we have loop
                     return commands;
                 }
             } else {
-                List<Command> lineCommands = new ArrayList<>();
+                List<ParameterizedCommand> lineCommands = new ArrayList<>();
                 if (commandMap.containsKey(parts.get(i))) {
                     currentCommand = parts.get(i);
-                    Command comm;
+                    ParameterizedCommand comm;
                     //check next string
                     if (i + 1 < parts.size() && !commandMap.containsKey(parts.get(i + 1))) {
                         comm = parseComplexCommand(currentCommand, parts.get(i + 1));
@@ -58,12 +60,11 @@ public class CommandParser {
                         i++;
                     } else {
                         comm = parseSimpleCommand(currentCommand);
-                        if (currentCommand.equals("go")) comm.setDefaultsValues();
                         lineCommands.add(comm);
                         commands.add(lineCommands);
                     }
                 } else {
-                    lineCommands.add(Command.WRONG);
+                    ParameterizedCommand parComm = new ParameterizedCommand(Command.WRONG, 0);
                     commands.add(lineCommands);
                 }
             }
@@ -72,19 +73,23 @@ public class CommandParser {
         return commands;
     }
 
-    public Command parseSimpleCommand(String currentCommand) {
-        return commandMap.getOrDefault(currentCommand, Command.WRONG);
+    public ParameterizedCommand parseSimpleCommand(String currentCommand) {
+        ParameterizedCommand parComm = new ParameterizedCommand(commandMap.getOrDefault(currentCommand, Command.WRONG), 0);
+        return parComm;
     }
 
-    public Command parseComplexCommand(String currentCommand, String nextCommand) {
+    public ParameterizedCommand parseComplexCommand(String currentCommand, String nextCommand) {
         Command comm = commandMap.getOrDefault(currentCommand, Command.WRONG);
         try {
             Integer arg = Integer.parseInt(nextCommand);
-            comm.setValue(arg);
+            ParameterizedCommand parComm = new ParameterizedCommand(comm, arg);
+            return parComm;
         } catch (NumberFormatException e) {
-            return Command.WRONG;
+            ParameterizedCommand parComm = new ParameterizedCommand(Command.WRONG, 0);
+            return parComm;
         }
 
-        return comm;
+
+
     }
 }

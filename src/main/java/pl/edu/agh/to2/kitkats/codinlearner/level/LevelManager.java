@@ -4,6 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
 import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
+import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public class LevelManager {
     // TODO: Maybe replace IntegerProperty with ObjectProperty<Level>
     private IntegerProperty currentLevelNumber;
     private List<Level> levels;
-    private List<Command> currentLevelCommands;
+    private List<ParameterizedCommand> currentLevelCommands;
     private int currentLevelCommandNumber;
 
     public LevelManager (int currentLevelNumber) {
@@ -49,7 +50,7 @@ public class LevelManager {
         this.currentLevelCommandNumber = 0;
     }
 
-    public void addCommands(List<Command> commands){
+    public void addCommands(List<ParameterizedCommand> commands){
         this.currentLevelCommands.addAll(commands);
         this.currentLevelCommandNumber++;
     }
