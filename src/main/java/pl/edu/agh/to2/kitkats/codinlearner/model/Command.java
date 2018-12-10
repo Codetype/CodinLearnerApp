@@ -16,16 +16,6 @@ public enum Command {
         this.value = value;
     }
 
-    public void setDefaultsValues(){
-        RIGHT.setValue(90);
-        LEFT.setValue(90);
-        FORWARD.setValue(1);
-        BACK.setValue(1);
-        WRONG.setValue(0);
-        EMPTY.setValue(0);
-        REPEAT.setValue(0);
-    }
-
     public Command oppositeCommand(){
         switch (this){
             case FORWARD: return BACK;

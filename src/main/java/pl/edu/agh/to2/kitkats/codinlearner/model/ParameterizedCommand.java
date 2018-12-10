@@ -10,6 +10,19 @@ public class ParameterizedCommand {
         this.parameter = parameter;
     }
 
+    public void setDefaultsValues(){
+        switch(this.command){
+            case RIGHT: this.setParameter(90); break;
+            case LEFT: this.setParameter(90); break;
+            case FORWARD: this.setParameter(1); break;
+            case BACK: this.setParameter(1); break;
+            case WRONG: this.setParameter(0); break;
+            case EMPTY: this.setParameter(0); break;
+            case REPEAT: this.setParameter(0); break;
+        }
+
+    }
+
     public Command getCommand() {
         return command;
     }

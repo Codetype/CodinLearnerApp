@@ -41,31 +41,25 @@ public class CommandParser {
                     }
                     i = commandAsString.indexOf("]");
                 } catch (NumberFormatException e) {
-                    ParameterizedCommand parComm = new ParameterizedCommand(Command.WRONG, 0);
-                    lineCommands.add(parComm);
-                    commands.add(lineCommands);
-                    //return if we have loop
+                    commands.add(parseWrongCommand());
+
                     return commands;
                 }
             } else {
                 List<ParameterizedCommand> lineCommands = new ArrayList<>();
                 if (commandMap.containsKey(parts.get(i))) {
                     currentCommand = parts.get(i);
-                    ParameterizedCommand comm;
                     //check next string
                     if (i + 1 < parts.size() && !commandMap.containsKey(parts.get(i + 1))) {
-                        comm = parseComplexCommand(currentCommand, parts.get(i + 1));
-                        lineCommands.add(comm);
+                        lineCommands.add(parseComplexCommand(currentCommand, parts.get(i + 1)));
                         commands.add(lineCommands);
                         i++;
                     } else {
-                        comm = parseSimpleCommand(currentCommand);
-                        lineCommands.add(comm);
+                        lineCommands.add(parseSimpleCommand(currentCommand));
                         commands.add(lineCommands);
                     }
                 } else {
-                    ParameterizedCommand parComm = new ParameterizedCommand(Command.WRONG, 0);
-                    commands.add(lineCommands);
+                    commands.add(parseWrongCommand());
                 }
             }
         }
@@ -73,8 +67,17 @@ public class CommandParser {
         return commands;
     }
 
+    public List<ParameterizedCommand> parseWrongCommand() {
+        List<ParameterizedCommand> parComm = new ArrayList<>();
+        parComm.add(new ParameterizedCommand(Command.WRONG, 0));
+        return parComm;
+    }
+
+
     public ParameterizedCommand parseSimpleCommand(String currentCommand) {
-        ParameterizedCommand parComm = new ParameterizedCommand(commandMap.getOrDefault(currentCommand, Command.WRONG), 0);
+        Command com = commandMap.getOrDefault(currentCommand, Command.WRONG);
+        ParameterizedCommand parComm = new ParameterizedCommand(com, 0);
+        parComm.setDefaultsValues();
         return parComm;
     }
 
@@ -88,8 +91,5 @@ public class CommandParser {
             ParameterizedCommand parComm = new ParameterizedCommand(Command.WRONG, 0);
             return parComm;
         }
-
-
-
     }
 }
