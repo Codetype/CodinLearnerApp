@@ -52,3 +52,15 @@ To turn right type:
 ```
 right
 ```
+
+## More complex commands
+Now, it is possible to write some more complicated expression.
+
+For example:
+```
+go 2 left
+``` 
+To run loop type:
+```
+repeat 2 [ go 2 left ]
+```
