@@ -40,7 +40,7 @@ public class Cursor {
         alongVector = new Vector2D(length,0);
         acrossVector = new Vector2D(0, width);
         moveVector = new Vector2D(moveStep, 0);
-       //three points of triangular shape
+        //three points of triangular shape
         shapePointsX = new ArrayList<>();
         shapePointsY = new ArrayList<>();
         setShapePoints();
@@ -67,15 +67,21 @@ public class Cursor {
     }
 
     public void rotateLeft(double angle){
+        System.out.println(angle);
         this.alongVector = this.alongVector.rotate(Angle.toRadians(-angle));
         this.acrossVector = this.acrossVector.rotate(Angle.toRadians(-angle));
         this.moveVector = this.moveVector.rotate(Angle.toRadians(-angle));
+
+        setShapePoints();
     }
 
     public void rotateRight(double angle){
+        System.out.println(angle);
         this.alongVector = this.alongVector.rotate(Angle.toRadians(angle));
         this.acrossVector = this.acrossVector.rotate(Angle.toRadians(angle));
         this.moveVector = this.moveVector.rotate(Angle.toRadians(angle));
+
+        setShapePoints();
     }
 
     private void setShapePoints(){
@@ -95,10 +101,18 @@ public class Cursor {
             double oldX = this.x;
             double oldY = this.y;
             switch (command){
-                case LEFT: turnLeft(); break;
-                case RIGHT: turnRight(); break;
-                case FORWARD: move(false); break;
-                case BACK: move(true); break;
+                case LEFT: rotateLeft(command.getValue()); break;
+                case RIGHT: rotateRight(command.getValue()); break;
+                case FORWARD:
+                    for(int i=0; i<command.getValue(); i++){
+                        move(false);
+                    }
+                    break;
+                case BACK:
+                    for(int i=0; i<command.getValue(); i++){
+                        move(true);
+                    }
+                break;
                 default: break;
             }
             double newX = this.x;
@@ -109,7 +123,8 @@ public class Cursor {
                 this.arena.getMoveGraph().removeVertex(oldX, oldY, newX, newY);
 
         }
-
+        setShapePoints();
+        System.out.println(x + " " + y);
     }
 
     public void moveBack(List<Command> commands){
@@ -145,10 +160,17 @@ public class Cursor {
 
     private List<Command> reverseCommands(List<Command> commands){
         List<Command> commandList = new ArrayList<>();
-        for(int i = commands.size() -1; i >= 0; i--){
+        for(int i = commands.size()-1; i >= 0; i--){
             commandList.add(commands.get(i).oppositeCommand());
         }
         return commandList;
+    }
+
+    private void setDefaultCommands(){
+        Command.LEFT.setValue(90);
+        Command.RIGHT.setValue(90);
+        Command.FORWARD.setValue(1);
+        Command.BACK.setValue(1);
     }
 
     public double[] getShapePointsX() {
