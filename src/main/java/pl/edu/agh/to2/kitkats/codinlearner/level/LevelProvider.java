@@ -60,7 +60,7 @@ public class LevelProvider {
         levels.add(new Level(graph, description));
     }
 
-    private void initializeLevels() {
+    public List<Level> getLevels() {
         newLevel(
                 Collections.singletonList(new Pair<>(Command.FORWARD, 2)),
                 "Draw a line (length: 2)"
@@ -122,6 +122,8 @@ public class LevelProvider {
                 ),
                 "Draw an asterisk (size: 1, arms: 5)"
         );
+
+        return levels;
     }
 
 }

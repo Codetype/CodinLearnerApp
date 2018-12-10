@@ -17,6 +17,7 @@ import pl.edu.agh.to2.kitkats.codinlearner.command.CommandRegistry;
 import pl.edu.agh.to2.kitkats.codinlearner.command.MoveCommand;
 import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
+import pl.edu.agh.to2.kitkats.codinlearner.level.LevelProvider;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
 import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
@@ -33,6 +34,7 @@ public class CodinOverviewController {
 
     private CommandRegistry commandRegistry;
     private LevelManager levelManager;
+    private LevelProvider levelProvider;
     private CommandParser commandParser;
 
     public Arena arena;
@@ -119,20 +121,10 @@ public class CodinOverviewController {
 
 
     public void initializeLevels() {
-        // level 1
-        int commandNumber = 2;
-        float lineLength = commandNumber * arena.getCursor().getMoveStep();
-        MoveGraph task1 = new MoveGraph();
-        task1.addVertex(0.0, 0.0, 50.0, 0.0);
-        task1.addVertex(50.0, 0.0, 100.0, 0.0);
-        task1.addVertex(100.0, 0.0, 100.0, 50.0);
-        task1.addVertex(100.0, 50.0, 100.0, 100.0);
-        task1.addVertex(100.0, 100.0, 50.0, 100.0);
-        task1.addVertex(50.0, 100.0, 0.0, 100.0);
-        task1.addVertex(0.0, 100.0, 0.0, 50.0);
-        task1.addVertex(0.0, 50.0, 0.0, 0.0);
-        Level l1 = new Level(task1, "Draw a line (length: " + commandNumber + ")");
-        levelManager.addLevel(l1);
+        levelProvider = new LevelProvider(arena.getCursor().getMoveStep());
+        for (Level level : levelProvider.getLevels()) {
+            levelManager.addLevel(level);
+        }
     }
 
     public void initializeProperties() {
