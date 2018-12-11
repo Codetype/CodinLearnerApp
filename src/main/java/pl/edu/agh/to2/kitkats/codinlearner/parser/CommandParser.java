@@ -18,16 +18,14 @@ public class CommandParser {
         this.commandMap = commandMap;
     }
 
-    public List<List<ParameterizedCommand>> parseCommand(String commandAsString) {
-        System.out.println(commandAsString);
-        List<List<ParameterizedCommand>> commands = new ArrayList<>();
+    public List<ParameterizedCommand> parseCommand(String commandAsString) {
+        List<ParameterizedCommand> commands = new ArrayList<>();
         List<String> parts = Arrays.asList(commandAsString.split("\\s"));
 
         for (int i = 0; i < parts.size(); i++) {
             String currentCommand = parts.get(i);
 
             if (currentCommand.equals("repeat")) {
-                List<ParameterizedCommand> lineCommands = new ArrayList<>();
                 i++;
                 try {
                     Integer repeats = 0;
@@ -42,35 +40,29 @@ public class CommandParser {
                     i = commandAsString.indexOf("]");
                 } catch (NumberFormatException e) {
                     commands.add(parseWrongCommand());
-
                     return commands;
                 }
             } else {
-                List<ParameterizedCommand> lineCommands = new ArrayList<>();
                 if (commandMap.containsKey(parts.get(i))) {
                     currentCommand = parts.get(i);
                     //check next string
                     if (i + 1 < parts.size() && !commandMap.containsKey(parts.get(i + 1))) {
-                        lineCommands.add(parseComplexCommand(currentCommand, parts.get(i + 1)));
-                        commands.add(lineCommands);
+                        commands.add(parseComplexCommand(currentCommand, parts.get(i + 1)));
+
                         i++;
                     } else {
-                        lineCommands.add(parseSimpleCommand(currentCommand));
-                        commands.add(lineCommands);
+                        commands.add(parseSimpleCommand(currentCommand));
                     }
                 } else {
                     commands.add(parseWrongCommand());
                 }
             }
         }
-        //return if empty
         return commands;
     }
 
-    private List<ParameterizedCommand> parseWrongCommand() {
-        List<ParameterizedCommand> parComm = new ArrayList<>();
-        parComm.add(new ParameterizedCommand(Command.WRONG, 0));
-        return parComm;
+    private ParameterizedCommand parseWrongCommand() {
+        return (new ParameterizedCommand(Command.WRONG, 0));
     }
 
 
