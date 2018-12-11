@@ -24,7 +24,6 @@ public class MoveGraph {
     }
 
     public void addVertex(double fromX, double fromY, double toX, double toY){
-        System.out.println("In add vertex");
         Vertex newVertex = new Vertex(toX, toY);
         Vertex oldVertex = new Vertex(fromX, fromY);
 
@@ -39,22 +38,16 @@ public class MoveGraph {
         Vertex oldEdgeVertex = new Vertex(fromX, fromY);
         Vertex newEdgeVertex = new Vertex(toX, toY);
         Edge newEdge = new Edge(oldEdgeVertex, newEdgeVertex);
-        System.out.println(!this.edgeList.contains(newEdge));
-        System.out.println("From x : " + fromX);
-        System.out.println("To x : " + toX);
-        System.out.println("From y : " + fromY);
-        System.out.println("To y : " + toY);
         if(!this.edgeList.contains(newEdge) && ( fromX != toX || fromY != toY)) {
-            System.out.println("Adding new edge");
             this.edgeList.add(newEdge);
         }
     }
 
 
     public void removeVertex(double fromX, double fromY, double toX, double toY){
-        Vertex vertexToDelete = new Vertex(toX, toY);
+        Vertex vertexToDelete = new Vertex(fromX, fromY);
         this.vertexList.remove(vertexToDelete);
-        Vertex vertexInEdge = new Vertex(fromX, fromY);
+        Vertex vertexInEdge = new Vertex(toX, toY);
         Edge edge = new Edge(vertexInEdge, vertexToDelete);
         this.edgeList.remove(edge);
     }
@@ -88,14 +81,6 @@ public class MoveGraph {
 
 
         transpose(difX, difY);
-        System.out.println("THIS GRAPH");
-        printGraph();
-
-        System.out.println("\nTASK GRAPH");
-        moveGraph.printGraph();
-
-        Collection vertexCollection = this.vertexList;
-        Collection edgeCollection = this.edgeList;
 
         for(Vertex vert : moveGraph.vertexList){
             if(this.vertexList.contains(vert)) this.vertexList.remove(vert);
@@ -111,7 +96,7 @@ public class MoveGraph {
     }
 
 
-    public void transpose(double x, double y){
+    private void transpose(double x, double y){
         for(Vertex vert : this.vertexList)
             vert.transpose(x, y);
 

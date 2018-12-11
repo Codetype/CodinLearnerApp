@@ -88,7 +88,6 @@ public class Cursor {
             case LEFT: rotateLeft(command.getParameter()); break;
             case RIGHT: rotateRight(command.getParameter()); break;
             case FORWARD:
-                System.out.println("GO " + command.getParameter());
                 for(int i=0; i<command.getParameter(); i++) {
                     double oldX = this.x;
                     double oldY = this.y;
