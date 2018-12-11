@@ -34,11 +34,10 @@ public class CursorTest {
 
     @Test
     public void testResetCursorPosition() {
-        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
-        commands.add(new ParameterizedCommand(Command.LEFT, 90));
-        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
-        commands.add(new ParameterizedCommand(Command.RIGHT, 90));
-        cursor.move(1,commands);
+        cursor.move(1, new ParameterizedCommand(Command.FORWARD, 90));
+        cursor.move(1, new ParameterizedCommand(Command.RIGHT, 90));
+        cursor.move(1, new ParameterizedCommand(Command.FORWARD, 90));
+        cursor.move(1, new ParameterizedCommand(Command.LEFT, 90));
         cursor.reset();
 
         double x1 = cursor.getX();
@@ -50,8 +49,7 @@ public class CursorTest {
 
     @Test
     public void testGoForwardCursor() {
-        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
-        cursor.move(1,commands);
+        cursor.move(1, new ParameterizedCommand(Command.FORWARD, 1));
 
         double x1 = cursor.getX();
         double y1 = cursor.getY();
@@ -61,9 +59,8 @@ public class CursorTest {
 
     @Test
     public void testGoLeftCursor() {
-        commands.add(new ParameterizedCommand(Command.LEFT, 90));
-        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
-        cursor.move(1,commands);
+        cursor.move(1, new ParameterizedCommand(Command.LEFT, 90));
+        cursor.move(1, new ParameterizedCommand(Command.FORWARD, 1));
 
         double x1 = cursor.getX();
         double y1 = cursor.getY();
@@ -71,31 +68,5 @@ public class CursorTest {
         assertEquals(90, y1, 0.0);
     }
 
-    @Test
-    public void testGoRightCursor() {
-        commands.add(new ParameterizedCommand(Command.RIGHT, 90));
-        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
-        cursor.move(1,commands);
 
-        double x1 = cursor.getX();
-        double y1 = cursor.getY();
-        assertEquals(150, x1, 0.0);
-        assertEquals(110, y1, 0.0);
-    }
-
-    @Test
-    public void testTrianglePath() {
-        commands.add(new ParameterizedCommand(Command.LEFT, 60));
-        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
-        commands.add(new ParameterizedCommand(Command.LEFT, 120));
-        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
-        commands.add(new ParameterizedCommand(Command.LEFT, 120));
-        commands.add(new ParameterizedCommand(Command.FORWARD, 1));
-        cursor.move(1,commands);
-
-        double x1 = cursor.getX();
-        double y1 = cursor.getY();
-        assertEquals(150, x1, 0.0);
-        assertEquals(100, y1, 0.0);
-    }
 }
