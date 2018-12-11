@@ -70,6 +70,7 @@ public class LevelProvider {
         level2.add(Command.FORWARD, 2);
         level2.add(Command.LEFT, 90);
         level2.add(Command.FORWARD, 1);
+        level2.add(Command.LEFT, 90);
         newLevel(
                 level2.getAll(),
                 "Draw a rectangle (width: 2, height: 1)"

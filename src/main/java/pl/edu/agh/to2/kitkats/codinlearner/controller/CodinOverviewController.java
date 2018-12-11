@@ -18,10 +18,7 @@ import pl.edu.agh.to2.kitkats.codinlearner.command.MoveCommand;
 import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelProvider;
-import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
-import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
-import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
-import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedCommand;
+import pl.edu.agh.to2.kitkats.codinlearner.model.*;
 import pl.edu.agh.to2.kitkats.codinlearner.parser.CommandParser;
 
 import java.util.Collections;
@@ -37,6 +34,7 @@ public class CodinOverviewController {
     private LevelManager levelManager;
     private LevelProvider levelProvider;
     private CommandParser commandParser;
+    private CanvasManager canvasManager;
 
     public Arena arena;
 
@@ -107,7 +105,7 @@ public class CodinOverviewController {
                     for(List<ParameterizedCommand> lineCommands : commands) {
                         if (handleOperation(lineCommands)) {
                             levelManager.addCommands(lineCommands);
-                            move(lineCommands);
+                            canvasManager.move(lineCommands);
                             commandLine.clear();
                         } else {
                             prevCommands.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
@@ -135,7 +133,12 @@ public class CodinOverviewController {
     }
 
     public void initializeDrawing() {
-        drawCursor();
+        this.canvasManager.drawCursor();
+    }
+
+    public void initializeCanvasManager(){
+        this.canvasManager = new CanvasManager(this.arena, this.cursorCanvas.getGraphicsContext2D(),
+                this.lineCanvas.getGraphicsContext2D(), this.commandRegistry);
     }
 
     public void showLevelInfo() {
@@ -147,29 +150,14 @@ public class CodinOverviewController {
         }
     }
 
-    public void resetDrawing() {
-        clearCursor();
-        clearLine();
-        this.prevCommands.setText("");
-        arena.getCursor().reset();
-        arena.clearMoveGraph();
-        drawCursor();
-    }
-
     @FXML
     private void handleUndoAction(ActionEvent event) {
-        clearCursor();
-        commandRegistry.undo();
-        this.arena.getCursor().reset();
-        commandRegistry.redraw();
-        drawCursor();
+        this.canvasManager.undo();
     }
 
     @FXML
     private void handleRedoAction(ActionEvent event) {
-        clearCursor();
-        commandRegistry.redo();
-        drawCursor();
+        this.canvasManager.redo();
     }
 
 
@@ -198,25 +186,15 @@ public class CodinOverviewController {
         showLevelInfo();
     }
 
+    private void resetDrawing() {
+        this.canvasManager.resetDrawing();
+        this.prevCommands.setText("");
+    }
+
     public boolean handleOperation(List<ParameterizedCommand> Commands){
         if(Commands.get(0).getCommand().equals(Command.WRONG)) return false;
         return true;
     }
-
-    private void move(List<ParameterizedCommand> commands){
-
-        clearCursor();
-
-        commandRegistry.executeCommand(
-                new MoveCommand(
-                        this.lineGc,
-                        commands,
-                        this.arena
-                )
-        );
-        drawCursor();
-    }
-
 
     public void setArena(Arena arena) {
         this.arena = arena;
@@ -227,16 +205,5 @@ public class CodinOverviewController {
         this.appController = appController;
     }
 
-    private void clearLine() {
-        lineGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
-    }
-
-    private void clearCursor(){
-        cursorGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
-    }
-
-    private void drawCursor() {
-        cursorGc.fillPolygon(arena.getCursor().getShapePointsX(), arena.getCursor().getShapePointsY(), 3);
-    }
 }
 
