@@ -83,47 +83,45 @@ public class Cursor {
             shapePointsY.add(this.y + alongVector.getY());
     }
 
-    public void move(int mode, List<ParameterizedCommand> commands){
-        System.out.println("SIZE : " + commands.size());
-        for(ParameterizedCommand command : commands){
-            switch (command.getCommand()){
-                case LEFT: rotateLeft(command.getParameter()); break;
-                case RIGHT: rotateRight(command.getParameter()); break;
-                case FORWARD:
-                    System.out.println("GO " + command.getParameter());
-                    for(int i=0; i<command.getParameter(); i++) {
-                        double oldX = this.x;
-                        double oldY = this.y;
-                        move(false);
-                        double newX = this.x;
-                        double newY = this.y;
-                        if(mode == 1)
-                            this.arena.getMoveGraph().addVertex(oldX, oldY, newX, newY);
-                        if(mode == -1)
-                            this.arena.getMoveGraph().removeVertex(oldX, oldY, newX, newY);
-                    }
-                    break;
-                case BACK:
-                    for(int i=0; i<command.getParameter(); i++){
-                        double oldX = this.x;
-                        double oldY = this.y;
-                        move(true);
-                        double newX = this.x;
-                        double newY = this.y;
-                        if(mode == 1)
-                            this.arena.getMoveGraph().addVertex(oldX, oldY, newX, newY);
-                        if(mode == -1)
-                            this.arena.getMoveGraph().removeVertex(oldX, oldY, newX, newY);
-                    }
+    public void move(int mode, ParameterizedCommand command){
+        switch (command.getCommand()){
+            case LEFT: rotateLeft(command.getParameter()); break;
+            case RIGHT: rotateRight(command.getParameter()); break;
+            case FORWARD:
+                System.out.println("GO " + command.getParameter());
+                for(int i=0; i<command.getParameter(); i++) {
+                    double oldX = this.x;
+                    double oldY = this.y;
+                    move(false);
+                    double newX = this.x;
+                    double newY = this.y;
+                    if(mode == 1)
+                        this.arena.getMoveGraph().addVertex(oldX, oldY, newX, newY);
+                    if(mode == -1)
+                        this.arena.getMoveGraph().removeVertex(oldX, oldY, newX, newY);
+                }
                 break;
-                default: break;
-            }
+            case BACK:
+                for(int i=0; i<command.getParameter(); i++){
+                    double oldX = this.x;
+                    double oldY = this.y;
+                    move(true);
+                    double newX = this.x;
+                    double newY = this.y;
+                    if(mode == 1)
+                        this.arena.getMoveGraph().addVertex(oldX, oldY, newX, newY);
+                    if(mode == -1)
+                        this.arena.getMoveGraph().removeVertex(oldX, oldY, newX, newY);
+                }
+            break;
+            default: break;
         }
+
         setShapePoints();
     }
 
-    public void moveBack(List<ParameterizedCommand> commands){
-        move(-1, reverseCommands(commands));
+    public void moveBack(ParameterizedCommand command){
+        move(-1, reverseCommand(command));
     }
 
     private void move(boolean backward){
@@ -153,15 +151,10 @@ public class Cursor {
         setShapePoints();
     }
 
-    private List<ParameterizedCommand> reverseCommands(List<ParameterizedCommand> commands){
-        List<ParameterizedCommand> commandList = new ArrayList<>();
-        for(int i = commands.size()-1; i >= 0; i--){
-
-            Command newCommand = commands.get(i).getCommand().oppositeCommand();
-            int parameter = commands.get(i).getParameter();
-            ParameterizedCommand newCom = new ParameterizedCommand(newCommand,parameter);
-        }
-        return commandList;
+    private ParameterizedCommand reverseCommand(ParameterizedCommand command){
+        Command newCommand = command.getCommand().oppositeCommand();
+        int parameter = command.getParameter();
+        return new ParameterizedCommand(newCommand, parameter);
     }
 
     public double[] getShapePointsX() {

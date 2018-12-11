@@ -43,4 +43,11 @@ public class CommandRegistry {
 			command.redraw();
 		}
 	}
+
+	public void reset(){
+		this.commandStack = FXCollections
+				.observableArrayList();
+		this.undoCommandStack = FXCollections
+				.observableArrayList();
+	}
 }

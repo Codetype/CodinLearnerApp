@@ -50,8 +50,8 @@ public class LevelManager {
         this.currentLevelCommandNumber = 0;
     }
 
-    public void addCommands(List<ParameterizedCommand> commands){
-        this.currentLevelCommands.addAll(commands);
+    public void addCommand(ParameterizedCommand command){
+        this.currentLevelCommands.add(command);
         this.currentLevelCommandNumber++;
     }
 

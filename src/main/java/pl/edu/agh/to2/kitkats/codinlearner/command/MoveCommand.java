@@ -13,11 +13,11 @@ import java.util.List;
 public class MoveCommand implements pl.edu.agh.to2.kitkats.codinlearner.command.Command{
 
     private GraphicsContext lineGc;
-    private List<ParameterizedCommand> commandList;
+    private ParameterizedCommand command;
     private Arena arena;
 
-    public MoveCommand(GraphicsContext graphicsContext, List<ParameterizedCommand> commandList, Arena arena) {
-        this.commandList = commandList;
+    public MoveCommand(GraphicsContext graphicsContext, ParameterizedCommand command, Arena arena) {
+        this.command = command;
         this.arena = arena;
         this.lineGc = graphicsContext;
     }
@@ -27,7 +27,7 @@ public class MoveCommand implements pl.edu.agh.to2.kitkats.codinlearner.command.
         double startX = arena.getCursor().getX();
         double startY = arena.getCursor().getY();
 
-        this.arena.getCursor().move(1, commandList);
+        this.arena.getCursor().move(1, command);
 
         double endX = arena.getCursor().getX();
         double endY = arena.getCursor().getY();
@@ -38,7 +38,7 @@ public class MoveCommand implements pl.edu.agh.to2.kitkats.codinlearner.command.
     @Override
     public void undo() {
 
-        this.arena.getCursor().moveBack(commandList);
+        this.arena.getCursor().moveBack(command);
 
         lineGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
 
@@ -49,7 +49,7 @@ public class MoveCommand implements pl.edu.agh.to2.kitkats.codinlearner.command.
         double startX = arena.getCursor().getX();
         double startY = arena.getCursor().getY();
 
-        this.arena.getCursor().move(0, this.commandList);
+        this.arena.getCursor().move(0, this.command);
 
         double endX = arena.getCursor().getX();
         double endY = arena.getCursor().getY();

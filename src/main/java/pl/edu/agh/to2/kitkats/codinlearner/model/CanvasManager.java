@@ -40,14 +40,14 @@ public class CanvasManager {
         drawCursor();
     }
 
-    public void move(List<ParameterizedCommand> commands){
+    public void move(ParameterizedCommand command){
 
         clearCursor();
 
         commandRegistry.executeCommand(
                 new MoveCommand(
                         this.lineGc,
-                        commands,
+                        command,
                         this.arena
                 )
         );
@@ -72,5 +72,9 @@ public class CanvasManager {
 
     public void drawCursor() {
         cursorGc.fillPolygon(arena.getCursor().getShapePointsX(), arena.getCursor().getShapePointsY(), 3);
+    }
+
+    public void resetCommandRegistry(){
+        this.commandRegistry.reset();
     }
 }

@@ -98,14 +98,14 @@ public class CodinOverviewController {
             public void handle(KeyEvent ke){
                 if (ke.getCode().equals(KeyCode.ENTER)){
 
-                    List<List<ParameterizedCommand>> commands = commandParser.parseCommand(commandLine.getText());
+                    List<ParameterizedCommand> commands = commandParser.parseCommand(commandLine.getText());
                     prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
                     prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
 
-                    for(List<ParameterizedCommand> lineCommands : commands) {
-                        if (handleOperation(lineCommands)) {
-                            levelManager.addCommands(lineCommands);
-                            canvasManager.move(lineCommands);
+                    for(ParameterizedCommand lineCommand : commands) {
+                        if (handleOperation(lineCommand)) {
+                            levelManager.addCommand(lineCommand);
+                            canvasManager.move(lineCommand);
                             commandLine.clear();
                         } else {
                             prevCommands.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
@@ -181,7 +181,7 @@ public class CodinOverviewController {
         alert.setTitle(null);
         alert.setHeaderText(null);
         alert.showAndWait();
-
+        canvasManager.resetCommandRegistry();
         resetDrawing();
         showLevelInfo();
     }
@@ -191,9 +191,8 @@ public class CodinOverviewController {
         this.prevCommands.setText("");
     }
 
-    public boolean handleOperation(List<ParameterizedCommand> Commands){
-        if(Commands.get(0).getCommand().equals(Command.WRONG)) return false;
-        return true;
+    private boolean handleOperation(ParameterizedCommand command){
+        return !command.getCommand().equals(Command.WRONG);
     }
 
     public void setArena(Arena arena) {
