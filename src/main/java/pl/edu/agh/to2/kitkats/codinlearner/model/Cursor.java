@@ -56,17 +56,7 @@ public class Cursor {
         this.arena.setStartY(this.y);
     }
 
-    public void turnLeft(){
-        rotateLeft(90.0);
-        setShapePoints();
-    }
-
-    public void turnRight(){
-        rotateRight(90.0);
-        setShapePoints();
-    }
-
-    public void rotateLeft(double angle){
+    private void rotateLeft(double angle){
         this.alongVector = this.alongVector.rotate(Angle.toRadians(-angle));
         this.acrossVector = this.acrossVector.rotate(Angle.toRadians(-angle));
         this.moveVector = this.moveVector.rotate(Angle.toRadians(-angle));
@@ -74,7 +64,7 @@ public class Cursor {
         setShapePoints();
     }
 
-    public void rotateRight(double angle){
+    private void rotateRight(double angle){
         this.alongVector = this.alongVector.rotate(Angle.toRadians(angle));
         this.acrossVector = this.acrossVector.rotate(Angle.toRadians(angle));
         this.moveVector = this.moveVector.rotate(Angle.toRadians(angle));
@@ -130,7 +120,6 @@ public class Cursor {
             }
         }
         setShapePoints();
-
     }
 
     public void moveBack(List<ParameterizedCommand> commands){

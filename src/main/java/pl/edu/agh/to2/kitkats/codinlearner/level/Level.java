@@ -1,9 +1,7 @@
 package pl.edu.agh.to2.kitkats.codinlearner.level;
 
-import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
 import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
 
-import java.util.List;
 public class Level {
 
     public final MoveGraph task;

@@ -78,9 +78,9 @@ public class CodinOverviewController {
         levelManager = new LevelManager(0);
         //TODO commands map parsed from JSON or level - for every level some available commands
         HashMap<String, Command> movesMap = new HashMap<>();
-        movesMap.put("go", Command.FORWARD);     // movesMap.put("GO", Command.FORWARD);
-        movesMap.put("left", Command.LEFT);      // movesMap.put("LEFT", Command.LEFT);
-        movesMap.put("right", Command.RIGHT);    // movesMap.put("RIGHT", Command.RIGHT);
+        movesMap.put("go", Command.FORWARD);
+        movesMap.put("left", Command.LEFT);
+        movesMap.put("right", Command.RIGHT);
         movesMap.put("repeat", Command.REPEAT);
         movesMap.put("", Command.EMPTY);
         commandParser = new CommandParser(movesMap);
@@ -214,7 +214,6 @@ public class CodinOverviewController {
                         this.arena
                 )
         );
-
         drawCursor();
     }
 
@@ -231,7 +230,6 @@ public class CodinOverviewController {
     private void clearLine() {
         lineGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
     }
-
 
     private void clearCursor(){
         cursorGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());

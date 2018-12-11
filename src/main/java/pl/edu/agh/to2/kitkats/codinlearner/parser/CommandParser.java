@@ -67,21 +67,21 @@ public class CommandParser {
         return commands;
     }
 
-    public List<ParameterizedCommand> parseWrongCommand() {
+    private List<ParameterizedCommand> parseWrongCommand() {
         List<ParameterizedCommand> parComm = new ArrayList<>();
         parComm.add(new ParameterizedCommand(Command.WRONG, 0));
         return parComm;
     }
 
 
-    public ParameterizedCommand parseSimpleCommand(String currentCommand) {
+    private ParameterizedCommand parseSimpleCommand(String currentCommand) {
         Command com = commandMap.getOrDefault(currentCommand, Command.WRONG);
         ParameterizedCommand parComm = new ParameterizedCommand(com, 0);
         parComm.setDefaultsValues();
         return parComm;
     }
 
-    public ParameterizedCommand parseComplexCommand(String currentCommand, String nextCommand) {
+    private ParameterizedCommand parseComplexCommand(String currentCommand, String nextCommand) {
         Command comm = commandMap.getOrDefault(currentCommand, Command.WRONG);
         try {
             Integer arg = Integer.parseInt(nextCommand);

@@ -3,15 +3,11 @@ package pl.edu.agh.to2.kitkats.codinlearner.level;
 import com.vividsolutions.jts.algorithm.Angle;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.math.Vector2D;
-import javafx.util.Pair;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
 import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
 import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedCommand;
 import pl.edu.agh.to2.kitkats.codinlearner.model.RepeatedCommands;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class LevelProvider {
