@@ -1,8 +1,6 @@
 package pl.edu.agh.to2.kitkats.codinlearner.controller;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,15 +11,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import pl.edu.agh.to2.kitkats.codinlearner.canvas.CanvasManager;
 import pl.edu.agh.to2.kitkats.codinlearner.command.CommandRegistry;
-import pl.edu.agh.to2.kitkats.codinlearner.command.MoveCommand;
 import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelProvider;
 import pl.edu.agh.to2.kitkats.codinlearner.model.*;
 import pl.edu.agh.to2.kitkats.codinlearner.parser.CommandParser;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.HashMap;
 
