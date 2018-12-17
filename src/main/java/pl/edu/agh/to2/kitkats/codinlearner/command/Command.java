@@ -1,6 +1,8 @@
 package pl.edu.agh.to2.kitkats.codinlearner.command;
 
-public interface Move {
+import java.util.List;
+
+public interface Command {
 
 	void execute();
 
