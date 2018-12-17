@@ -1,44 +1,38 @@
 package pl.edu.agh.to2.kitkats.codinlearner.canvas;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import pl.edu.agh.to2.kitkats.codinlearner.command.CommandRegistry;
-import pl.edu.agh.to2.kitkats.codinlearner.command.MoveCommand;
-import pl.edu.agh.to2.kitkats.codinlearner.controller.CodinAppController;
+import pl.edu.agh.to2.kitkats.codinlearner.command.MoveRegistry;
+import pl.edu.agh.to2.kitkats.codinlearner.command.DrawMove;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
 import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedCommand;
-
-import java.util.List;
 
 public class CanvasManager {
 
     private Arena arena;
     private GraphicsContext cursorGc;
     private GraphicsContext lineGc;
-    private CommandRegistry commandRegistry;
+    private MoveRegistry moveRegistry;
 
-    public CanvasManager(Arena arena, GraphicsContext cursorGc, GraphicsContext lineGc, CommandRegistry commandRegistry) {
+    public CanvasManager(Arena arena, GraphicsContext cursorGc, GraphicsContext lineGc, MoveRegistry moveRegistry) {
         this.arena = arena;
         this.cursorGc = cursorGc;
         this.lineGc = lineGc;
-        this.commandRegistry = commandRegistry;
+        this.moveRegistry = moveRegistry;
     }
 
 
     public void undo() {
         clearCursor();
-        commandRegistry.undo();
+        moveRegistry.undo();
         this.arena.getCursor().reset();
-        commandRegistry.redraw();
+        moveRegistry.redraw();
         drawCursor();
     }
 
 
     public void redo() {
         clearCursor();
-        commandRegistry.redo();
+        moveRegistry.redo();
         drawCursor();
     }
 
@@ -46,8 +40,8 @@ public class CanvasManager {
 
         clearCursor();
 
-        commandRegistry.executeCommand(
-                new MoveCommand(
+        moveRegistry.execute(
+                new DrawMove(
                         this.lineGc,
                         command,
                         this.arena
@@ -77,6 +71,6 @@ public class CanvasManager {
     }
 
     public void resetCommandRegistry(){
-        this.commandRegistry.reset();
+        this.moveRegistry.reset();
     }
 }

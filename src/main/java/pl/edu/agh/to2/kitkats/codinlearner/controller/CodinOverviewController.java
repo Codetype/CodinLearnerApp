@@ -12,7 +12,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import pl.edu.agh.to2.kitkats.codinlearner.canvas.CanvasManager;
-import pl.edu.agh.to2.kitkats.codinlearner.command.CommandRegistry;
+import pl.edu.agh.to2.kitkats.codinlearner.command.MoveRegistry;
 import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelProvider;
@@ -27,7 +27,7 @@ import static java.lang.Math.min;
 
 public class CodinOverviewController {
 
-    private CommandRegistry commandRegistry;
+    private MoveRegistry moveRegistry;
     private LevelManager levelManager;
     private LevelProvider levelProvider;
     private CommandParser commandParser;
@@ -80,7 +80,7 @@ public class CodinOverviewController {
         movesMap.put(CommandParser.EMPTY, Command.EMPTY);
         commandParser = new CommandParser(movesMap);
 
-        commandRegistry = new CommandRegistry();
+        moveRegistry = new MoveRegistry();
 
         prevCommands.setMinHeight(170);
         cursorGc = cursorCanvas.getGraphicsContext2D();
@@ -135,7 +135,7 @@ public class CodinOverviewController {
 
     public void initializeCanvasManager(){
         this.canvasManager = new CanvasManager(this.arena, this.cursorCanvas.getGraphicsContext2D(),
-                this.lineCanvas.getGraphicsContext2D(), this.commandRegistry);
+                this.lineCanvas.getGraphicsContext2D(), this.moveRegistry);
     }
 
     public void showLevelInfo() {
