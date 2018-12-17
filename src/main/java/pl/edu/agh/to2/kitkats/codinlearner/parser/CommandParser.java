@@ -12,7 +12,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CommandParser {
+
     private HashMap<String, Command> commandMap;
+
+    public static final String GO = "go";
+    public static final String LEFT = "left";
+    public static final String RIGHT = "right";
+    public static final String REPEAT = "repeat";
+    public static final String EMPTY = "";
 
     public CommandParser(HashMap<String, Command> commandMap) {
         this.commandMap = commandMap;

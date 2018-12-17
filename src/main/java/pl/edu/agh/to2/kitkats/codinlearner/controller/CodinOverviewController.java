@@ -76,11 +76,11 @@ public class CodinOverviewController {
         levelManager = new LevelManager(0);
         //TODO commands map parsed from JSON or level - for every level some available commands
         HashMap<String, Command> movesMap = new HashMap<>();
-        movesMap.put("go", Command.FORWARD);
-        movesMap.put("left", Command.LEFT);
-        movesMap.put("right", Command.RIGHT);
-        movesMap.put("repeat", Command.REPEAT);
-        movesMap.put("", Command.EMPTY);
+        movesMap.put(CommandParser.GO, Command.FORWARD);
+        movesMap.put(CommandParser.LEFT, Command.LEFT);
+        movesMap.put(CommandParser.RIGHT, Command.RIGHT);
+        movesMap.put(CommandParser.REPEAT, Command.REPEAT);
+        movesMap.put(CommandParser.EMPTY, Command.EMPTY);
         commandParser = new CommandParser(movesMap);
 
         commandRegistry = new CommandRegistry();
