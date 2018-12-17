@@ -1,20 +1,33 @@
 package pl.edu.agh.to2.kitkats.codinlearner.model;
 
 public enum Command {
-    RIGHT(90), LEFT(90), FORWARD(1), BACK(1), WRONG(0), EMPTY(0), REPEAT(0);
+//    RIGHT(90),
+//    LEFT(90),
+//    FORWARD(1),
+//    BACK(1),
+//    WRONG(0),
+//    EMPTY(0),
+//    REPEAT(0);
+    RIGHT,
+    LEFT,
+    FORWARD,
+    BACK,
+    WRONG,
+    EMPTY,
+    REPEAT;
 
-    private int value;
-    Command(int value){
-        this.value = value;
-    }
+//    private final int value;
+//    Command(int value){
+//        this.value = value;
+//    }
+//
+//    public int getValue() {
+//        return value;
+//    }
 
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
+//    public void setValue(int value) {
+//        this.value = value;
+//    }
 
     public Command oppositeCommand(){
         switch (this){

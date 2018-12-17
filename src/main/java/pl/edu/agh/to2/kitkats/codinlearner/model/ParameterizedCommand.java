@@ -2,7 +2,7 @@ package pl.edu.agh.to2.kitkats.codinlearner.model;
 
 public class ParameterizedCommand {
 
-    private Command command;
+    private final Command command;
     private int parameter;
 
     public ParameterizedCommand(Command command, int parameter) {
@@ -10,25 +10,28 @@ public class ParameterizedCommand {
         this.parameter = parameter;
     }
 
-    public void setDefaultsValues(){
-        switch(this.command){
-            case RIGHT: this.setParameter(90); break;
-            case LEFT: this.setParameter(90); break;
-            case FORWARD: this.setParameter(1); break;
-            case BACK: this.setParameter(1); break;
-            case WRONG: this.setParameter(0); break;
-            case EMPTY: this.setParameter(0); break;
-            case REPEAT: this.setParameter(0); break;
-        }
+    public ParameterizedCommand(Command command) {
+        this.command = command;
+        this.parameter = getDefaultParameter(this.command);
+    }
 
+    private int getDefaultParameter(Command command) {
+        int result;
+        switch (command) {
+            case RIGHT: result = 90; break;
+            case LEFT: result = 90; break;
+            case FORWARD: result = 1; break;
+            case BACK: result = 1; break;
+            case WRONG: result = 0; break;
+            case EMPTY: result = 0; break;
+            case REPEAT: result = 0; break;
+            default: result = 0; break;
+        }
+        return result;
     }
 
     public Command getCommand() {
         return command;
-    }
-
-    public void setCommand(Command command) {
-        this.command = command;
     }
 
     public int getParameter() {

@@ -32,10 +32,10 @@ public class CommandParser {
         for (int i = 0; i < parts.size(); i++) {
             String currentCommand = parts.get(i);
 
-            if (currentCommand.equals("repeat")) {
+            if (currentCommand.equals(REPEAT)) {
                 i++;
                 try {
-                    Integer repeats = 0;
+                    int repeats = 0;
                     if (i < parts.size()) {
                         repeats = Integer.parseInt(parts.get(i));
                         i++;
@@ -74,21 +74,17 @@ public class CommandParser {
 
 
     private ParameterizedCommand parseSimpleCommand(String currentCommand) {
-        Command com = commandMap.getOrDefault(currentCommand, Command.WRONG);
-        ParameterizedCommand parComm = new ParameterizedCommand(com, 0);
-        parComm.setDefaultsValues();
-        return parComm;
+        Command command = commandMap.getOrDefault(currentCommand, Command.WRONG);
+        return new ParameterizedCommand(command);
     }
 
     private ParameterizedCommand parseComplexCommand(String currentCommand, String nextCommand) {
-        Command comm = commandMap.getOrDefault(currentCommand, Command.WRONG);
+        Command command = commandMap.getOrDefault(currentCommand, Command.WRONG);
         try {
-            Integer arg = Integer.parseInt(nextCommand);
-            ParameterizedCommand parComm = new ParameterizedCommand(comm, arg);
-            return parComm;
+            int parameter = Integer.parseInt(nextCommand);
+            return new ParameterizedCommand(command, parameter);
         } catch (NumberFormatException e) {
-            ParameterizedCommand parComm = new ParameterizedCommand(Command.WRONG, 0);
-            return parComm;
+            return new ParameterizedCommand(Command.WRONG, 0);
         }
     }
 }

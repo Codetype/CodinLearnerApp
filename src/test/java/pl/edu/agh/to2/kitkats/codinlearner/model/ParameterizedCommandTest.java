@@ -12,13 +12,14 @@ public class ParameterizedCommandTest {
     @Before
     public void beforeEachTest(){
         parameterizedCommand = Mockito.mock(ParameterizedCommand.class);
-        parameterizedCommand = new ParameterizedCommand(Command.WRONG, 0);
+//        parameterizedCommand = new ParameterizedCommand(Command.WRONG, 0);
     }
 
     @Test
     public void gettersTest(){
-        parameterizedCommand.setCommand(Command.FORWARD);
-        parameterizedCommand.setParameter(2);
+//        parameterizedCommand.setCommand(Command.FORWARD);
+//        parameterizedCommand.setParameter(2);
+        parameterizedCommand = new ParameterizedCommand(Command.FORWARD, 2);
 
         Command com = parameterizedCommand.getCommand();
         int param = parameterizedCommand.getParameter();
