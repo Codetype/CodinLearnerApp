@@ -21,6 +21,7 @@ import pl.edu.agh.to2.kitkats.codinlearner.parser.CommandParser;
 
 import java.util.List;
 import java.util.HashMap;
+import java.util.Optional;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -67,6 +68,9 @@ public class CodinOverviewController {
 
     @FXML
     private Button redoButton;
+
+    @FXML
+    private Button addLevelsButton;
 
     @FXML
     private void initialize() {
@@ -145,6 +149,21 @@ public class CodinOverviewController {
         } else {
             levelInfo.setText("All levels completed. Congratulations!");
         }
+    }
+
+    @FXML
+    private void handleAddLevelsAction(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "About to reset current level progress. Continue?",
+                ButtonType.OK,
+                ButtonType.CANCEL
+        );
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+//            System.out.println("ok");
+            levelManager.resetLevel();
+        }
+
     }
 
     @FXML

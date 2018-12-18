@@ -62,8 +62,7 @@
                             </HBox.margin>
                         </Button>
                         <Pane HBox.hgrow="ALWAYS"/>
-                        <!--<Button fx:id="addLevelsButton" mnemonicParsing="false" onAction="#handleAddLevelsAction" text="Add levels" alignment="TOP_RIGHT">-->
-                        <Button fx:id="addLevelsButton" mnemonicParsing="false" text="Add levels">
+                        <Button fx:id="addLevelsButton" mnemonicParsing="false" onAction="#handleAddLevelsAction" text="Add Levels">
                             <HBox.margin>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </HBox.margin>
