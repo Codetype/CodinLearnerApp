@@ -1,23 +1,23 @@
 package pl.edu.agh.to2.kitkats.codinlearner.model;
 
-public class ParameterizedCommand {
+public class ParameterizedInstruction {
 
-    private final Command command;
+    private final Instruction instruction;
     private int parameter;
 
-    public ParameterizedCommand(Command command, int parameter) {
-        this.command = command;
+    public ParameterizedInstruction(Instruction instruction, int parameter) {
+        this.instruction = instruction;
         this.parameter = parameter;
     }
 
-    public ParameterizedCommand(Command command) {
-        this.command = command;
-        this.parameter = getDefaultParameter(this.command);
+    public ParameterizedInstruction(Instruction instruction) {
+        this.instruction = instruction;
+        this.parameter = getDefaultParameter(this.instruction);
     }
 
-    private int getDefaultParameter(Command command) {
+    private int getDefaultParameter(Instruction instruction) {
         int result;
-        switch (command) {
+        switch (instruction) {
             case RIGHT: result = 90; break;
             case LEFT: result = 90; break;
             case FORWARD: result = 1; break;
@@ -30,8 +30,8 @@ public class ParameterizedCommand {
         return result;
     }
 
-    public Command getCommand() {
-        return command;
+    public Instruction getInstruction() {
+        return instruction;
     }
 
     public int getParameter() {

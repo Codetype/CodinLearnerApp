@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import pl.edu.agh.to2.kitkats.codinlearner.canvas.CanvasManager;
@@ -73,15 +74,18 @@ public class CodinOverviewController {
     private Button addLevelsButton;
 
     @FXML
+    private HBox hbox;
+
+    @FXML
     private void initialize() {
         levelManager = new LevelManager(0);
         //TODO commands map parsed from JSON or level - for every level some available commands
-        HashMap<String, Command> movesMap = new HashMap<>();
-        movesMap.put(CommandParser.GO, Command.FORWARD);
-        movesMap.put(CommandParser.LEFT, Command.LEFT);
-        movesMap.put(CommandParser.RIGHT, Command.RIGHT);
-        movesMap.put(CommandParser.REPEAT, Command.REPEAT);
-        movesMap.put(CommandParser.EMPTY, Command.EMPTY);
+        HashMap<String, Instruction> movesMap = new HashMap<>();
+        movesMap.put(CommandParser.GO, Instruction.FORWARD);
+        movesMap.put(CommandParser.LEFT, Instruction.LEFT);
+        movesMap.put(CommandParser.RIGHT, Instruction.RIGHT);
+        movesMap.put(CommandParser.REPEAT, Instruction.REPEAT);
+        movesMap.put(CommandParser.EMPTY, Instruction.EMPTY);
         commandParser = new CommandParser(movesMap);
 
         commandRegistry = new CommandRegistry();
@@ -99,11 +103,11 @@ public class CodinOverviewController {
             public void handle(KeyEvent ke){
                 if (ke.getCode().equals(KeyCode.ENTER)){
 
-                    List<ParameterizedCommand> commands = commandParser.parseCommand(commandLine.getText());
+                    List<ParameterizedInstruction> commands = commandParser.parseCommand(commandLine.getText());
                     prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
                     prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
 
-                    for(ParameterizedCommand lineCommand : commands) {
+                    for(ParameterizedInstruction lineCommand : commands) {
                         if (handleOperation(lineCommand)) {
                             levelManager.addCommand(lineCommand);
                             canvasManager.move(lineCommand);
@@ -160,8 +164,12 @@ public class CodinOverviewController {
         );
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-//            System.out.println("ok");
+            System.out.println("ok");
             levelManager.resetLevel();
+            canvasManager.resetCommandRegistry();
+            resetDrawing();
+//            addLevelsButton.setText("");
+//            hbox.getChildren().
         }
 
     }
@@ -207,8 +215,8 @@ public class CodinOverviewController {
         this.prevCommands.setText("");
     }
 
-    private boolean handleOperation(ParameterizedCommand command){
-        return !command.getCommand().equals(Command.WRONG);
+    private boolean handleOperation(ParameterizedInstruction command){
+        return !command.getInstruction().equals(Instruction.WRONG);
     }
 
     public void setArena(Arena arena) {

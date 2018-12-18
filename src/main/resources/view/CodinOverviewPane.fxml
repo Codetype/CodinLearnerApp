@@ -49,25 +49,25 @@
                     </content>
                 </ScrollPane>
                 <TextField id="CommandLine" fx:id="commandLine"  />
-                <HBox maxHeight="-Infinity" prefHeight="39.0" prefWidth="800.0" BorderPane.alignment="TOP_LEFT">
-                    <children>
-                        <Button fx:id="undoButton" mnemonicParsing="false" onAction="#handleUndoAction" text="Undo">
-                            <HBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </HBox.margin>
-                        </Button>
-                        <Button fx:id="redoButton" mnemonicParsing="false" onAction="#handleRedoAction" text="Redo">
-                            <HBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </HBox.margin>
-                        </Button>
-                        <Pane HBox.hgrow="ALWAYS"/>
-                        <Button fx:id="addLevelsButton" mnemonicParsing="false" onAction="#handleAddLevelsAction" text="Add Levels">
-                            <HBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </HBox.margin>
-                        </Button>
-                    </children>
+                <HBox fx:id="hbox" maxHeight="-Infinity" prefHeight="39.0" prefWidth="800.0"
+                      BorderPane.alignment="TOP_LEFT">
+                    <Button fx:id="undoButton" mnemonicParsing="false" onAction="#handleUndoAction" text="Undo">
+                        <HBox.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </HBox.margin>
+                    </Button>
+                    <Button fx:id="redoButton" mnemonicParsing="false" onAction="#handleRedoAction" text="Redo">
+                        <HBox.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </HBox.margin>
+                    </Button>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="addLevelsButton" mnemonicParsing="false" onAction="#handleAddLevelsAction"
+                            text="Add Levels">
+                        <HBox.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </HBox.margin>
+                    </Button>
                 </HBox>
             </children>
         </VBox>

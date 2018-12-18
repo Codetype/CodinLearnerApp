@@ -1,22 +1,17 @@
 package pl.edu.agh.to2.kitkats.codinlearner.command;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
-import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
-import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedCommand;
-
-import java.util.ArrayList;
-import java.util.List;
+import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 
 
 public class MoveCommand implements pl.edu.agh.to2.kitkats.codinlearner.command.Command{
 
     private GraphicsContext lineGc;
-    private ParameterizedCommand command;
+    private ParameterizedInstruction command;
     private Arena arena;
 
-    public MoveCommand(GraphicsContext graphicsContext, ParameterizedCommand command, Arena arena) {
+    public MoveCommand(GraphicsContext graphicsContext, ParameterizedInstruction command, Arena arena) {
         this.command = command;
         this.arena = arena;
         this.lineGc = graphicsContext;

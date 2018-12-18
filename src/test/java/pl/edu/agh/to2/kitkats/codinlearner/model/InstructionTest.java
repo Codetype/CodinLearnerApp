@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class CommandTest {
+public class InstructionTest {
 //    @Test
 //    public void testGetters() {
 //        Command command = Command.FORWARD;
@@ -16,8 +16,8 @@ public class CommandTest {
 
     @Test
     public void testOpositeCommand() {
-        Command command = Command.LEFT.oppositeCommand();
+        Instruction instruction = Instruction.LEFT.oppositeInstruction();
 
-        assertEquals(Command.RIGHT, command);
+        assertEquals(Instruction.RIGHT, instruction);
     }
 }

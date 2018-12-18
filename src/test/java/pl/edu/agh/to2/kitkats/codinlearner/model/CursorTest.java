@@ -13,7 +13,7 @@ import java.util.List;
 public class CursorTest {
     private Arena arena = null;
     private Cursor cursor = null;
-    private List<ParameterizedCommand> commands;
+    private List<ParameterizedInstruction> commands;
 
     @Before
     public void beforeEachTest(){
@@ -34,10 +34,10 @@ public class CursorTest {
 
     @Test
     public void testResetCursorPosition() {
-        cursor.move(1, new ParameterizedCommand(Command.FORWARD, 90));
-        cursor.move(1, new ParameterizedCommand(Command.RIGHT, 90));
-        cursor.move(1, new ParameterizedCommand(Command.FORWARD, 90));
-        cursor.move(1, new ParameterizedCommand(Command.LEFT, 90));
+        cursor.move(1, new ParameterizedInstruction(Instruction.FORWARD, 90));
+        cursor.move(1, new ParameterizedInstruction(Instruction.RIGHT, 90));
+        cursor.move(1, new ParameterizedInstruction(Instruction.FORWARD, 90));
+        cursor.move(1, new ParameterizedInstruction(Instruction.LEFT, 90));
         cursor.reset();
 
         double x1 = cursor.getX();
@@ -49,7 +49,7 @@ public class CursorTest {
 
     @Test
     public void testGoForwardCursor() {
-        cursor.move(1, new ParameterizedCommand(Command.FORWARD, 1));
+        cursor.move(1, new ParameterizedInstruction(Instruction.FORWARD, 1));
 
         double x1 = cursor.getX();
         double y1 = cursor.getY();
@@ -59,8 +59,8 @@ public class CursorTest {
 
     @Test
     public void testGoLeftCursor() {
-        cursor.move(1, new ParameterizedCommand(Command.LEFT, 90));
-        cursor.move(1, new ParameterizedCommand(Command.FORWARD, 1));
+        cursor.move(1, new ParameterizedInstruction(Instruction.LEFT, 90));
+        cursor.move(1, new ParameterizedInstruction(Instruction.FORWARD, 1));
 
         double x1 = cursor.getX();
         double y1 = cursor.getY();

@@ -2,15 +2,9 @@ package pl.edu.agh.to2.kitkats.codinlearner.model;
 
 import com.vividsolutions.jts.algorithm.Angle;
 import com.vividsolutions.jts.math.Vector2D;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
 
 public class Cursor {
 
@@ -83,8 +77,8 @@ public class Cursor {
             shapePointsY.add(this.y + alongVector.getY());
     }
 
-    public void move(int mode, ParameterizedCommand command){
-        switch (command.getCommand()){
+    public void move(int mode, ParameterizedInstruction command){
+        switch (command.getInstruction()){
             case LEFT: rotateLeft(command.getParameter()); break;
             case RIGHT: rotateRight(command.getParameter()); break;
             case FORWARD:
@@ -119,7 +113,7 @@ public class Cursor {
         setShapePoints();
     }
 
-    public void moveBack(ParameterizedCommand command){
+    public void moveBack(ParameterizedInstruction command){
         move(-1, reverseCommand(command));
     }
 
@@ -150,10 +144,10 @@ public class Cursor {
         setShapePoints();
     }
 
-    private ParameterizedCommand reverseCommand(ParameterizedCommand command){
-        Command newCommand = command.getCommand().oppositeCommand();
+    private ParameterizedInstruction reverseCommand(ParameterizedInstruction command){
+        Instruction newInstruction = command.getInstruction().oppositeInstruction();
         int parameter = command.getParameter();
-        return new ParameterizedCommand(newCommand, parameter);
+        return new ParameterizedInstruction(newInstruction, parameter);
     }
 
     public double[] getShapePointsX() {

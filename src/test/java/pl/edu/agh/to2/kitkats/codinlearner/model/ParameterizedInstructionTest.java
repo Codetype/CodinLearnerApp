@@ -6,12 +6,12 @@ import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
 
-public class ParameterizedCommandTest {
-    private ParameterizedCommand parameterizedCommand = null;
+public class ParameterizedInstructionTest {
+    private ParameterizedInstruction parameterizedInstruction = null;
 
     @Before
     public void beforeEachTest(){
-        parameterizedCommand = Mockito.mock(ParameterizedCommand.class);
+        parameterizedInstruction = Mockito.mock(ParameterizedInstruction.class);
 //        parameterizedCommand = new ParameterizedCommand(Command.WRONG, 0);
     }
 
@@ -19,12 +19,12 @@ public class ParameterizedCommandTest {
     public void gettersTest(){
 //        parameterizedCommand.setCommand(Command.FORWARD);
 //        parameterizedCommand.setParameter(2);
-        parameterizedCommand = new ParameterizedCommand(Command.FORWARD, 2);
+        parameterizedInstruction = new ParameterizedInstruction(Instruction.FORWARD, 2);
 
-        Command com = parameterizedCommand.getCommand();
-        int param = parameterizedCommand.getParameter();
+        Instruction com = parameterizedInstruction.getInstruction();
+        int param = parameterizedInstruction.getParameter();
 
-        assertEquals(Command.FORWARD, com);
+        assertEquals(Instruction.FORWARD, com);
         assertEquals(2, param);
     }
 }

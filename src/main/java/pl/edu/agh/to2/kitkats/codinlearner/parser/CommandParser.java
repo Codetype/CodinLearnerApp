@@ -1,19 +1,16 @@
 package pl.edu.agh.to2.kitkats.codinlearner.parser;
 
-import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
-import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedCommand;
+import pl.edu.agh.to2.kitkats.codinlearner.model.Instruction;
+import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 
-import java.awt.event.ComponentAdapter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CommandParser {
 
-    private HashMap<String, Command> commandMap;
+    private HashMap<String, Instruction> commandMap;
 
     public static final String GO = "go";
     public static final String LEFT = "left";
@@ -21,12 +18,12 @@ public class CommandParser {
     public static final String REPEAT = "repeat";
     public static final String EMPTY = "";
 
-    public CommandParser(HashMap<String, Command> commandMap) {
+    public CommandParser(HashMap<String, Instruction> commandMap) {
         this.commandMap = commandMap;
     }
 
-    public List<ParameterizedCommand> parseCommand(String commandAsString) {
-        List<ParameterizedCommand> commands = new ArrayList<>();
+    public List<ParameterizedInstruction> parseCommand(String commandAsString) {
+        List<ParameterizedInstruction> commands = new ArrayList<>();
         List<String> parts = Arrays.asList(commandAsString.split("\\s"));
 
         for (int i = 0; i < parts.size(); i++) {
@@ -68,23 +65,23 @@ public class CommandParser {
         return commands;
     }
 
-    private ParameterizedCommand parseWrongCommand() {
-        return (new ParameterizedCommand(Command.WRONG));
+    private ParameterizedInstruction parseWrongCommand() {
+        return (new ParameterizedInstruction(Instruction.WRONG));
     }
 
 
-    private ParameterizedCommand parseSimpleCommand(String currentCommand) {
-        Command command = commandMap.getOrDefault(currentCommand, Command.WRONG);
-        return new ParameterizedCommand(command);
+    private ParameterizedInstruction parseSimpleCommand(String currentCommand) {
+        Instruction instruction = commandMap.getOrDefault(currentCommand, Instruction.WRONG);
+        return new ParameterizedInstruction(instruction);
     }
 
-    private ParameterizedCommand parseComplexCommand(String currentCommand, String nextCommand) {
-        Command command = commandMap.getOrDefault(currentCommand, Command.WRONG);
+    private ParameterizedInstruction parseComplexCommand(String currentCommand, String nextCommand) {
+        Instruction instruction = commandMap.getOrDefault(currentCommand, Instruction.WRONG);
         try {
             int parameter = Integer.parseInt(nextCommand);
-            return new ParameterizedCommand(command, parameter);
+            return new ParameterizedInstruction(instruction, parameter);
         } catch (NumberFormatException e) {
-            return new ParameterizedCommand(Command.WRONG);
+            return new ParameterizedInstruction(Instruction.WRONG);
         }
     }
 }

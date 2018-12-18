@@ -1,16 +1,10 @@
 package pl.edu.agh.to2.kitkats.codinlearner.canvas;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import pl.edu.agh.to2.kitkats.codinlearner.command.CommandRegistry;
 import pl.edu.agh.to2.kitkats.codinlearner.command.MoveCommand;
-import pl.edu.agh.to2.kitkats.codinlearner.controller.CodinAppController;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
-import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedCommand;
-
-import java.util.List;
+import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 
 public class CanvasManager {
 
@@ -42,7 +36,7 @@ public class CanvasManager {
         drawCursor();
     }
 
-    public void move(ParameterizedCommand command){
+    public void move(ParameterizedInstruction command){
 
         clearCursor();
 
