@@ -18,7 +18,7 @@ import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelProvider;
 import pl.edu.agh.to2.kitkats.codinlearner.model.*;
-import pl.edu.agh.to2.kitkats.codinlearner.parser.CommandParser;
+import pl.edu.agh.to2.kitkats.codinlearner.parser.InstructionParser;
 
 import java.util.List;
 import java.util.HashMap;
@@ -32,7 +32,7 @@ public class CodinOverviewController {
     private CommandRegistry commandRegistry;
     private LevelManager levelManager;
     private LevelProvider levelProvider;
-    private CommandParser commandParser;
+    private InstructionParser instructionParser;
     private CanvasManager canvasManager;
 
     public Arena arena;
@@ -81,12 +81,12 @@ public class CodinOverviewController {
         levelManager = new LevelManager(0);
         //TODO commands map parsed from JSON or level - for every level some available commands
         HashMap<String, Instruction> movesMap = new HashMap<>();
-        movesMap.put(CommandParser.GO, Instruction.FORWARD);
-        movesMap.put(CommandParser.LEFT, Instruction.LEFT);
-        movesMap.put(CommandParser.RIGHT, Instruction.RIGHT);
-        movesMap.put(CommandParser.REPEAT, Instruction.REPEAT);
-        movesMap.put(CommandParser.EMPTY, Instruction.EMPTY);
-        commandParser = new CommandParser(movesMap);
+        movesMap.put(InstructionParser.GO, Instruction.FORWARD);
+        movesMap.put(InstructionParser.LEFT, Instruction.LEFT);
+        movesMap.put(InstructionParser.RIGHT, Instruction.RIGHT);
+        movesMap.put(InstructionParser.REPEAT, Instruction.REPEAT);
+        movesMap.put(InstructionParser.EMPTY, Instruction.EMPTY);
+        instructionParser = new InstructionParser(movesMap);
 
         commandRegistry = new CommandRegistry();
 
@@ -103,7 +103,7 @@ public class CodinOverviewController {
             public void handle(KeyEvent ke){
                 if (ke.getCode().equals(KeyCode.ENTER)){
 
-                    List<ParameterizedInstruction> commands = commandParser.parseCommand(commandLine.getText());
+                    List<ParameterizedInstruction> commands = instructionParser.parseInstruction(commandLine.getText());
                     prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
                     prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
 
