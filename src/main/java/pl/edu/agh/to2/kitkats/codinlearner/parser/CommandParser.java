@@ -69,7 +69,7 @@ public class CommandParser {
     }
 
     private ParameterizedCommand parseWrongCommand() {
-        return (new ParameterizedCommand(Command.WRONG, 0));
+        return (new ParameterizedCommand(Command.WRONG));
     }
 
 
@@ -84,7 +84,7 @@ public class CommandParser {
             int parameter = Integer.parseInt(nextCommand);
             return new ParameterizedCommand(command, parameter);
         } catch (NumberFormatException e) {
-            return new ParameterizedCommand(Command.WRONG, 0);
+            return new ParameterizedCommand(Command.WRONG);
         }
     }
 }
