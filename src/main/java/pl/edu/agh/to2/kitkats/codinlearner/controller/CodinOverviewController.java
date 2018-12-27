@@ -46,7 +46,7 @@ public class CodinOverviewController {
     private Label prevCommands;
 
     @FXML
-    private TextField commandLine;
+    private TextArea commandLine;
 
     @FXML
     private Canvas cursorCanvas;
@@ -97,29 +97,6 @@ public class CodinOverviewController {
 
         lineGc = lineCanvas.getGraphicsContext2D();
         lineGc.setStroke(Color.RED);
-
-        commandLine.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke){
-                if (ke.getCode().equals(KeyCode.ENTER)){
-
-                    List<ParameterizedInstruction> commands = instructionParser.parseInstruction(commandLine.getText());
-                    prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
-                    prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
-
-                    for(ParameterizedInstruction lineCommand : commands) {
-                        if (handleOperation(lineCommand)) {
-                            levelManager.addCommand(lineCommand);
-                            canvasManager.move(lineCommand);
-                            commandLine.clear();
-                        } else {
-                            prevCommands.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
-                        }
-
-                    }
-                }
-            }
-        });
     }
 
 
@@ -184,6 +161,23 @@ public class CodinOverviewController {
         this.canvasManager.redo();
     }
 
+    @FXML
+    private void handleExecuteAction(ActionEvent event) {
+        List<ParameterizedInstruction> commands = instructionParser.parseInstruction(commandLine.getText());
+        prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
+        prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
+
+        for(ParameterizedInstruction lineCommand : commands) {
+            if (handleOperation(lineCommand)) {
+                levelManager.addCommand(lineCommand);
+                canvasManager.move(lineCommand);
+                commandLine.clear();
+            } else {
+                prevCommands.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
+            }
+
+        }
+    }
 
     @FXML
     private void handleCheckAction(ActionEvent event) {
