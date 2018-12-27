@@ -3,12 +3,18 @@ package pl.edu.agh.to2.kitkats.codinlearner.level;
 import com.vividsolutions.jts.algorithm.Angle;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.math.Vector2D;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Instruction;
 import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
 import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 import pl.edu.agh.to2.kitkats.codinlearner.model.RepeatedInstructions;
+
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.simple.parser.*;
+import java.util.Iterator;
 
 public class LevelProvider {
 
@@ -59,49 +65,49 @@ public class LevelProvider {
     }
 
     public List<Level> getLevels() {
-        RepeatedInstructions level1 = new RepeatedInstructions();
-        level1.add(Instruction.FORWARD, 2);
-        newLevel(
-                level1.getAll(),
-                "Draw a line (length: 2)"
-        );
+        //level parsing
+        JSONParser parser = new JSONParser();
+        try{
+            Object obj = parser.parse(new FileReader(
+                    "./src/main/resources/MoveConfiguration/Levels.json"));
+            JSONObject jsonObj = (JSONObject) obj;
+            JSONArray jsonLevels = (JSONArray) jsonObj.get("levels");
 
-        RepeatedInstructions level2 = new RepeatedInstructions(2);
-        level2.add(Instruction.FORWARD, 2);
-        level2.add(Instruction.LEFT, 90);
-        level2.add(Instruction.FORWARD, 1);
-        level2.add(Instruction.LEFT, 90);
-        newLevel(
-                level2.getAll(),
-                "Draw a rectangle (width: 2, height: 1)"
-        );
+            for(Object level : jsonLevels){
+                JSONObject jsonLevel = (JSONObject) level;
+                final String desc = (String) jsonLevel.get("description");
+                final Long repeats = (Long) jsonLevel.get("repeats");
 
-        RepeatedInstructions level3 = new RepeatedInstructions(4);
-        level3.add(Instruction.FORWARD, 1);
-        level3.add(Instruction.LEFT, 90);
-        newLevel(
-                level3.getAll(),
-                "Draw a square (size: 1)"
-        );
+                JSONArray moves = (JSONArray) jsonLevel.get("moves");
+                Iterator<String> movesIterator = moves.iterator();
+                JSONArray units = (JSONArray) jsonLevel.get("units");
+                Iterator<Long> unitsIterator = units.iterator();
 
-        RepeatedInstructions level4 = new RepeatedInstructions(3);
-        level4.add(Instruction.FORWARD, 1);
-        level4.add(Instruction.LEFT, 120);
-        newLevel(
-                level4.getAll(),
-                "Draw an equilateral triangle (size: 1)"
-        );
+                RepeatedInstructions instructions = new RepeatedInstructions(repeats.intValue());
+                while(movesIterator.hasNext() && unitsIterator.hasNext()){
+                    instructions.add(parseInstructionFromString(movesIterator.next()),unitsIterator.next().intValue());
+                }
 
-        RepeatedInstructions level5 = new RepeatedInstructions(5);
-        level5.add(Instruction.FORWARD, 1);
-        level5.add(Instruction.BACK, 1);
-        level5.add(Instruction.RIGHT, 72);
-        newLevel(
-                level5.getAll(),
-                "Draw an asterisk (size: 1, arms: 5)"
-        );
-
+                newLevel(
+                        instructions.getAll(),
+                        desc
+                );
+            }
+        } catch (Exception e){
+            System.out.println("Error during parsing JSON file.");
+            //e.printStackTrace();
+        }
         return levels;
     }
 
+    public Instruction parseInstructionFromString(String value) {
+        Instruction instruction = Instruction.WRONG;
+        switch(value){
+            case "FORWARD": instruction = Instruction.FORWARD; break;
+            case "LEFT": instruction = Instruction.LEFT; break;
+            case "RIGHT": instruction = Instruction.RIGHT; break;
+            default: break;
+        }
+        return instruction;
+    }
 }

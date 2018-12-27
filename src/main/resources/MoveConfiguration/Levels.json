@@ -1,0 +1,64 @@
+{
+  "levels": [
+    {
+      "_id": 1,
+      "description": "Draw a line (length: 2)",
+      "moves": [
+        "FORWARD"
+      ],
+      "units": [
+        2
+      ],
+      "repeats": 1,
+      "minNumbersOfMove": 1
+    },
+    {
+      "_id": 2,
+      "description": "Draw a rectangle (width: 2, height: 1)",
+      "moves": [
+        "FORWARD", "LEFT", "FORWARD", "LEFT"
+      ],
+      "units": [
+        2, 90, 1, 90
+      ],
+      "repeats": 2,
+      "minNumbersOfMove": 1
+    },
+    {
+      "_id": 3,
+      "description": "Draw a square (size: 1)",
+      "moves": [
+        "FORWARD", "LEFT"
+      ],
+      "units": [
+        1, 90
+      ],
+      "repeats": 4,
+      "minNumbersOfMove": 1
+    },
+    {
+      "_id": 4,
+      "description": "Draw an equilateral triangle (size: 1)",
+      "moves": [
+        "FORWARD", "LEFT"
+      ],
+      "units": [
+        1, 120
+      ],
+      "repeats": 3,
+      "minNumbersOfMove": 1
+    },
+    {
+      "_id": 5,
+      "description": "Draw an asterisk (size: 1, arms: 5)",
+      "moves": [
+        "FORWARD", "BACK", "RIGHT"
+      ],
+      "units": [
+        1, 1, 72
+      ],
+      "repeats": 5,
+      "minNumbersOfMove": 1
+    }
+  ]
+}
