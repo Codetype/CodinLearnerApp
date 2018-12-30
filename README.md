@@ -61,13 +61,13 @@ For example:
 go 2 left
 ``` 
 
-###Loops
+### Loops
 To run loop type:
 ```
 repeat 2 [ go 2 left ]
 ```
 
-###Procedures
+### Procedures
 There is posibility to write simple procedure:
 ```
 begin line :length
