@@ -6,8 +6,7 @@ public enum Instruction {
     FORWARD,
     BACK,
     WRONG,
-    EMPTY,
-    REPEAT;
+    EMPTY;
 
     public Instruction oppositeInstruction() {
         switch (this) {

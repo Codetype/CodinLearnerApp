@@ -84,7 +84,6 @@ public class CodinOverviewController {
         movesMap.put(InstructionParser.GO, Instruction.FORWARD);
         movesMap.put(InstructionParser.LEFT, Instruction.LEFT);
         movesMap.put(InstructionParser.RIGHT, Instruction.RIGHT);
-        movesMap.put(InstructionParser.REPEAT, Instruction.REPEAT);
         movesMap.put(InstructionParser.EMPTY, Instruction.EMPTY);
         instructionParser = new InstructionParser(movesMap);
 

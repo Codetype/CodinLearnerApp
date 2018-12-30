@@ -1,0 +1,44 @@
+{
+  "procedures": [
+    {
+      "_id": 1,
+      "name": "triangle",
+      "instruction": "repeat 3 [go side left 120]",
+      "side": 1,
+      "numberOfArguments": 1,
+      "arguments": [
+        "side"
+      ]
+    },
+    {
+      "_id": 2,
+      "name": "square",
+      "instruction": "repeat 4 [go side left]",
+      "side": 1,
+      "numberOfArguments": 1,
+      "arguments": [
+        "side"
+      ]
+    },
+    {
+      "_id": 3,
+      "name": "pentagon",
+      "instruction": "repeat 5 [go side left 72]",
+      "side": 1,
+      "numberOfArguments": 1,
+      "arguments": [
+        "side"
+      ]
+    },
+    {
+      "_id": 4,
+      "name": "hexagon",
+      "instruction": "repeat 6 [go side left 60]",
+      "side": 1,
+      "numberOfArguments": 1,
+      "arguments": [
+        "side"
+      ]
+    }
+  ]
+}

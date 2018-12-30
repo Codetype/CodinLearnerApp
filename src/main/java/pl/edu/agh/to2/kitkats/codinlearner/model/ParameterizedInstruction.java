@@ -24,7 +24,6 @@ public class ParameterizedInstruction {
             case BACK: result = 1; break;
             case WRONG: result = 0; break;
             case EMPTY: result = 0; break;
-            case REPEAT: result = 0; break;
             default: result = 0; break;
         }
         return result;
