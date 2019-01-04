@@ -2,7 +2,8 @@ package pl.edu.agh.to2.kitkats.codinlearner.level;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
+import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
+import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ public class LevelManager {
     // TODO: Maybe replace IntegerProperty with ObjectProperty<Level>
     private IntegerProperty currentLevelNumber;
     private List<Level> levels;
-    private List<Command> currentLevelCommands;
+    private List<ParameterizedInstruction> currentLevelCommands;
     private int currentLevelCommandNumber;
 
     public LevelManager (int currentLevelNumber) {
@@ -22,8 +23,8 @@ public class LevelManager {
 
     }
 
-    public boolean checkCurrentLevel(){
-        boolean passed = levels.get(getCurrentLevelNumber()).check(this.currentLevelCommands);
+    public boolean checkCurrentLevel(MoveGraph graph){
+        boolean passed = levels.get(getCurrentLevelNumber()).check(graph);
         if(passed) {
             levels.get(this.getCurrentLevelNumber()).addSolution(this.currentLevelCommandNumber);
             return true;
@@ -48,8 +49,8 @@ public class LevelManager {
         this.currentLevelCommandNumber = 0;
     }
 
-    public void addCommands(List<Command> commands){
-        this.currentLevelCommands.addAll(commands);
+    public void addCommand(ParameterizedInstruction command){
+        this.currentLevelCommands.add(command);
         this.currentLevelCommandNumber++;
     }
 

@@ -1,8 +1,6 @@
 package pl.edu.agh.to2.kitkats.codinlearner.controller;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,25 +9,31 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import pl.edu.agh.to2.kitkats.codinlearner.canvas.CanvasManager;
+import pl.edu.agh.to2.kitkats.codinlearner.command.CommandRegistry;
 import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
-import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
-import pl.edu.agh.to2.kitkats.codinlearner.model.Command;
-import pl.edu.agh.to2.kitkats.codinlearner.parser.CommandParser;
+import pl.edu.agh.to2.kitkats.codinlearner.level.LevelProvider;
+import pl.edu.agh.to2.kitkats.codinlearner.model.*;
+import pl.edu.agh.to2.kitkats.codinlearner.parser.InstructionParser;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Optional;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class CodinOverviewController {
 
+    private CommandRegistry commandRegistry;
     private LevelManager levelManager;
-    private CommandParser commandParser;
+    private LevelProvider levelProvider;
+    private InstructionParser instructionParser;
+    private CanvasManager canvasManager;
 
     public Arena arena;
 
@@ -61,15 +65,30 @@ public class CodinOverviewController {
     private TextArea levelInfo;
 
     @FXML
+    private Button undoButton;
+
+    @FXML
+    private Button redoButton;
+
+    @FXML
+    private Button addLevelsButton;
+
+    @FXML
+    private HBox hbox;
+
+    @FXML
     private void initialize() {
         levelManager = new LevelManager(0);
         //TODO commands map parsed from JSON or level - for every level some available commands
-        HashMap<String, Command> movesMap = new HashMap<>();
-        movesMap.put("go", Command.FORWARD);     // movesMap.put("GO", Command.FORWARD);
-        movesMap.put("left", Command.LEFT);      // movesMap.put("LEFT", Command.LEFT);
-        movesMap.put("right", Command.RIGHT);    // movesMap.put("RIGHT", Command.RIGHT);
-        movesMap.put("", Command.EMPTY);
-        commandParser = new CommandParser(movesMap);
+        HashMap<String, Instruction> movesMap = new HashMap<>();
+        movesMap.put(InstructionParser.GO, Instruction.FORWARD);
+        movesMap.put(InstructionParser.LEFT, Instruction.LEFT);
+        movesMap.put(InstructionParser.RIGHT, Instruction.RIGHT);
+        movesMap.put(InstructionParser.REPEAT, Instruction.REPEAT);
+        movesMap.put(InstructionParser.EMPTY, Instruction.EMPTY);
+        instructionParser = new InstructionParser(movesMap);
+
+        commandRegistry = new CommandRegistry();
 
         prevCommands.setMinHeight(170);
         cursorGc = cursorCanvas.getGraphicsContext2D();
@@ -84,29 +103,32 @@ public class CodinOverviewController {
             public void handle(KeyEvent ke){
                 if (ke.getCode().equals(KeyCode.ENTER)){
 
-                    List<Command> commands = commandParser.parseCommand(commandLine.getText());
-
+                    List<ParameterizedInstruction> commands = instructionParser.parseInstruction(commandLine.getText());
                     prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
-                    if(handleOperation(commands)){
-                        prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
-                    } else {
-                        prevCommands.setText(prevCommands.getText() + "\n>>> '" + commandLine.getText() + "' is incorrect operation!");
+                    prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
+
+                    for(ParameterizedInstruction lineCommand : commands) {
+                        if (handleOperation(lineCommand)) {
+                            levelManager.addCommand(lineCommand);
+                            canvasManager.move(lineCommand);
+                            commandLine.clear();
+                        } else {
+                            prevCommands.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
+                        }
+
                     }
-                    levelManager.addCommands(commands);
-                    move(commands);
-                    commandLine.clear();
                 }
             }
         });
     }
 
+
+
     public void initializeLevels() {
-        // level 1
-        int commandNumber = 2;
-        float lineLength = commandNumber * arena.getCursor().getMoveStep();
-        List<Command> task = Collections.nCopies(commandNumber, Command.FORWARD);
-        Level l1 = new Level(task, "Draw a line (length: " + commandNumber + ")");
-        levelManager.addLevel(l1);
+        levelProvider = new LevelProvider(arena.getCursor().getMoveStep());
+        for (Level level : levelProvider.getLevels()) {
+            levelManager.addLevel(level);
+        }
     }
 
     public void initializeProperties() {
@@ -116,7 +138,12 @@ public class CodinOverviewController {
     }
 
     public void initializeDrawing() {
-        drawCursor();
+        this.canvasManager.drawCursor();
+    }
+
+    public void initializeCanvasManager(){
+        this.canvasManager = new CanvasManager(this.arena, this.cursorCanvas.getGraphicsContext2D(),
+                this.lineCanvas.getGraphicsContext2D(), this.commandRegistry);
     }
 
     public void showLevelInfo() {
@@ -128,18 +155,39 @@ public class CodinOverviewController {
         }
     }
 
-    public void resetDrawing() {
-        clearCursor();
-        clearLine();
-        this.prevCommands.setText("");
-        arena.getCursor().reset();
-        drawCursor();
+    @FXML
+    private void handleAddLevelsAction(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "About to reset current level progress. Continue?",
+                ButtonType.OK,
+                ButtonType.CANCEL
+        );
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            System.out.println("ok");
+            levelManager.resetLevel();
+            canvasManager.resetCommandRegistry();
+            resetDrawing();
+//            addLevelsButton.setText("");
+//            hbox.getChildren().
+        }
+
+    }
+
+    @FXML
+    private void handleUndoAction(ActionEvent event) {
+        this.canvasManager.undo();
+    }
+
+    @FXML
+    private void handleRedoAction(ActionEvent event) {
+        this.canvasManager.redo();
     }
 
 
     @FXML
     private void handleCheckAction(ActionEvent event) {
-        boolean passed = levelManager.checkCurrentLevel();
+        boolean passed = levelManager.checkCurrentLevel(this.arena.getMoveGraph());
         Alert alert;
 
         if (passed) {
@@ -157,53 +205,28 @@ public class CodinOverviewController {
         alert.setTitle(null);
         alert.setHeaderText(null);
         alert.showAndWait();
-
+        canvasManager.resetCommandRegistry();
         resetDrawing();
         showLevelInfo();
     }
 
-    public boolean handleOperation(List<Command> Commands){
-        if(Commands.get(0).equals(Command.WRONG)) return false;
-        return true;
+    private void resetDrawing() {
+        this.canvasManager.resetDrawing();
+        this.prevCommands.setText("");
     }
 
-    private void move(List<Command> commands){
-
-        clearCursor();
-
-        double startX = arena.getCursor().getX();
-        double startY = arena.getCursor().getY();
-
-        this.arena.getCursor().move(commands);
-
-        double endX = arena.getCursor().getX();
-        double endY = arena.getCursor().getY();
-
-        lineGc.strokeLine( startX,  startY, endX, endY);
-
-        drawCursor();
+    private boolean handleOperation(ParameterizedInstruction command){
+        return !command.getInstruction().equals(Instruction.WRONG);
     }
-
 
     public void setArena(Arena arena) {
         this.arena = arena;
+        this.arena.getCursor().setArenaStartPoints();
     }
 
     public void setAppController(CodinAppController appController) {
         this.appController = appController;
     }
 
-    private void clearLine() {
-        lineGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
-    }
-
-
-    private void clearCursor(){
-        cursorGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
-    }
-
-    private void drawCursor() {
-        cursorGc.fillPolygon(arena.getCursor().getShapePointsX(), arena.getCursor().getShapePointsY(), 3);
-    }
 }
 

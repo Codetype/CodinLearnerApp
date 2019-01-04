@@ -2,15 +2,9 @@ package pl.edu.agh.to2.kitkats.codinlearner.model;
 
 import com.vividsolutions.jts.algorithm.Angle;
 import com.vividsolutions.jts.math.Vector2D;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
 
 public class Cursor {
 
@@ -40,7 +34,7 @@ public class Cursor {
         alongVector = new Vector2D(length,0);
         acrossVector = new Vector2D(0, width);
         moveVector = new Vector2D(moveStep, 0);
-       //three points of triangular shape
+        //three points of triangular shape
         shapePointsX = new ArrayList<>();
         shapePointsY = new ArrayList<>();
         setShapePoints();
@@ -51,26 +45,25 @@ public class Cursor {
         this.arena = arena;
     }
 
-    public void turnLeft(){
-        rotateLeft(90.0);
-        setShapePoints();
+    public void setArenaStartPoints(){
+        this.arena.setStartX(this.x);
+        this.arena.setStartY(this.y);
     }
 
-    public void turnRight(){
-        rotateRight(90.0);
-        setShapePoints();
-    }
-
-    public void rotateLeft(double angle){
+    private void rotateLeft(double angle){
         this.alongVector = this.alongVector.rotate(Angle.toRadians(-angle));
         this.acrossVector = this.acrossVector.rotate(Angle.toRadians(-angle));
         this.moveVector = this.moveVector.rotate(Angle.toRadians(-angle));
+
+        setShapePoints();
     }
 
-    public void rotateRight(double angle){
+    private void rotateRight(double angle){
         this.alongVector = this.alongVector.rotate(Angle.toRadians(angle));
         this.acrossVector = this.acrossVector.rotate(Angle.toRadians(angle));
         this.moveVector = this.moveVector.rotate(Angle.toRadians(angle));
+
+        setShapePoints();
     }
 
     private void setShapePoints(){
@@ -84,26 +77,62 @@ public class Cursor {
             shapePointsY.add(this.y + alongVector.getY());
     }
 
-    public void move(List<Command> commands){
-        for(Command command : commands){
-            switch (command){
-                case LEFT: turnLeft(); break;
-                case RIGHT: turnRight(); break;
-                case FORWARD: move(); break;
-                default: break;
-            }
+    public void move(int mode, ParameterizedInstruction command){
+        switch (command.getInstruction()){
+            case LEFT: rotateLeft(command.getParameter()); break;
+            case RIGHT: rotateRight(command.getParameter()); break;
+            case FORWARD:
+                for(int i=0; i<command.getParameter(); i++) {
+                    double oldX = this.x;
+                    double oldY = this.y;
+                    move(false);
+                    double newX = this.x;
+                    double newY = this.y;
+                    if(mode == 1)
+                        this.arena.getMoveGraph().addVertex(oldX, oldY, newX, newY);
+                    if(mode == -1)
+                        this.arena.getMoveGraph().removeVertex(oldX, oldY, newX, newY);
+                }
+                break;
+            case BACK:
+                for(int i=0; i<command.getParameter(); i++){
+                    double oldX = this.x;
+                    double oldY = this.y;
+                    move(true);
+                    double newX = this.x;
+                    double newY = this.y;
+                    if(mode == 1)
+                        this.arena.getMoveGraph().addVertex(oldX, oldY, newX, newY);
+                    if(mode == -1)
+                        this.arena.getMoveGraph().removeVertex(oldX, oldY, newX, newY);
+                }
+            break;
+            default: break;
         }
+
+        setShapePoints();
     }
 
-    public void move(){
+    public void moveBack(ParameterizedInstruction command){
+        move(-1, reverseCommand(command));
+    }
+
+    private void move(boolean backward){
         double xMove = this.moveVector.getX();
         double yMove = this.moveVector.getY();
+
+        if(backward){
+            xMove = -xMove;
+            yMove = -yMove;
+        }
 
         if(!this.arena.canMove(this.x + xMove, this.y + yMove)) return;
         this.x = this.x + xMove;
         this.y = this.y + yMove;
         setShapePoints();
     }
+
+
 
     public void reset() {
         x = arena.getWidth() / 2;
@@ -113,6 +142,12 @@ public class Cursor {
         moveVector = new Vector2D(moveStep, 0);
 
         setShapePoints();
+    }
+
+    private ParameterizedInstruction reverseCommand(ParameterizedInstruction command){
+        Instruction newInstruction = command.getInstruction().oppositeInstruction();
+        int parameter = command.getParameter();
+        return new ParameterizedInstruction(newInstruction, parameter);
     }
 
     public double[] getShapePointsX() {

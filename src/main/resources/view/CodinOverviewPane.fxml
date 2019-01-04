@@ -10,8 +10,8 @@
             fx:controller="pl.edu.agh.to2.kitkats.codinlearner.controller.CodinOverviewController">
     <center>
         <Pane prefHeight="400.0" prefWidth="600.0"
-              style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
-            <Canvas fx:id="cursorCanvas" height="400.0" width="600.0"/>
+              style="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
+            <Canvas fx:id="cursorCanvas" height="400.0" width="600.0" style="-fx-border-color:white"/>
             <Canvas fx:id="lineCanvas" height="400.0" width="600.0"  />
         </Pane>
     </center>
@@ -49,6 +49,26 @@
                     </content>
                 </ScrollPane>
                 <TextField id="CommandLine" fx:id="commandLine"  />
+                <HBox fx:id="hbox" maxHeight="-Infinity" prefHeight="39.0" prefWidth="800.0"
+                      BorderPane.alignment="TOP_LEFT">
+                    <Button fx:id="undoButton" mnemonicParsing="false" onAction="#handleUndoAction" text="Undo">
+                        <HBox.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </HBox.margin>
+                    </Button>
+                    <Button fx:id="redoButton" mnemonicParsing="false" onAction="#handleRedoAction" text="Redo">
+                        <HBox.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </HBox.margin>
+                    </Button>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="addLevelsButton" mnemonicParsing="false" onAction="#handleAddLevelsAction"
+                            text="Add Levels">
+                        <HBox.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </HBox.margin>
+                    </Button>
+                </HBox>
             </children>
         </VBox>
     </bottom>

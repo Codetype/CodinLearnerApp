@@ -31,6 +31,7 @@ public class CodinAppController{
             controller.setArena(new Arena(600.0f, 400.0f, 21f, 8f));
             controller.initializeLevels();
             controller.initializeProperties();
+            controller.initializeCanvasManager();
             controller.initializeDrawing();
             controller.showLevelInfo();
             // add layout to a scene and show them all
