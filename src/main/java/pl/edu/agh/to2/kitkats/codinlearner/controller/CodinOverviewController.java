@@ -143,27 +143,26 @@ public class CodinOverviewController {
                     String text = null;
 
                     if (keyCode == KeyCode.UP) {
-                        if (commandLine.getText().equals("") || instructionHistory.getKeyCode() != null) {
+                        if (commandLine.getText().equals("") || instructionHistory.isIterated()) {
                             text = instructionHistory.previous();
                         }
                     } else if (keyCode == KeyCode.DOWN) {
-                        if (commandLine.getText().equals("") || instructionHistory.getKeyCode() != null) {
+                        if (commandLine.getText().equals("") || instructionHistory.isIterated()) {
                             text = instructionHistory.next();
                         }
                     } else if (keyCode == KeyCode.ENTER && keyEvent.isControlDown()) {
                         instructionHistory.add(commandLine.getText());
-                        instructionHistory.setKeyCode(null);
                         instructionHistory.resetIterator();
                         handleExecuteAction(null);
                     } else {
-                        instructionHistory.setKeyCode(null);
                         instructionHistory.resetIterator();
                     }
 
                     if (text != null) {
+                        keyEvent.consume();
                         commandLine.setText(text);
                         commandLine.positionCaret(text.length());
-                        instructionHistory.setKeyCode(keyCode);
+                        instructionHistory.setLastKeyCode(keyCode);
                     }
                 }
         );
@@ -210,7 +209,6 @@ public class CodinOverviewController {
 
     @FXML
     private void handleExecuteAction(ActionEvent event) {
-//
         List<ParameterizedInstruction> commands = instructionParser.parseInstruction(commandLine.getText());
         prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
         prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
@@ -244,6 +242,7 @@ public class CodinOverviewController {
 
             levelManager.resetLevel();
         }
+        instructionHistory.resetIterator();
 
         alert.setTitle(null);
         alert.setHeaderText(null);

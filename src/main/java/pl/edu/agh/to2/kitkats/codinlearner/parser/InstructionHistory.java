@@ -11,11 +11,11 @@ public class InstructionHistory {
     private KeyCode lastKeyCode;
     private String lastConsumed;
 
-    public KeyCode getKeyCode() {
+    public KeyCode getLastKeyCode() {
         return lastKeyCode;
     }
 
-    public void setKeyCode(KeyCode keyCode) {
+    public void setLastKeyCode(KeyCode keyCode) {
         this.lastKeyCode = keyCode;
     }
 
@@ -67,7 +67,12 @@ public class InstructionHistory {
         }
     }
 
+    public boolean isIterated() {
+        return lastKeyCode != null;
+    }
+
     public void resetIterator() {
+        lastKeyCode = null;
         iter = textInputs.listIterator(textInputs.size());
     }
 
