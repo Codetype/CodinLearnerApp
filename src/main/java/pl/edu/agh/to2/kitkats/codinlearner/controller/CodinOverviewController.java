@@ -10,6 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import pl.edu.agh.to2.kitkats.codinlearner.canvas.CanvasManager;
 import pl.edu.agh.to2.kitkats.codinlearner.command.CommandRegistry;
 import pl.edu.agh.to2.kitkats.codinlearner.command.MoveCommand;
@@ -81,6 +82,9 @@ public class CodinOverviewController {
 
     @FXML
     private HBox hbox;
+
+    @FXML
+    private Text infoText;
 
     @FXML
     private void initialize() {
@@ -219,8 +223,10 @@ public class CodinOverviewController {
                 commandRegistry.executeCommand(new MoveCommand(lineGc, lineCommand, arena, canvasManager));
                 //canvasManager.move(lineCommand);
                 commandLine.clear();
+                infoText.setText("");
             } else {
-                prevCommands.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
+//                prevCommands.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
+                infoText.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
             }
 
         }
@@ -242,7 +248,6 @@ public class CodinOverviewController {
 
             levelManager.resetLevel();
         }
-        instructionHistory.resetIterator();
 
         alert.setTitle(null);
         alert.setHeaderText(null);
@@ -257,7 +262,8 @@ public class CodinOverviewController {
 
     private void resetDrawing() {
         this.canvasManager.resetDrawing();
-        this.prevCommands.setText("");
+        instructionHistory.resetIterator();
+//        this.prevCommands.setText("");
     }
 
     private boolean handleOperation(ParameterizedInstruction command){
