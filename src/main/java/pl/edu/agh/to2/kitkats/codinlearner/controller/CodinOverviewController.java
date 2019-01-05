@@ -20,6 +20,7 @@ import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelProvider;
 import pl.edu.agh.to2.kitkats.codinlearner.model.*;
+import pl.edu.agh.to2.kitkats.codinlearner.parser.InstructionHistory;
 import pl.edu.agh.to2.kitkats.codinlearner.parser.InstructionParser;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class CodinOverviewController {
     private LevelProvider levelProvider;
     private InstructionParser instructionParser;
     private CanvasManager canvasManager;
+    private InstructionHistory instructionHistory;
 
     public Arena arena;
 
@@ -93,6 +95,7 @@ public class CodinOverviewController {
         movesMap.put(InstructionParser.RIGHT, Instruction.RIGHT);
         movesMap.put(InstructionParser.EMPTY, Instruction.EMPTY);
         instructionParser = new InstructionParser(movesMap);
+        instructionHistory = new InstructionHistory();
 
         commandRegistry = new CommandRegistry();
 
@@ -136,6 +139,20 @@ public class CodinOverviewController {
                 , this.commandRegistry);
     }
 
+    public void initializeCommandLine() {
+        commandLine.setOnKeyPressed(
+                keyEvent -> {
+                    if (keyEvent.getCode() == KeyCode.UP && commandLine.getText().equals("")) {
+                        commandLine.setText(instructionHistory.previous());
+                    } else if (keyEvent.getCode() == KeyCode.DOWN && commandLine.getText().equals("")) {
+                        commandLine.setText(instructionHistory.next());
+                    } else if (keyEvent.getCode() == KeyCode.ENTER && keyEvent.isControlDown()) {
+                        handleExecuteAction(null);
+                    }
+                }
+        );
+    }
+
     public void showLevelInfo() {
         Level currentLevel = levelManager.getCurrentLevel();
         if (currentLevel != null) {
@@ -177,6 +194,8 @@ public class CodinOverviewController {
 
     @FXML
     private void handleExecuteAction(ActionEvent event) {
+        instructionHistory.add(commandLine.getText());
+        instructionHistory.reset();
         List<ParameterizedInstruction> commands = instructionParser.parseInstruction(commandLine.getText());
         prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
         prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
