@@ -5,6 +5,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.math.Vector2D;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import pl.edu.agh.to2.kitkats.codinlearner.canvas.CanvasManager;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Instruction;
 import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
 import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
@@ -27,6 +28,7 @@ public class LevelProvider {
     }
 
     private void newLevel(List<ParameterizedInstruction> commands, String description) {
+
         MoveGraph graph = new MoveGraph();
         Coordinate from = new Coordinate(0.0, 0.0);
         Coordinate to = new Coordinate(0.0, 0.0);
@@ -57,11 +59,12 @@ public class LevelProvider {
                     }
                     graph.addVertex(from.x, from.y, to.x, to.y);
                     from.setCoordinate(to);
+
                 }
             }
         }
 
-        levels.add(new Level(graph, description));
+        levels.add(new Level(graph, description, commands));
     }
 
     public List<Level> getLevels() {
@@ -95,7 +98,7 @@ public class LevelProvider {
             }
         } catch (Exception e){
             System.out.println("Error during parsing JSON file.");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return levels;
     }

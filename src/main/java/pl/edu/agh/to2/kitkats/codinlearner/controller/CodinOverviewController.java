@@ -59,6 +59,11 @@ public class CodinOverviewController {
     private GraphicsContext lineGc;
 
     @FXML
+    private Canvas shadowCanvas;
+
+    private GraphicsContext shadowGc;
+
+    @FXML
     private Button checkButton;
 
     @FXML
@@ -96,6 +101,9 @@ public class CodinOverviewController {
 
         lineGc = lineCanvas.getGraphicsContext2D();
         lineGc.setStroke(Color.RED);
+
+        shadowGc = shadowCanvas.getGraphicsContext2D();
+        shadowGc.setStroke(Color.LIGHTGRAY);
     }
 
 
@@ -114,12 +122,15 @@ public class CodinOverviewController {
     }
 
     public void initializeDrawing() {
+
         this.canvasManager.drawCursor();
+        this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
     }
 
     public void initializeCanvasManager(){
         this.canvasManager = new CanvasManager(this.arena, this.cursorCanvas.getGraphicsContext2D(),
-                this.lineCanvas.getGraphicsContext2D(), this.commandRegistry);
+                this.lineCanvas.getGraphicsContext2D(), this.shadowCanvas.getGraphicsContext2D()
+                , this.commandRegistry);
     }
 
     public void showLevelInfo() {
@@ -200,7 +211,12 @@ public class CodinOverviewController {
         alert.showAndWait();
         canvasManager.resetCommandRegistry();
         resetDrawing();
+        this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
         showLevelInfo();
+    }
+
+    public void drawShadow(){
+
     }
 
     private void resetDrawing() {
