@@ -174,4 +174,7 @@ public class Cursor {
         this.y = y;
     }
 
+    public Vector2D getAlongVector() {
+        return alongVector;
+    }
 }

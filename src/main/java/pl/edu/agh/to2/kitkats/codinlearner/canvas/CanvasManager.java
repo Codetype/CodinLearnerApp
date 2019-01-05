@@ -27,20 +27,13 @@ public class CanvasManager {
     }
 
 
-    public void undo() {
+    public void undo(ParameterizedInstruction command) {
         clearCursor();
-        commandRegistry.undo();
+        this.arena.getCursor().moveBack(command);
+        lineGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
         this.arena.getCursor().reset();
-        commandRegistry.redraw();
-        drawCursor();
     }
 
-
-    public void redo() {
-        clearCursor();
-        commandRegistry.redo();
-        drawCursor();
-    }
 
     public void drawShadow(List<ParameterizedInstruction> commands) {
         this.arena.getCursor().reset();
@@ -59,17 +52,20 @@ public class CanvasManager {
 
     }
 
-    public void move(ParameterizedInstruction command){
+    public void move(ParameterizedInstruction command, int mode){
 
         clearCursor();
 
-        commandRegistry.executeCommand(
-                new MoveCommand(
-                        this.lineGc,
-                        command,
-                        this.arena
-                )
-        );
+        double startX = arena.getCursor().getX();
+        double startY = arena.getCursor().getY();
+
+        this.arena.getCursor().move(mode, command);
+
+        double endX = arena.getCursor().getX();
+        double endY = arena.getCursor().getY();
+
+        lineGc.strokeLine( startX,  startY, endX, endY);
+
         drawCursor();
     }
 
@@ -94,7 +90,11 @@ public class CanvasManager {
         shadowGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
     }
     public void drawCursor() {
-        cursorGc.fillPolygon(arena.getCursor().getShapePointsX(), arena.getCursor().getShapePointsY(), 3);
+        shadowGc.clearRect(arena.getCursor().getX(), arena.getCursor().getY(),
+                arena.getCursor().getAlongVector().getX(), 1);
+        cursorGc.fillPolygon(arena.getCursor().getShapePointsX(),
+                arena.getCursor().getShapePointsY(), 3);
+
     }
 
     public void resetCommandRegistry(){

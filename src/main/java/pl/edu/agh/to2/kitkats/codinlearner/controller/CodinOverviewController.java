@@ -13,7 +13,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import pl.edu.agh.to2.kitkats.codinlearner.canvas.CanvasManager;
+import pl.edu.agh.to2.kitkats.codinlearner.command.Command;
 import pl.edu.agh.to2.kitkats.codinlearner.command.CommandRegistry;
+import pl.edu.agh.to2.kitkats.codinlearner.command.MoveCommand;
 import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelProvider;
@@ -122,9 +124,10 @@ public class CodinOverviewController {
     }
 
     public void initializeDrawing() {
-
-        this.canvasManager.drawCursor();
         this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
+        this.canvasManager.drawCursor();
+
+
     }
 
     public void initializeCanvasManager(){
@@ -163,12 +166,13 @@ public class CodinOverviewController {
 
     @FXML
     private void handleUndoAction(ActionEvent event) {
-        this.canvasManager.undo();
+        commandRegistry.undo();
+        canvasManager.drawCursor();
     }
 
     @FXML
     private void handleRedoAction(ActionEvent event) {
-        this.canvasManager.redo();
+        commandRegistry.redo();
     }
 
     @FXML
@@ -180,7 +184,8 @@ public class CodinOverviewController {
         for(ParameterizedInstruction lineCommand : commands) {
             if (handleOperation(lineCommand)) {
                 levelManager.addCommand(lineCommand);
-                canvasManager.move(lineCommand);
+                commandRegistry.executeCommand(new MoveCommand(lineGc, lineCommand, arena, canvasManager));
+                //canvasManager.move(lineCommand);
                 commandLine.clear();
             } else {
                 prevCommands.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
@@ -212,12 +217,10 @@ public class CodinOverviewController {
         canvasManager.resetCommandRegistry();
         resetDrawing();
         this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
+        this.canvasManager.drawCursor();
         showLevelInfo();
     }
 
-    public void drawShadow(){
-
-    }
 
     private void resetDrawing() {
         this.canvasManager.resetDrawing();

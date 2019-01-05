@@ -2,6 +2,7 @@ package pl.edu.agh.to2.kitkats.codinlearner.command;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import pl.edu.agh.to2.kitkats.codinlearner.canvas.CanvasManager;
 
 public class CommandRegistry {
 
@@ -31,6 +32,7 @@ public class CommandRegistry {
 			commandStack.remove(commandStack.size()-1);
 			this.undoCommandStack.add(lastCommand);
 			lastCommand.undo();
+			redraw();
 		}
 	}
 
