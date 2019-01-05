@@ -2,18 +2,15 @@ package pl.edu.agh.to2.kitkats.codinlearner.controller;
 
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import pl.edu.agh.to2.kitkats.codinlearner.canvas.CanvasManager;
-import pl.edu.agh.to2.kitkats.codinlearner.command.Command;
 import pl.edu.agh.to2.kitkats.codinlearner.command.CommandRegistry;
 import pl.edu.agh.to2.kitkats.codinlearner.command.MoveCommand;
 import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
@@ -142,12 +139,31 @@ public class CodinOverviewController {
     public void initializeCommandLine() {
         commandLine.setOnKeyPressed(
                 keyEvent -> {
-                    if (keyEvent.getCode() == KeyCode.UP && commandLine.getText().equals("")) {
-                        commandLine.setText(instructionHistory.previous());
-                    } else if (keyEvent.getCode() == KeyCode.DOWN && commandLine.getText().equals("")) {
-                        commandLine.setText(instructionHistory.next());
-                    } else if (keyEvent.getCode() == KeyCode.ENTER && keyEvent.isControlDown()) {
+                    KeyCode keyCode = keyEvent.getCode();
+                    String text = null;
+
+                    if (keyCode == KeyCode.UP) {
+                        if (commandLine.getText().equals("") || instructionHistory.getKeyCode() != null) {
+                            text = instructionHistory.previous();
+                        }
+                    } else if (keyCode == KeyCode.DOWN) {
+                        if (commandLine.getText().equals("") || instructionHistory.getKeyCode() != null) {
+                            text = instructionHistory.next();
+                        }
+                    } else if (keyCode == KeyCode.ENTER && keyEvent.isControlDown()) {
+                        instructionHistory.add(commandLine.getText());
+                        instructionHistory.setKeyCode(null);
+                        instructionHistory.resetIterator();
                         handleExecuteAction(null);
+                    } else {
+                        instructionHistory.setKeyCode(null);
+                        instructionHistory.resetIterator();
+                    }
+
+                    if (text != null) {
+                        commandLine.setText(text);
+                        commandLine.positionCaret(text.length());
+                        instructionHistory.setKeyCode(keyCode);
                     }
                 }
         );
@@ -194,8 +210,7 @@ public class CodinOverviewController {
 
     @FXML
     private void handleExecuteAction(ActionEvent event) {
-        instructionHistory.add(commandLine.getText());
-        instructionHistory.reset();
+//
         List<ParameterizedInstruction> commands = instructionParser.parseInstruction(commandLine.getText());
         prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
         prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());

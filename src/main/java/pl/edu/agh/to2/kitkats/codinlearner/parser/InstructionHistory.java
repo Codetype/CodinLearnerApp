@@ -1,21 +1,29 @@
 package pl.edu.agh.to2.kitkats.codinlearner.parser;
 
+import javafx.scene.input.KeyCode;
+
 import java.util.*;
 
 public class InstructionHistory {
 
     private List<String> textInputs;
-//    private Deque<String> textInputs;
     private ListIterator<String> iter;
+    private KeyCode lastKeyCode;
+    private String lastConsumed;
+
+    public KeyCode getKeyCode() {
+        return lastKeyCode;
+    }
+
+    public void setKeyCode(KeyCode keyCode) {
+        this.lastKeyCode = keyCode;
+    }
 
     public InstructionHistory() {
-//        this.textInputs = new Stack<>();
         this.textInputs = new LinkedList<>();
-//        this.textInputs = new ArrayDeque<>();
         iter = textInputs.listIterator(textInputs.size());
-        reset();
-//        List<String>a;
-//        a.pre
+        lastKeyCode = null;
+        resetIterator();
     }
 
     public void add(String s) {
@@ -24,21 +32,42 @@ public class InstructionHistory {
 
     public String next() {
         if (iter.hasNext()) {
-            return iter.next();
+            if (lastKeyCode == KeyCode.UP) {
+                iter.next();
+            }
+
+            if (iter.hasNext()) {
+                lastConsumed = iter.next();
+                return lastConsumed;
+            } else {
+                lastConsumed = null;
+                return "";
+            }
         } else {
+            lastConsumed = null;
             return "";
         }
     }
 
     public String previous() {
         if (iter.hasPrevious()) {
-            return iter.previous();
+            if (lastKeyCode == KeyCode.DOWN && lastConsumed != null) {
+                iter.previous();
+            }
+
+            lastConsumed = iter.previous();
+            return lastConsumed;
         } else {
-            return "";
+            lastConsumed = null;
+            if (iter.hasNext()) {
+                return null;
+            } else {
+                return "";
+            }
         }
     }
 
-    public void reset() {
+    public void resetIterator() {
         iter = textInputs.listIterator(textInputs.size());
     }
 
