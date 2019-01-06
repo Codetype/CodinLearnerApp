@@ -83,6 +83,7 @@ public class LevelManager {
 
     public void popMove() {
         this.currentLevelMoves.pop();
+        setCurrentMoveCommandNumber(this.currentLevelMoves.peek());
 //        this.currentLevelCommandNumber -= numberOfInstructions;
     }
 

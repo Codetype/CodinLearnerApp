@@ -238,7 +238,7 @@ public class CodinOverviewController {
     @FXML
     private void handleExecuteAction(ActionEvent event) {
         String input = commandLine.getText();
-        List<ParameterizedInstruction> commands = instructionParser.parseInstruction(input);
+        List<ParameterizedInstruction> commands = instructionParser.parseInstruction(input, true);
         prevCommands.setMinHeight(max(170, Region.USE_PREF_SIZE));
 
         if (!InstructionParser.isInputWhitespace(input)) {
@@ -248,6 +248,7 @@ public class CodinOverviewController {
         if (commands.isEmpty()) {
             commandLine.clear();
             infoText.setText("");
+            return;
         }
 
         int commandNumber = 0;
@@ -265,10 +266,22 @@ public class CodinOverviewController {
             }
         }
 
-        // Currently InstructionParser handles only 1 loop or procedure
-        levelManager.pushMove(commandNumber);
-        levelManager.setCurrentMoveCommandNumber(commandNumber);
-        setStepsText();
+        // TODO: Currently InstructionParser handles only 1 loop or procedure
+        if (commandNumber > 0) {
+            if (instructionParser.getMoveNumber() > 1) {
+                for (int i = 0; i < commandNumber; i++) {
+                    levelManager.pushMove(1);
+                    levelManager.setCurrentMoveCommandNumber(1);
+                }
+            } else {
+                levelManager.pushMove(commandNumber);
+                levelManager.setCurrentMoveCommandNumber(commandNumber);
+            }
+            setStepsText();
+        }
+//        levelManager.pushMove(commandNumber);
+//        levelManager.setCurrentMoveCommandNumber(commandNumber);
+//        setStepsText();
     }
 
     @FXML
