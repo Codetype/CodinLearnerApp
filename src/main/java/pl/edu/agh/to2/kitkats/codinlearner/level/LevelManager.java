@@ -7,6 +7,8 @@ import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+
 public class LevelManager {
 
     // TODO: Maybe replace IntegerProperty with ObjectProperty<Level>
@@ -14,13 +16,32 @@ public class LevelManager {
     private List<Level> levels;
     private List<ParameterizedInstruction> currentLevelCommands;
     private int currentLevelCommandNumber;
+    private int currentMoveCommandNumber;
+    private Stack<Integer> currentLevelMoves;
+
+    public int getCurrentMoveCommandNumber() {
+        return currentMoveCommandNumber;
+    }
+
+    public void setCurrentMoveCommandNumber(int currentMoveCommandNumber) {
+        this.currentMoveCommandNumber = currentMoveCommandNumber;
+    }
+
+    public void incrementCurrentMoveCommandNumber() {
+        this.currentMoveCommandNumber++;
+    }
+
+    public void decrementCurrentMoveCommandNumber() {
+        this.currentMoveCommandNumber--;
+    }
 
     public LevelManager (int currentLevelNumber) {
         this.levels = new ArrayList<>();
         this.currentLevelNumber = new SimpleIntegerProperty(currentLevelNumber);
         this.currentLevelCommands = new ArrayList<>();
         this.currentLevelCommandNumber = 0;
-
+        this.currentLevelMoves = new Stack<>();
+//        this.currentLevelMoveNumber = 0;
     }
 
     public boolean checkCurrentLevel(MoveGraph graph){
@@ -38,8 +59,7 @@ public class LevelManager {
 
     public void nextLevel() {
         if (currentLevelExists()) {
-            this.currentLevelCommands.clear();
-            this.currentLevelCommandNumber = 0;
+            resetLevel();
             this.currentLevelNumber.set(this.getCurrentLevelNumber() + 1);
         }
     }
@@ -47,11 +67,23 @@ public class LevelManager {
     public void resetLevel() {
         this.currentLevelCommands.clear();
         this.currentLevelCommandNumber = 0;
+        this.currentMoveCommandNumber = 0;
+        this.currentLevelMoves.removeAllElements();
     }
 
     public void addCommand(ParameterizedInstruction command){
         this.currentLevelCommands.add(command);
         this.currentLevelCommandNumber++;
+    }
+
+    public void pushMove(Integer numberOfInstructions) {
+        this.currentLevelMoves.push(numberOfInstructions);
+//        this.currentLevelCommandNumber += numberOfInstructions;
+    }
+
+    public void popMove() {
+        this.currentLevelMoves.pop();
+//        this.currentLevelCommandNumber -= numberOfInstructions;
     }
 
     public void addLevel(Level level) {
@@ -64,6 +96,10 @@ public class LevelManager {
         } else {
             return null;
         }
+    }
+
+    public int getCurrentLevelMoveNumber() {
+        return currentLevelMoves.size();
     }
 
     public int getCurrentLevelNumber() {

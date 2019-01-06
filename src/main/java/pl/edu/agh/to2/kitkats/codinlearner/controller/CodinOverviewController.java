@@ -175,17 +175,25 @@ public class CodinOverviewController {
         );
     }
 
-    public void initializeSteps() {
-//        stepsText.setText();
+    public void initializeStepsText() {
+        setStepsText();
     }
 
     public void showLevelInfo() {
         Level currentLevel = levelManager.getCurrentLevel();
         if (currentLevel != null) {
             levelInfo.setText(currentLevel.taskDescription);
+            setStepsText();
         } else {
             levelInfo.setText("All levels completed. Congratulations!");
         }
+    }
+
+    private void setStepsText() {
+        Integer a = levelManager.getCurrentLevelMoveNumber();
+        Long b = levelManager.getCurrentLevel().minNumberOfMoves;
+        String text = a.toString() + " / " + b.toString();
+        stepsText.setText(text);
     }
 
     @FXML
@@ -199,6 +207,7 @@ public class CodinOverviewController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             System.out.println("ok");
             levelManager.resetLevel();
+            setStepsText();
             canvasManager.resetCommandRegistry();
             resetDrawing();
 //            addLevelsButton.setText("");
@@ -209,13 +218,21 @@ public class CodinOverviewController {
 
     @FXML
     private void handleUndoAction(ActionEvent event) {
-        commandRegistry.undo();
-        canvasManager.drawCursor();
+        if (commandRegistry.undo()) {
+            canvasManager.drawCursor();
+            levelManager.decrementCurrentMoveCommandNumber();
+            if (levelManager.getCurrentMoveCommandNumber() == 0) {
+                levelManager.popMove();
+                setStepsText();
+            }
+        }
     }
 
     @FXML
     private void handleRedoAction(ActionEvent event) {
-        commandRegistry.redo();
+        if (commandRegistry.redo()) {
+            levelManager.incrementCurrentMoveCommandNumber();
+        }
     }
 
     @FXML
@@ -224,7 +241,7 @@ public class CodinOverviewController {
         List<ParameterizedInstruction> commands = instructionParser.parseInstruction(input);
         prevCommands.setMinHeight(max(170, Region.USE_PREF_SIZE));
 
-        if (!instructionParser.isInputWhitespace(input)) {
+        if (!InstructionParser.isInputWhitespace(input)) {
             prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
         }
 
@@ -233,9 +250,12 @@ public class CodinOverviewController {
             infoText.setText("");
         }
 
+        int commandNumber = 0;
+
         for(ParameterizedInstruction lineCommand : commands) {
             if (handleOperation(lineCommand)) {
                 levelManager.addCommand(lineCommand);
+                commandNumber++;
                 commandRegistry.executeCommand(new MoveCommand(lineGc, lineCommand, arena, canvasManager));
                 //canvasManager.move(lineCommand);
                 commandLine.clear();
@@ -244,6 +264,11 @@ public class CodinOverviewController {
                 infoText.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
             }
         }
+
+        // Currently InstructionParser handles only 1 loop or procedure
+        levelManager.pushMove(commandNumber);
+        levelManager.setCurrentMoveCommandNumber(commandNumber);
+        setStepsText();
     }
 
     @FXML
@@ -256,11 +281,13 @@ public class CodinOverviewController {
             alert.setContentText("Level passed!");
 
             levelManager.nextLevel();
+            setStepsText();
         } else {
             alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("There were some errors in your solution. Try again...");
 
             levelManager.resetLevel();
+            setStepsText();
         }
 
         alert.setTitle(null);

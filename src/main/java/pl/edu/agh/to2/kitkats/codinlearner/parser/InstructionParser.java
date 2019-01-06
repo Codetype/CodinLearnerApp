@@ -27,7 +27,11 @@ public class InstructionParser {
         this.instructionHashMap = instructionMap;
     }
 
-    public boolean isInputWhitespace(String input) {
+//    public static int getNumberOfInstructions(List<ParameterizedInstruction> instructions) {
+//
+//    }
+
+    public static boolean isInputWhitespace(String input) {
         for (int i = 0; i < input.length(); i++) {
             if (!Character.isWhitespace(input.charAt(i))) {
                 return false;
