@@ -78,8 +78,9 @@ public class LevelProvider {
 
             for(Object level : jsonLevels){
                 JSONObject jsonLevel = (JSONObject) level;
-                final String desc = (String) jsonLevel.get("description");
                 final Long repeats = (Long) jsonLevel.get("repeats");
+                final Long minNumberOfMoves = (Long) jsonLevel.get("minNumbersOfMove");
+                final String desc = (String) jsonLevel.get("description") + "\n\nThe best solution requires " + minNumberOfMoves.toString() + " move(s).";
 
                 JSONArray moves = (JSONArray) jsonLevel.get("moves");
                 Iterator<String> movesIterator = moves.iterator();
