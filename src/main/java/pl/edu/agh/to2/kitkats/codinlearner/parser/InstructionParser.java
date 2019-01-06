@@ -27,6 +27,15 @@ public class InstructionParser {
         this.instructionHashMap = instructionMap;
     }
 
+    public boolean isInputWhitespace(String input) {
+        for (int i = 0; i < input.length(); i++) {
+            if (!Character.isWhitespace(input.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public List<ParameterizedInstruction> parseInstruction(String instructionAsString) {
         List<ParameterizedInstruction> instructions = new ArrayList<>();
         List<String> parts = Arrays.asList(instructionAsString.split("\\s"));

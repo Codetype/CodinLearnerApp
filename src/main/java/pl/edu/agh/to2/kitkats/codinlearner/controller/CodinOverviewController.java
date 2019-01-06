@@ -87,6 +87,9 @@ public class CodinOverviewController {
     private Text infoText;
 
     @FXML
+    private Text stepsText;
+
+    @FXML
     private void initialize() {
         levelManager = new LevelManager(0);
         //TODO commands map parsed from JSON or level - for every level some available commands
@@ -172,6 +175,10 @@ public class CodinOverviewController {
         );
     }
 
+    public void initializeTest() {
+
+    }
+
     public void showLevelInfo() {
         Level currentLevel = levelManager.getCurrentLevel();
         if (currentLevel != null) {
@@ -213,9 +220,18 @@ public class CodinOverviewController {
 
     @FXML
     private void handleExecuteAction(ActionEvent event) {
-        List<ParameterizedInstruction> commands = instructionParser.parseInstruction(commandLine.getText());
-        prevCommands.setMinHeight(max(170,Region.USE_PREF_SIZE));
-        prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
+        String input = commandLine.getText();
+        List<ParameterizedInstruction> commands = instructionParser.parseInstruction(input);
+        prevCommands.setMinHeight(max(170, Region.USE_PREF_SIZE));
+
+        if (!instructionParser.isInputWhitespace(input)) {
+            prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
+        }
+
+        if (commands.isEmpty()) {
+            commandLine.clear();
+            infoText.setText("");
+        }
 
         for(ParameterizedInstruction lineCommand : commands) {
             if (handleOperation(lineCommand)) {
@@ -225,10 +241,8 @@ public class CodinOverviewController {
                 commandLine.clear();
                 infoText.setText("");
             } else {
-//                prevCommands.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
                 infoText.setText("TypeException: '" + commandLine.getText() + "' is incorrect operation!");
             }
-
         }
     }
 
