@@ -175,8 +175,8 @@ public class CodinOverviewController {
         );
     }
 
-    public void initializeTest() {
-
+    public void initializeSteps() {
+//        stepsText.setText();
     }
 
     public void showLevelInfo() {

@@ -5,7 +5,6 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.math.Vector2D;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import pl.edu.agh.to2.kitkats.codinlearner.canvas.CanvasManager;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Instruction;
 import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
 import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
@@ -27,7 +26,7 @@ public class LevelProvider {
         this.levels = new ArrayList<>();
     }
 
-    private void newLevel(List<ParameterizedInstruction> commands, String description) {
+    private void newLevel(List<ParameterizedInstruction> commands, String description, Long repeats, Long minNumberOfMoves) {
 
         MoveGraph graph = new MoveGraph();
         Coordinate from = new Coordinate(0.0, 0.0);
@@ -64,7 +63,7 @@ public class LevelProvider {
             }
         }
 
-        levels.add(new Level(graph, description, commands));
+        levels.add(new Level(graph, description, commands, repeats, minNumberOfMoves));
     }
 
     public List<Level> getLevels() {
@@ -94,7 +93,9 @@ public class LevelProvider {
 
                 newLevel(
                         instructions.getAll(),
-                        desc
+                        desc,
+                        repeats,
+                        minNumberOfMoves
                 );
             }
         } catch (Exception e){
