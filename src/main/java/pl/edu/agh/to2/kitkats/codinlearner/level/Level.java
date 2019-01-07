@@ -12,6 +12,7 @@ public class Level {
     public final Long repeats;
     public final Long minNumberOfMoves;
 //    private int bestSolution;
+    private boolean accomplished;
 
     public Level(MoveGraph task, String taskDescription, List<ParameterizedInstruction> commands, Long repeats, Long minNumberOfMoves) {
         this.commands = commands;
@@ -19,6 +20,7 @@ public class Level {
         this.taskDescription = taskDescription;
         this.repeats = repeats;
         this.minNumberOfMoves = minNumberOfMoves;
+        this.accomplished = false;
 //        this.bestSolution = 999;
     }
 
@@ -31,7 +33,15 @@ public class Level {
 //            this.bestSolution = bestSolution;
 //    }
 
-    public boolean check( MoveGraph graph){
+    public boolean getAccomplished(){
+        return this.accomplished;
+    }
+
+    public void setAccomplished(boolean accomplished) {
+        this.accomplished = accomplished;
+    }
+
+    public boolean check(MoveGraph graph){
         return graph.isTheSame(this.task);
     }
 }

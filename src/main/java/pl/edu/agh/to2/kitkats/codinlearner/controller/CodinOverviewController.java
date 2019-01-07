@@ -197,6 +197,30 @@ public class CodinOverviewController {
     }
 
     @FXML
+    private void handlePrevLevelAction(ActionEvent event){
+        levelManager.prevLevel();
+        setStepsText();
+
+        canvasManager.resetCommandRegistry();
+        resetDrawing();
+        this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
+        this.canvasManager.drawCursor();
+        showLevelInfo();
+    }
+
+    @FXML
+    private void handleNextLevelAction(ActionEvent event){
+        levelManager.nextLevel();
+        setStepsText();
+
+        canvasManager.resetCommandRegistry();
+        resetDrawing();
+        this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
+        this.canvasManager.drawCursor();
+        showLevelInfo();
+    }
+
+    @FXML
     private void handleAddLevelsAction(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "About to reset current level progress. Continue?",

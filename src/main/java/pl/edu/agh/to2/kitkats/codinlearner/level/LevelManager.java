@@ -42,6 +42,8 @@ public class LevelManager {
     public boolean checkCurrentLevel(MoveGraph graph){
         boolean passed = levels.get(getLevelNumber()).check(graph);
         if(passed) {
+            levels.get(getLevelNumber()).setAccomplished(true);
+
 //            levels.get(getLevelNumber()).addSolution(currentLevelCommandNumber);
             return true;
         }
@@ -53,9 +55,16 @@ public class LevelManager {
     }
 
     public void nextLevel() {
-        if (currentLevelExists()) {
+        if (getLevelNumber() < levels.size() && levels.get(getLevelNumber()).getAccomplished()) {
             resetLevel();
             levelNumber.set(getLevelNumber() + 1);
+        }
+    }
+
+    public void prevLevel() {
+        if (getLevelNumber() > 0) {
+            resetLevel();
+            levelNumber.set(getLevelNumber() - 1);
         }
     }
 

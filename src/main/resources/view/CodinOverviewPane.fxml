@@ -99,6 +99,16 @@
                         </HBox.margin>
                     </Button>
                     <Pane HBox.hgrow="ALWAYS" />
+                    <Button fx:id="prevLevelButton" mnemonicParsing="false" onAction="#handlePrevLevelAction" text="Previous level">
+                        <HBox.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </HBox.margin>
+                    </Button>
+                    <Button fx:id="nextLevelButton" mnemonicParsing="false" onAction="#handleNextLevelAction" text="Next Level">
+                        <HBox.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </HBox.margin>
+                    </Button>
                     <Button fx:id="addLevelsButton" mnemonicParsing="false" onAction="#handleAddLevelsAction" text="Add Levels">
                         <HBox.margin>
                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
