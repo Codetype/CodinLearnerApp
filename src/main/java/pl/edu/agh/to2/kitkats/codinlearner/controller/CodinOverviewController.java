@@ -259,10 +259,10 @@ public class CodinOverviewController {
         if (commandRegistry.redo()) {
             canvasManager.drawCursor();
             levelManager.previousCommand();
-            if (levelManager.getCommandNumber() == 0) {
+//            if (levelManager.getCommandNumber() == 0) {
                 levelManager.previousMove();
                 setStepsText();
-            }
+//            }
         }
 
 //        if (commandRegistry.redo()) {
@@ -288,6 +288,7 @@ public class CodinOverviewController {
     private void handleExecuteAction(ActionEvent event) {
         String input = commandLine.getText();
         instructionParser.setMoveNumber(0);
+        instructionParser.setInputType(InstructionParser.NONE_TYPE);
         List<ParameterizedInstruction> instructions = instructionParser.parseInstruction(input, true);
         prevCommands.setMinHeight(max(170, Region.USE_PREF_SIZE));
 
@@ -319,14 +320,16 @@ public class CodinOverviewController {
         // TODO: Currently InstructionParser handles only 1 loop or procedure
         if (commandNumber > 0) {
             int moveNumber = instructionParser.getMoveNumber();
-            if (moveNumber > 1) {
+            String inputType = instructionParser.getInputType();
+            if (inputType.equals(InstructionParser.PROCEDURE_TYPE) && moveNumber == 1) {
+                levelManager.addMove(1);
+            } else if (inputType.equals(InstructionParser.LOOP_TYPE) && moveNumber == 1) {
+                levelManager.addMove(1);
+                levelManager.addMove(1);
+            } else if (inputType.equals(InstructionParser.INSTRUCTION_TYPE) && moveNumber > 0) {
                 for (int i = 0; i < moveNumber; i++) {
                     levelManager.addMove(1);
-//                    levelManager.setCurrentMoveCommandNumber(1);
                 }
-            } else if (moveNumber == 1) {
-                levelManager.addMove(commandNumber);
-//                levelManager.setCurrentMoveCommandNumber(commandNumber);
             }
             setStepsText();
         }
@@ -335,11 +338,6 @@ public class CodinOverviewController {
         this.canvasManager.clearAll();
         this.commandRegistry.redraw();
         this.canvasManager.drawCursor();
-
-//        levelManager.pushMove(commandNumber);
-//        levelManager.setCurrentMoveCommandNumber(commandNumber);
-//        setStepsText();
-
     }
 
     @FXML
