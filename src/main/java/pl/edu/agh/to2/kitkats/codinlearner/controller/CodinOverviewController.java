@@ -209,6 +209,7 @@ public class CodinOverviewController {
     @FXML
     private void handleRedoAction(ActionEvent event) {
         commandRegistry.redo();
+        canvasManager.drawCursor();
     }
 
     @FXML
@@ -220,7 +221,7 @@ public class CodinOverviewController {
         for(ParameterizedInstruction lineCommand : commands) {
             if (handleOperation(lineCommand)) {
                 levelManager.addCommand(lineCommand);
-                commandRegistry.executeCommand(new MoveCommand(lineGc, lineCommand, arena, canvasManager));
+                commandRegistry.executeCommand(new MoveCommand(lineCommand, canvasManager));
                 //canvasManager.move(lineCommand);
                 commandLine.clear();
                 infoText.setText("");
@@ -230,6 +231,10 @@ public class CodinOverviewController {
             }
 
         }
+        this.canvasManager.resetCursor();
+        this.canvasManager.clearAll();
+        this.commandRegistry.redraw();
+        this.canvasManager.drawCursor();
     }
 
     @FXML
