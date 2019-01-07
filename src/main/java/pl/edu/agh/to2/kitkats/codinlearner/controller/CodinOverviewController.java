@@ -244,11 +244,13 @@ public class CodinOverviewController {
     private void handleUndoAction(ActionEvent event) {
         if (commandRegistry.undo()) {
             canvasManager.drawCursor();
-            levelManager.previousCommand();
-            if (levelManager.getCommandNumber() == 0) {
-                levelManager.previousMove();
-                setStepsText();
-            }
+            levelManager.addMove(1);
+            setStepsText();
+//            levelManager.previousCommand();
+//            if (levelManager.getCommandNumber() == 0) {
+//                levelManager.previousMove();
+//                setStepsText();
+//            }
         }
     }
 
@@ -256,21 +258,30 @@ public class CodinOverviewController {
     private void handleRedoAction(ActionEvent event) {
         if (commandRegistry.redo()) {
             canvasManager.drawCursor();
-//            levelManager.nextCommand();
-            if (levelManager.getMoveNumber() == 0) {
-                levelManager.nextMove();
-            }
-            levelManager.nextCommand();
-//                levelManager.nextCommand();
-//                setStepsText();
-            if (levelManager.getCommandNumber() == levelManager.getInitialCommandNumber()) {
+            levelManager.previousCommand();
+            if (levelManager.getCommandNumber() == 0) {
+                levelManager.previousMove();
                 setStepsText();
-                levelManager.nextMove();
-
-//            } else {
-//                levelManager.nextCommand();
             }
         }
+
+//        if (commandRegistry.redo()) {
+//            canvasManager.drawCursor();
+////            levelManager.nextCommand();
+//            if (levelManager.getMoveNumber() == 0) {
+//                levelManager.nextMove();
+//            }
+//            levelManager.nextCommand();
+////                levelManager.nextCommand();
+////                setStepsText();
+//            if (levelManager.getCommandNumber() == levelManager.getInitialCommandNumber()) {
+//                setStepsText();
+//                levelManager.nextMove();
+//
+////            } else {
+////                levelManager.nextCommand();
+//            }
+//        }
     }
 
     @FXML
