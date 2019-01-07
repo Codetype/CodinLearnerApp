@@ -9,12 +9,16 @@ public class Level {
     public final MoveGraph task;
     public final List<ParameterizedInstruction> commands;
     public final String taskDescription;
+    public final Long repeats;
+    public final Long minNumberOfMoves;
     private int bestSolution;
 
-    public Level(MoveGraph task, String taskDescription, List<ParameterizedInstruction> commands) {
+    public Level(MoveGraph task, String taskDescription, List<ParameterizedInstruction> commands, Long repeats, Long minNumberOfMoves) {
         this.commands = commands;
         this.task = task;
         this.taskDescription = taskDescription;
+        this.repeats = repeats;
+        this.minNumberOfMoves = minNumberOfMoves;
         this.bestSolution = 999;
     }
 

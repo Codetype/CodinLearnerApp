@@ -3,6 +3,7 @@ package pl.edu.agh.to2.kitkats.codinlearner.parser;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Instruction;
 import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 
@@ -21,13 +22,29 @@ public class InstructionParser {
     public static final String BEGIN = "begin";
     public static final String END = "end";
     public static final String EMPTY = "";
+    private int moveNumber;
+
+    public int getMoveNumber() {
+        return moveNumber;
+    }
 
     public InstructionParser(HashMap<String, Instruction> instructionMap) {
         this.procedureHashMap = getProcedures();
         this.instructionHashMap = instructionMap;
     }
 
-    public List<ParameterizedInstruction> parseInstruction(String instructionAsString) {
+
+    public static boolean isInputWhitespace(String input) {
+        for (int i = 0; i < input.length(); i++) {
+            if (!Character.isWhitespace(input.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<ParameterizedInstruction> parseInstruction(String instructionAsString, boolean count) {
+        if (count) moveNumber = 0;
         List<ParameterizedInstruction> instructions = new ArrayList<>();
         List<String> parts = Arrays.asList(instructionAsString.split("\\s"));
 
@@ -71,6 +88,8 @@ public class InstructionParser {
                 i = parts.indexOf(END);
             }
             else if (currentInstruction.equals(REPEAT)) {
+                if (count) moveNumber++;
+
                 i++;
                 try {
                     int repeats = 0;
@@ -80,7 +99,7 @@ public class InstructionParser {
                     }
                     String loopContent = instructionAsString.substring(instructionAsString.indexOf("[") + 1, instructionAsString.lastIndexOf("]"));
                     for (int r = 0; r < repeats; r++) {
-                        instructions.addAll(parseInstruction(loopContent));
+                        instructions.addAll(parseInstruction(loopContent, false));
                     }
                     i = instructionAsString.indexOf("]");
                 } catch (NumberFormatException e) {
@@ -89,6 +108,8 @@ public class InstructionParser {
                 }
             } else {
                 if (instructionHashMap.containsKey(parts.get(i))) {
+                    if (count) moveNumber++;
+
                     currentInstruction = parts.get(i);
                     //check next string
                     if (i + 1 < parts.size() && !instructionHashMap.containsKey(parts.get(i + 1))) {
@@ -98,6 +119,8 @@ public class InstructionParser {
                         instructions.add(parseSimpleInstruction(currentInstruction));
                     }
                 } else if (procedureHashMap.containsKey(currentInstruction)){
+                    if (count) moveNumber++;
+
                     JSONObject obj = procedureHashMap.get(currentInstruction);
                     final Long noa = (Long) obj.get("numberOfArguments");
                     if(noa != 0) {
@@ -126,7 +149,7 @@ public class InstructionParser {
                                 Long val = (Long) obj.get(argument);
                                 instruction = instruction.replaceAll(argument, val.toString());
                             }
-                            instructions.addAll(parseInstruction(instruction));
+                            instructions.addAll(parseInstruction(instruction, false));
                         }
                     }
                 } else {
