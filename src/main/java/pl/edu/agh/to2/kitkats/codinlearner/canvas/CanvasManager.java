@@ -1,5 +1,6 @@
 package pl.edu.agh.to2.kitkats.codinlearner.canvas;
 
+import com.vividsolutions.jts.math.Vector2D;
 import javafx.scene.canvas.GraphicsContext;
 import pl.edu.agh.to2.kitkats.codinlearner.command.CommandRegistry;
 import pl.edu.agh.to2.kitkats.codinlearner.command.MoveCommand;
@@ -9,6 +10,10 @@ import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 
 import java.util.List;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+
 public class CanvasManager {
 
     private Arena arena;
@@ -16,6 +21,7 @@ public class CanvasManager {
     private GraphicsContext lineGc;
     private GraphicsContext shadowGc;
     private CommandRegistry commandRegistry;
+    private List<ParameterizedInstruction> currentLevelCommands;
 
     public CanvasManager(Arena arena, GraphicsContext cursorGc, GraphicsContext lineGc,
                          GraphicsContext shadowGc, CommandRegistry commandRegistry) {
@@ -28,16 +34,37 @@ public class CanvasManager {
 
 
     public void undo(ParameterizedInstruction command) {
-        clearCursor();
         this.arena.getCursor().moveBack(command);
-        lineGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
         this.arena.getCursor().reset();
+    }
+
+    public void clearAll(){
+        clearLine();
+        clearShadow();
+        clearCursor();
     }
 
 
     public void drawShadow(List<ParameterizedInstruction> commands) {
+        this.currentLevelCommands = commands;
         this.arena.getCursor().reset();
         for(ParameterizedInstruction command : commands){
+            drawLine(command);
+        }
+        this.arena.getCursor().reset();
+    }
+
+    private void drawShadow() {
+        clearShadow();
+        this.arena.getCursor().saveStateAndReset();
+        for(ParameterizedInstruction command : this.currentLevelCommands){
+            drawLine(command);
+        }
+        this.arena.getCursor().loadState();
+        System.out.println("X : " + this.arena.getCursor().getX());
+    }
+
+    private void drawLine(ParameterizedInstruction command){
             double startX = arena.getCursor().getX();
             double startY = arena.getCursor().getY();
 
@@ -47,15 +74,9 @@ public class CanvasManager {
             double endY = arena.getCursor().getY();
 
             shadowGc.strokeLine( startX,  startY, endX, endY);
-        }
-        this.arena.getCursor().reset();
-
     }
 
     public void move(ParameterizedInstruction command, int mode){
-
-        clearCursor();
-
         double startX = arena.getCursor().getX();
         double startY = arena.getCursor().getY();
 
@@ -66,7 +87,10 @@ public class CanvasManager {
 
         lineGc.strokeLine( startX,  startY, endX, endY);
 
-        drawCursor();
+    }
+
+    public void resetCursor(){
+        this.arena.getCursor().reset();
     }
 
     public void resetDrawing() {
@@ -89,9 +113,36 @@ public class CanvasManager {
     private void clearShadow() {
         shadowGc.clearRect(0, 0, this.arena.getWidth(), this.arena.getHeight());
     }
+
     public void drawCursor() {
-        shadowGc.clearRect(arena.getCursor().getX(), arena.getCursor().getY(),
-                arena.getCursor().getAlongVector().getX(), 1);
+        drawShadow();
+        clearCursor();
+        double fromX = min(min(arena.getCursor().getX() + arena.getCursor().getAlongVector().getX(),
+                arena.getCursor().getX() + arena.getCursor().getAcrossVector().getX()),
+                arena.getCursor().getX() - arena.getCursor().getAcrossVector().getX());
+
+        double fromY = min(min(arena.getCursor().getY() + arena.getCursor().getAlongVector().getY(),
+                arena.getCursor().getY() + arena.getCursor().getAcrossVector().getY()),
+                arena.getCursor().getY() - arena.getCursor().getAcrossVector().getY());
+
+        double wid = abs(fromX - max(max(arena.getCursor().getX() + arena.getCursor().getAlongVector().getX(),
+                arena.getCursor().getX() + arena.getCursor().getAcrossVector().getX()),
+                arena.getCursor().getX() - arena.getCursor().getAcrossVector().getX()));
+
+        double hei = abs(fromY - max(max(arena.getCursor().getY() + arena.getCursor().getAlongVector().getY(),
+                arena.getCursor().getY() + arena.getCursor().getAcrossVector().getY()),
+                arena.getCursor().getY() - arena.getCursor().getAcrossVector().getY()));
+
+        shadowGc.clearRect(fromX, fromY, wid, hei);
+        System.out.println(arena.getCursor().getShapePointsX()[0]);
+        System.out.println(arena.getCursor().getShapePointsX()[1]);
+        System.out.println(arena.getCursor().getShapePointsX()[2]);
+
+        System.out.println(arena.getCursor().getShapePointsY()[0]);
+        System.out.println(arena.getCursor().getShapePointsY()[1]);
+        System.out.println(arena.getCursor().getShapePointsY()[2]);
+
+
         cursorGc.fillPolygon(arena.getCursor().getShapePointsX(),
                 arena.getCursor().getShapePointsY(), 3);
 

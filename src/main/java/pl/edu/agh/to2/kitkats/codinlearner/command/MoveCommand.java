@@ -8,16 +8,11 @@ import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 
 public class MoveCommand implements pl.edu.agh.to2.kitkats.codinlearner.command.Command{
 
-    private GraphicsContext lineGc;
     private ParameterizedInstruction command;
-    private Arena arena;
     private CanvasManager canvasManager;
 
-    public MoveCommand(GraphicsContext graphicsContext, ParameterizedInstruction command,
-                       Arena arena, CanvasManager canvasManager) {
+    public MoveCommand(ParameterizedInstruction command, CanvasManager canvasManager) {
         this.command = command;
-        this.arena = arena;
-        this.lineGc = graphicsContext;
         this.canvasManager = canvasManager;
     }
 
@@ -29,6 +24,7 @@ public class MoveCommand implements pl.edu.agh.to2.kitkats.codinlearner.command.
     @Override
     public void undo() {
         this.canvasManager.undo(this.command);
+        this.canvasManager.clearAll();
     }
 
     @Override
@@ -36,11 +32,13 @@ public class MoveCommand implements pl.edu.agh.to2.kitkats.codinlearner.command.
         this.canvasManager.move(this.command, 0);
     }
 
-
     @Override
     public void redo() {
-        this.execute();
+        execute();
+        this.canvasManager.resetCursor();
+        this.canvasManager.clearAll();
     }
+
 
     @Override
     public String getName() {

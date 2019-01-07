@@ -230,6 +230,8 @@ public class CodinOverviewController {
 
     @FXML
     private void handleRedoAction(ActionEvent event) {
+        commandRegistry.redo();
+        canvasManager.drawCursor();
         if (commandRegistry.redo()) {
 //            levelManager.nextCommand();
             if (levelManager.getMoveNumber() == 0) {
@@ -270,7 +272,7 @@ public class CodinOverviewController {
         for (ParameterizedInstruction instruction : instructions) {
             if (handleOperation(instruction)) {
                 levelManager.addInstruction(instruction);
-                commandRegistry.executeCommand(new MoveCommand(lineGc, instruction, arena, canvasManager));
+                commandRegistry.executeCommand(new MoveCommand(instruction, canvasManager));
                 commandNumber++;
                 //canvasManager.move(lineCommand);
                 commandLine.clear();
@@ -294,9 +296,16 @@ public class CodinOverviewController {
             }
             setStepsText();
         }
+
+        this.canvasManager.resetCursor();
+        this.canvasManager.clearAll();
+        this.commandRegistry.redraw();
+        this.canvasManager.drawCursor();
+
 //        levelManager.pushMove(commandNumber);
 //        levelManager.setCurrentMoveCommandNumber(commandNumber);
 //        setStepsText();
+
     }
 
     @FXML

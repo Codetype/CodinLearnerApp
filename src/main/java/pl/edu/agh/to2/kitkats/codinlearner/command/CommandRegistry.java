@@ -23,6 +23,7 @@ public class CommandRegistry {
 			this.undoCommandStack.remove(undoCommandStack.size()-1);
 			this.commandStack.add(lastCommand);
 			lastCommand.redo();
+			redraw();
 			return true;
 		}
 		return false;
