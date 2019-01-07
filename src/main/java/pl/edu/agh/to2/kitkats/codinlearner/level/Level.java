@@ -14,13 +14,13 @@ public class Level {
 //    private int bestSolution;
     private boolean accomplished;
 
-    public Level(MoveGraph task, String taskDescription, List<ParameterizedInstruction> commands, Long repeats, Long minNumberOfMoves) {
+    public Level(MoveGraph task, String taskDescription, List<ParameterizedInstruction> commands, Long repeats, Long minNumberOfMoves, boolean accomplished) {
         this.commands = commands;
         this.task = task;
         this.taskDescription = taskDescription;
         this.repeats = repeats;
         this.minNumberOfMoves = minNumberOfMoves;
-        this.accomplished = false;
+        this.accomplished = accomplished;
 //        this.bestSolution = 999;
     }
 

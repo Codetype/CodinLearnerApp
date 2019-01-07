@@ -341,6 +341,7 @@ public class CodinOverviewController {
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("Level passed!");
 
+            levelManager.setAccomplishment();
             levelManager.nextLevel();
             setStepsText();
         } else {

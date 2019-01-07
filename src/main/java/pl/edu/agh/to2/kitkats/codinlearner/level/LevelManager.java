@@ -2,9 +2,12 @@ package pl.edu.agh.to2.kitkats.codinlearner.level;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
 import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 
+import java.io.FileWriter;
 import java.util.*;
 
 public class LevelManager {
@@ -116,6 +119,25 @@ public class LevelManager {
             return levels.get(getLevelNumber());
         } else {
             return null;
+        }
+    }
+
+    public void setAccomplishment(){
+        JSONObject jsonObj = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        for(Level level : levels){
+            jsonArray.add(level.getAccomplished());
+        }
+
+        jsonObj.put("accomplished", jsonArray);
+
+        try {
+            FileWriter fileWriter = new FileWriter("./src/main/resources/MoveConfiguration/LevelProgress.json");
+            System.out.println("Zapisuje: " + jsonObj.toJSONString());
+            fileWriter.write(jsonObj.toJSONString());
+            fileWriter.close();
+        } catch(Exception e){
+            e.printStackTrace();
         }
     }
 

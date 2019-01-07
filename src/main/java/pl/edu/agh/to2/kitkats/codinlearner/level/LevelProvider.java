@@ -26,7 +26,7 @@ public class LevelProvider {
         this.levels = new ArrayList<>();
     }
 
-    private void newLevel(List<ParameterizedInstruction> commands, String description, Long repeats, Long minNumberOfMoves) {
+    private void newLevel(List<ParameterizedInstruction> commands, String description, Long repeats, Long minNumberOfMoves, boolean accomplished) {
 
         MoveGraph graph = new MoveGraph();
         Coordinate from = new Coordinate(0.0, 0.0);
@@ -63,7 +63,7 @@ public class LevelProvider {
             }
         }
 
-        levels.add(new Level(graph, description, commands, repeats, minNumberOfMoves));
+        levels.add(new Level(graph, description, commands, repeats, minNumberOfMoves, accomplished));
     }
 
     public List<Level> getLevels() {
@@ -74,6 +74,8 @@ public class LevelProvider {
                     "./src/main/resources/MoveConfiguration/Levels.json"));
             JSONObject jsonObj = (JSONObject) obj;
             JSONArray jsonLevels = (JSONArray) jsonObj.get("levels");
+
+            List<Boolean> progressList = checkAccomplishment();
 
             for(Object level : jsonLevels){
                 JSONObject jsonLevel = (JSONObject) level;
@@ -91,18 +93,45 @@ public class LevelProvider {
                     instructions.add(parseInstructionFromString(movesIterator.next()),unitsIterator.next().intValue());
                 }
 
+                boolean accomplished = false;
+                Long id = (Long) jsonLevel.get("_id");
+                if(progressList.get(id.intValue()-1)){
+                    accomplished = true;
+                }
+
                 newLevel(
                         instructions.getAll(),
                         desc,
                         repeats,
-                        minNumberOfMoves
+                        minNumberOfMoves,
+                        accomplished
                 );
+
             }
         } catch (Exception e){
             System.out.println("Error during parsing JSON file.");
             e.printStackTrace();
         }
         return levels;
+    }
+
+    private List<Boolean> checkAccomplishment(){
+        List progressList = new ArrayList();
+        JSONParser parser = new JSONParser();
+
+        try {
+            Object obj = parser.parse(new FileReader(
+                    "./src/main/resources/MoveConfiguration/LevelProgress.json"));
+            JSONObject jsonObj = (JSONObject) obj;
+            JSONArray jsonLevelsProgress = (JSONArray) jsonObj.get("accomplished");
+            Iterator<Boolean> iterator = jsonLevelsProgress.iterator();
+            while(iterator.hasNext()){
+                progressList.add(iterator.next().booleanValue());
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return progressList;
     }
 
     public Instruction parseInstructionFromString(String value) {
