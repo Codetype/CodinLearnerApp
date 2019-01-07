@@ -93,7 +93,7 @@ public class InstructionParser {
                 i = parts.indexOf(END);
             }
             else if (currentInstruction.equals(REPEAT)) {
-                if (count) moveNumber++;
+                if (count) moveNumber += 2;
                 i++;
                 try {
                     int repeats = 0;
