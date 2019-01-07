@@ -254,9 +254,8 @@ public class CodinOverviewController {
 
     @FXML
     private void handleRedoAction(ActionEvent event) {
-        commandRegistry.redo();
-        canvasManager.drawCursor();
         if (commandRegistry.redo()) {
+            canvasManager.drawCursor();
 //            levelManager.nextCommand();
             if (levelManager.getMoveNumber() == 0) {
                 levelManager.nextMove();
