@@ -24,10 +24,6 @@ public class InstructionParser {
     public static final String EMPTY = "";
     private int moveNumber;
 
-    public int getMoveNumber() {
-        return moveNumber;
-    }
-
     public InstructionParser(HashMap<String, Instruction> instructionMap) {
         this.procedureHashMap = getProcedures();
         this.instructionHashMap = instructionMap;
@@ -43,8 +39,16 @@ public class InstructionParser {
         return true;
     }
 
+    private void adjustMoveNumber(List<ParameterizedInstruction> instructions) {
+        for (ParameterizedInstruction pi : instructions) {
+            Instruction i = pi.getInstruction();
+            if (i == Instruction.WRONG || i == Instruction.EMPTY) {
+                moveNumber--;
+            }
+        }
+    }
+
     public List<ParameterizedInstruction> parseInstruction(String instructionAsString, boolean count) {
-        if (count) moveNumber = 0;
         List<ParameterizedInstruction> instructions = new ArrayList<>();
         List<String> parts = Arrays.asList(instructionAsString.split("\\s"));
 
@@ -83,13 +87,13 @@ public class InstructionParser {
                 }
                 else{
                     instructions.add(parseWrongInstruction());
+                    adjustMoveNumber(instructions);
                     return instructions;
                 }
                 i = parts.indexOf(END);
             }
             else if (currentInstruction.equals(REPEAT)) {
                 if (count) moveNumber++;
-
                 i++;
                 try {
                     int repeats = 0;
@@ -104,11 +108,15 @@ public class InstructionParser {
                     i = instructionAsString.indexOf("]");
                 } catch (NumberFormatException e) {
                     instructions.add(parseWrongInstruction());
+                    adjustMoveNumber(instructions);
                     return instructions;
                 }
+//                if (count) moveNumber++;
             } else {
+                if (count) moveNumber++;
+
                 if (instructionHashMap.containsKey(parts.get(i))) {
-                    if (count) moveNumber++;
+//                    if (count) moveNumber++;
 
                     currentInstruction = parts.get(i);
                     //check next string
@@ -119,7 +127,7 @@ public class InstructionParser {
                         instructions.add(parseSimpleInstruction(currentInstruction));
                     }
                 } else if (procedureHashMap.containsKey(currentInstruction)){
-                    if (count) moveNumber++;
+//                    if (count) moveNumber++;
 
                     JSONObject obj = procedureHashMap.get(currentInstruction);
                     final Long noa = (Long) obj.get("numberOfArguments");
@@ -127,6 +135,7 @@ public class InstructionParser {
                         if(noa > parts.size()-1){
                             System.out.println("Bad number of arguments");
                             instructions.add(parseWrongInstruction());
+                            adjustMoveNumber(instructions);
                             return instructions;
                         }
                         else {
@@ -139,6 +148,7 @@ public class InstructionParser {
                                 } catch (NumberFormatException e) {
                                     e.printStackTrace();
                                     instructions.add(parseWrongInstruction());
+                                    adjustMoveNumber(instructions);
                                     return instructions;
                                 }
                             }
@@ -151,12 +161,16 @@ public class InstructionParser {
                             }
                             instructions.addAll(parseInstruction(instruction, false));
                         }
+//                        if (count) moveNumber++;
+//                    } else {
+//                        if (count) moveNumber++;
                     }
                 } else {
                     instructions.add(parseWrongInstruction());
                 }
             }
         }
+        adjustMoveNumber(instructions);
         return instructions;
     }
 
@@ -255,5 +269,13 @@ public class InstructionParser {
         }
 
         return this.procedureHashMap;
+    }
+
+    public void setMoveNumber(int moveNumber) {
+        this.moveNumber = moveNumber;
+    }
+
+    public int getMoveNumber() {
+        return moveNumber;
     }
 }

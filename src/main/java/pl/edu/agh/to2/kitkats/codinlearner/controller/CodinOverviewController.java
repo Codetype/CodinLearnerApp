@@ -126,7 +126,7 @@ public class CodinOverviewController {
 
     public void initializeProperties() {
         checkButton.disableProperty().bind(Bindings.createBooleanBinding(
-                () -> !levelManager.currentLevelExists(), levelManager.currentLevelNumberProperty())
+                () -> !levelManager.currentLevelExists(), levelManager.levelNumberProperty())
         );
     }
 
@@ -190,7 +190,7 @@ public class CodinOverviewController {
     }
 
     private void setStepsText() {
-        Integer a = levelManager.getCurrentLevelMoveNumber();
+        Integer a = levelManager.getMoveNumber();
         Long b = levelManager.getCurrentLevel().minNumberOfMoves;
         String text = a.toString() + " / " + b.toString();
         stepsText.setText(text);
@@ -220,9 +220,9 @@ public class CodinOverviewController {
     private void handleUndoAction(ActionEvent event) {
         if (commandRegistry.undo()) {
             canvasManager.drawCursor();
-            levelManager.decrementCurrentMoveCommandNumber();
-            if (levelManager.getCurrentMoveCommandNumber() == 0) {
-                levelManager.popMove();
+            levelManager.previousCommand();
+            if (levelManager.getCommandNumber() == 0) {
+                levelManager.previousMove();
                 setStepsText();
             }
         }
@@ -231,21 +231,35 @@ public class CodinOverviewController {
     @FXML
     private void handleRedoAction(ActionEvent event) {
         if (commandRegistry.redo()) {
-            levelManager.incrementCurrentMoveCommandNumber();
+//            levelManager.nextCommand();
+            if (levelManager.getMoveNumber() == 0) {
+                levelManager.nextMove();
+            }
+            levelManager.nextCommand();
+//                levelManager.nextCommand();
+//                setStepsText();
+            if (levelManager.getCommandNumber() == levelManager.getInitialCommandNumber()) {
+                setStepsText();
+                levelManager.nextMove();
+
+//            } else {
+//                levelManager.nextCommand();
+            }
         }
     }
 
     @FXML
     private void handleExecuteAction(ActionEvent event) {
         String input = commandLine.getText();
-        List<ParameterizedInstruction> commands = instructionParser.parseInstruction(input, true);
+        instructionParser.setMoveNumber(0);
+        List<ParameterizedInstruction> instructions = instructionParser.parseInstruction(input, true);
         prevCommands.setMinHeight(max(170, Region.USE_PREF_SIZE));
 
         if (!InstructionParser.isInputWhitespace(input)) {
             prevCommands.setText(prevCommands.getText() + "\n>>> " + commandLine.getText());
         }
 
-        if (commands.isEmpty()) {
+        if (instructions.isEmpty()) {
             commandLine.clear();
             infoText.setText("");
             return;
@@ -253,11 +267,11 @@ public class CodinOverviewController {
 
         int commandNumber = 0;
 
-        for(ParameterizedInstruction lineCommand : commands) {
-            if (handleOperation(lineCommand)) {
-                levelManager.addCommand(lineCommand);
+        for (ParameterizedInstruction instruction : instructions) {
+            if (handleOperation(instruction)) {
+                levelManager.addInstruction(instruction);
+                commandRegistry.executeCommand(new MoveCommand(lineGc, instruction, arena, canvasManager));
                 commandNumber++;
-                commandRegistry.executeCommand(new MoveCommand(lineGc, lineCommand, arena, canvasManager));
                 //canvasManager.move(lineCommand);
                 commandLine.clear();
                 infoText.setText("");
@@ -268,14 +282,15 @@ public class CodinOverviewController {
 
         // TODO: Currently InstructionParser handles only 1 loop or procedure
         if (commandNumber > 0) {
-            if (instructionParser.getMoveNumber() > 1) {
-                for (int i = 0; i < commandNumber; i++) {
-                    levelManager.pushMove(1);
-                    levelManager.setCurrentMoveCommandNumber(1);
+            int moveNumber = instructionParser.getMoveNumber();
+            if (moveNumber > 1) {
+                for (int i = 0; i < moveNumber; i++) {
+                    levelManager.addMove(1);
+//                    levelManager.setCurrentMoveCommandNumber(1);
                 }
-            } else {
-                levelManager.pushMove(commandNumber);
-                levelManager.setCurrentMoveCommandNumber(commandNumber);
+            } else if (moveNumber == 1) {
+                levelManager.addMove(commandNumber);
+//                levelManager.setCurrentMoveCommandNumber(commandNumber);
             }
             setStepsText();
         }

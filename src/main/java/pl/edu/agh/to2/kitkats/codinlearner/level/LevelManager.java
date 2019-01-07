@@ -5,109 +5,124 @@ import javafx.beans.property.SimpleIntegerProperty;
 import pl.edu.agh.to2.kitkats.codinlearner.model.MoveGraph;
 import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class LevelManager {
 
     // TODO: Maybe replace IntegerProperty with ObjectProperty<Level>
-    private IntegerProperty currentLevelNumber;
+    private IntegerProperty levelNumber;
     private List<Level> levels;
-    private List<ParameterizedInstruction> currentLevelCommands;
-    private int currentLevelCommandNumber;
-    private int currentMoveCommandNumber;
-    private Stack<Integer> currentLevelMoves;
+    private List<ParameterizedInstruction> parameterizedInstructions;
+//    private int currentLevelCommandNumber; // old
+    private int commandNumber;
+    private List<Integer> moves;
+    private int moveIndex;
 
-    public int getCurrentMoveCommandNumber() {
-        return currentMoveCommandNumber;
+    public int getCommandNumber() {
+        return commandNumber;
     }
 
-    public void setCurrentMoveCommandNumber(int currentMoveCommandNumber) {
-        this.currentMoveCommandNumber = currentMoveCommandNumber;
+    public void nextCommand() {
+        commandNumber++;
     }
 
-    public void incrementCurrentMoveCommandNumber() {
-        this.currentMoveCommandNumber++;
+    public void previousCommand() {
+        commandNumber--;
     }
 
-    public void decrementCurrentMoveCommandNumber() {
-        this.currentMoveCommandNumber--;
-    }
-
-    public LevelManager (int currentLevelNumber) {
+    public LevelManager(int levelNumber) {
         this.levels = new ArrayList<>();
-        this.currentLevelNumber = new SimpleIntegerProperty(currentLevelNumber);
-        this.currentLevelCommands = new ArrayList<>();
-        this.currentLevelCommandNumber = 0;
-        this.currentLevelMoves = new Stack<>();
-//        this.currentLevelMoveNumber = 0;
+        this.levelNumber = new SimpleIntegerProperty(levelNumber);
+        this.parameterizedInstructions = new ArrayList<>();
+//        this.currentLevelCommandNumber = 0;
+        this.moves = new LinkedList<>();
+        this.moveIndex = -1;
     }
 
     public boolean checkCurrentLevel(MoveGraph graph){
-        boolean passed = levels.get(getCurrentLevelNumber()).check(graph);
+        boolean passed = levels.get(getLevelNumber()).check(graph);
         if(passed) {
-            levels.get(this.getCurrentLevelNumber()).addSolution(this.currentLevelCommandNumber);
+//            levels.get(getLevelNumber()).addSolution(currentLevelCommandNumber);
             return true;
         }
         else return false;
     }
 
     public boolean currentLevelExists() {
-        return (getCurrentLevelNumber() < levels.size());
+        return (getLevelNumber() < levels.size());
     }
 
     public void nextLevel() {
         if (currentLevelExists()) {
             resetLevel();
-            this.currentLevelNumber.set(this.getCurrentLevelNumber() + 1);
+            levelNumber.set(getLevelNumber() + 1);
         }
     }
 
     public void resetLevel() {
-        this.currentLevelCommands.clear();
-        this.currentLevelCommandNumber = 0;
-        this.currentMoveCommandNumber = 0;
-        this.currentLevelMoves.removeAllElements();
+        parameterizedInstructions.clear();
+//        currentLevelCommandNumber = 0;
+        commandNumber = 0;
+        moves.clear();
+        moveIndex = -1;
     }
 
-    public void addCommand(ParameterizedInstruction command){
-        this.currentLevelCommands.add(command);
-        this.currentLevelCommandNumber++;
+    public void addInstruction(ParameterizedInstruction instruction){
+        parameterizedInstructions.add(instruction);
+//        currentLevelCommandNumber++;
     }
 
-    public void pushMove(Integer numberOfInstructions) {
-        this.currentLevelMoves.push(numberOfInstructions);
-//        this.currentLevelCommandNumber += numberOfInstructions;
+    public void addMove(Integer commandNumber) {
+        if (moveIndex > -1) {
+            moves.subList(moveIndex, moves.size()).clear();
+            moves.add(moveIndex, this.commandNumber);
+        }
+        moveIndex++;
+        moves.add(moveIndex, commandNumber);
+        this.commandNumber = commandNumber;
     }
 
-    public void popMove() {
-        this.currentLevelMoves.pop();
-        setCurrentMoveCommandNumber(this.currentLevelMoves.peek());
-//        this.currentLevelCommandNumber -= numberOfInstructions;
+    public void nextMove() {
+        if (moveIndex < moves.size() - 1) {
+            moveIndex++;
+            commandNumber = 0;
+        }
+    }
+
+    public void previousMove() {
+        if (moveIndex > -1) {
+            moveIndex--;
+        }
+        if (moveIndex > -1) {
+            commandNumber = moves.get(moveIndex);
+        }
     }
 
     public void addLevel(Level level) {
-        this.levels.add(level);
+        levels.add(level);
     }
 
     public Level getCurrentLevel() {
         if (currentLevelExists()) {
-            return levels.get(getCurrentLevelNumber());
+            return levels.get(getLevelNumber());
         } else {
             return null;
         }
     }
 
-    public int getCurrentLevelMoveNumber() {
-        return currentLevelMoves.size();
+    public int getMoveNumber() {
+        return moveIndex + 1;
     }
 
-    public int getCurrentLevelNumber() {
-        return currentLevelNumber.get();
+    public int getInitialCommandNumber() {
+        return moves.get(moveIndex);
     }
 
-    public IntegerProperty currentLevelNumberProperty() {
-        return currentLevelNumber;
+    private int getLevelNumber() {
+        return levelNumber.get();
+    }
+
+    public IntegerProperty levelNumberProperty() {
+        return levelNumber;
     }
 }
