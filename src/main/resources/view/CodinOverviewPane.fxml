@@ -39,16 +39,11 @@
                     </VBox.margin>
                 </Button>
                 <Region VBox.vgrow="ALWAYS"/>
-                <!--<HBox alignment="BOTTOM_CENTER">-->
-                    <!--<HBox.margin>-->
-                        <!--<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />-->
-                    <!--</HBox.margin>-->
-                    <Text fx:id="stepsText">test
-                        <VBox.margin>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                        </VBox.margin>
-                    </Text>
-                <!--</HBox>-->
+                <Text fx:id="stepsText">test
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                </Text>
 
                 <!--TODO level manager-->
             </children>
@@ -56,20 +51,6 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </BorderPane.margin>
         </VBox>
-        <!--<VBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER"-->
-              <!--style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">-->
-            <!--<opaqueInsets>-->
-                <!--<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />-->
-            <!--</opaqueInsets>-->
-            <!--<Text fx:id="stepsText">-->
-                <!--<VBox.margin>-->
-                    <!--<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />-->
-                <!--</VBox.margin>-->
-            <!--</Text>-->
-            <!--<BorderPane.margin>-->
-                <!--<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />-->
-            <!--</BorderPane.margin>-->
-        <!--</VBox>-->
     </right>
     <bottom>
         <VBox prefHeight="300.0" prefWidth="800.0" style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" BorderPane.alignment="CENTER">
@@ -99,7 +80,7 @@
                         </HBox.margin>
                     </Button>
                     <Pane HBox.hgrow="ALWAYS" />
-                    <Button fx:id="prevLevelButton" mnemonicParsing="false" onAction="#handlePrevLevelAction" text="Previous level">
+                    <Button fx:id="prevLevelButton" mnemonicParsing="false" onAction="#handlePrevLevelAction" text="Previous Level">
                         <HBox.margin>
                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                         </HBox.margin>
