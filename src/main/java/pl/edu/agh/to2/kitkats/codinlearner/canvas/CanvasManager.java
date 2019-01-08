@@ -134,13 +134,7 @@ public class CanvasManager {
                 arena.getCursor().getY() - arena.getCursor().getAcrossVector().getY()));
 
         shadowGc.clearRect(fromX, fromY, wid, hei);
-        System.out.println(arena.getCursor().getShapePointsX()[0]);
-        System.out.println(arena.getCursor().getShapePointsX()[1]);
-        System.out.println(arena.getCursor().getShapePointsX()[2]);
-
-        System.out.println(arena.getCursor().getShapePointsY()[0]);
-        System.out.println(arena.getCursor().getShapePointsY()[1]);
-        System.out.println(arena.getCursor().getShapePointsY()[2]);
+        lineGc.clearRect(fromX, fromY, wid, hei);
 
 
         cursorGc.fillPolygon(arena.getCursor().getShapePointsX(),
