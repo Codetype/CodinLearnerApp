@@ -62,8 +62,11 @@ public class LevelManager {
             resetLevel();
             levelNumber.set(getLevelNumber() + 1);
             return true;
-        } else {
+        } else if (getLevelNumber() == levels.size() - 1) {
+            levelNumber.set(getLevelNumber() + 1);
 //            resetLevel();
+            return false;
+        } else {
             return false;
         }
     }
@@ -73,8 +76,11 @@ public class LevelManager {
             resetLevel();
             levelNumber.set(getLevelNumber() - 1);
             return false;
-        } else {
+        } else if (getLevelNumber() == 0) {
+            levelNumber.set(getLevelNumber() - 1);
 //            resetLevel();
+            return false;
+        } else {
             return false;
         }
     }
