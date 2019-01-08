@@ -66,6 +66,9 @@ public class CodinOverviewController {
     private GraphicsContext shadowGc;
 
     @FXML
+    private Button execButton;
+
+    @FXML
     private Button checkButton;
 
     @FXML
@@ -128,6 +131,9 @@ public class CodinOverviewController {
         checkButton.disableProperty().bind(Bindings.createBooleanBinding(
                 () -> !levelManager.currentLevelExists(), levelManager.levelNumberProperty())
         );
+        execButton.disableProperty().bind(Bindings.createBooleanBinding(
+                () -> !levelManager.currentLevelExists(), levelManager.levelNumberProperty())
+        );
     }
 
     public void initializeDrawing() {
@@ -157,7 +163,7 @@ public class CodinOverviewController {
                         if (commandLine.getText().equals("") || instructionHistory.isIterated()) {
                             text = instructionHistory.next();
                         }
-                    } else if (keyCode == KeyCode.ENTER && keyEvent.isControlDown()) {
+                    } else if (keyCode == KeyCode.ENTER && keyEvent.isControlDown() && !levelManager.isAllLevelsCompleted()) {
                         instructionHistory.add(commandLine.getText());
                         instructionHistory.resetIterator();
                         handleExecuteAction(null);
@@ -207,21 +213,25 @@ public class CodinOverviewController {
             resetDrawing();
             this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
             this.canvasManager.drawCursor();
+            setStepsText();
+            showLevelInfo();
         }
-        setStepsText();
-        showLevelInfo();
     }
 
     @FXML
     private void handleNextLevelAction(ActionEvent event) {
-        canvasManager.resetCommandRegistry();
-        resetDrawing();
         if (levelManager.nextLevel()) {
-            this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
+            canvasManager.resetCommandRegistry();
+            resetDrawing();
+            if (!levelManager.isAllLevelsCompleted()) {
+                this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
+                this.canvasManager.drawCursor();
+            } else {
+                canvasManager.clearAll();
+            }
+            setStepsText();
+            showLevelInfo();
         }
-        this.canvasManager.drawCursor();
-        showLevelInfo();
-        setStepsText();
     }
 
     @FXML
@@ -250,11 +260,6 @@ public class CodinOverviewController {
             canvasManager.drawCursor();
             levelManager.addMove(1);
             setStepsText();
-//            levelManager.previousCommand();
-//            if (levelManager.getCommandNumber() == 0) {
-//                levelManager.previousMove();
-//                setStepsText();
-//            }
         }
     }
 
@@ -263,29 +268,9 @@ public class CodinOverviewController {
         if (commandRegistry.redo()) {
             canvasManager.drawCursor();
             levelManager.previousCommand();
-//            if (levelManager.getCommandNumber() == 0) {
-                levelManager.previousMove();
-                setStepsText();
-//            }
+            levelManager.previousMove();
+            setStepsText();
         }
-
-//        if (commandRegistry.redo()) {
-//            canvasManager.drawCursor();
-////            levelManager.nextCommand();
-//            if (levelManager.getMoveNumber() == 0) {
-//                levelManager.nextMove();
-//            }
-//            levelManager.nextCommand();
-////                levelManager.nextCommand();
-////                setStepsText();
-//            if (levelManager.getCommandNumber() == levelManager.getInitialCommandNumber()) {
-//                setStepsText();
-//                levelManager.nextMove();
-//
-////            } else {
-////                levelManager.nextCommand();
-//            }
-//        }
     }
 
     @FXML
@@ -355,13 +340,13 @@ public class CodinOverviewController {
 
             levelManager.setAccomplishment();
             levelManager.nextLevel();
-            setStepsText();
+//            setStepsText();
         } else {
             alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("There were some errors in your solution. Try again...");
 
             levelManager.resetLevel();
-            setStepsText();
+//            setStepsText();
         }
 
         alert.setTitle(null);
@@ -369,8 +354,13 @@ public class CodinOverviewController {
         alert.showAndWait();
         canvasManager.resetCommandRegistry();
         resetDrawing();
-        this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
-        this.canvasManager.drawCursor();
+        if (!levelManager.isAllLevelsCompleted()) {
+            this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
+            this.canvasManager.drawCursor();
+        } else {
+            canvasManager.clearAll();
+        }
+        setStepsText();
         showLevelInfo();
     }
 

@@ -21,6 +21,16 @@ public class LevelManager {
     private List<Integer> moves;
     private int moveIndex;
 
+    public boolean isAllLevelsCompleted() {
+        return allLevelsCompleted;
+    }
+
+    public void setAllLevelsCompleted(boolean allLevelsCompleted) {
+        this.allLevelsCompleted = allLevelsCompleted;
+    }
+
+    private boolean allLevelsCompleted;
+
     public int getCommandNumber() {
         return commandNumber;
     }
@@ -40,6 +50,7 @@ public class LevelManager {
 //        this.currentLevelCommandNumber = 0;
         this.moves = new LinkedList<>();
         this.moveIndex = -1;
+        this.allLevelsCompleted = false;
     }
 
     public boolean checkCurrentLevel(MoveGraph graph){
@@ -62,22 +73,26 @@ public class LevelManager {
             resetLevel();
             levelNumber.set(getLevelNumber() + 1);
             return true;
-        } else if (getLevelNumber() == levels.size() - 1) {
+        } else if (getLevelNumber() == levels.size() - 1 && levels.get(getLevelNumber()).getAccomplished()) {
             levelNumber.set(getLevelNumber() + 1);
+            allLevelsCompleted = true;
 //            resetLevel();
-            return false;
+            return true;
         } else {
             return false;
         }
     }
 
     public boolean prevLevel() {
+        if (allLevelsCompleted) {
+            allLevelsCompleted = false;
+        }
         if (getLevelNumber() > 0) {
             resetLevel();
             levelNumber.set(getLevelNumber() - 1);
-            return false;
+            return true;
         } else if (getLevelNumber() == 0) {
-            levelNumber.set(getLevelNumber() - 1);
+//            levelNumber.set(getLevelNumber() - 1);
 //            resetLevel();
             return false;
         } else {
