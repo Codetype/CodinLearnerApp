@@ -190,34 +190,38 @@ public class CodinOverviewController {
     }
 
     private void setStepsText() {
-        Integer a = levelManager.getMoveNumber();
-        Long b = levelManager.getCurrentLevel().minNumberOfMoves;
-        String text = a.toString() + " / " + b.toString();
-        stepsText.setText(text);
+        if (levelManager.currentLevelExists()) {
+            Integer a = levelManager.getMoveNumber();
+            Long b = levelManager.getCurrentLevel().minNumberOfMoves;
+            String text = a.toString() + " / " + b.toString();
+            stepsText.setText(text);
+        } else {
+            stepsText.setText("");
+        }
     }
 
     @FXML
-    private void handlePrevLevelAction(ActionEvent event){
-        levelManager.prevLevel();
+    private void handlePrevLevelAction(ActionEvent event) {
+        if (levelManager.prevLevel()) {
+            canvasManager.resetCommandRegistry();
+            resetDrawing();
+            this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
+            this.canvasManager.drawCursor();
+        }
         setStepsText();
-
-        canvasManager.resetCommandRegistry();
-        resetDrawing();
-        this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
-        this.canvasManager.drawCursor();
         showLevelInfo();
     }
 
     @FXML
-    private void handleNextLevelAction(ActionEvent event){
-        levelManager.nextLevel();
-        setStepsText();
-
+    private void handleNextLevelAction(ActionEvent event) {
         canvasManager.resetCommandRegistry();
         resetDrawing();
-        this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
+        if (levelManager.nextLevel()) {
+            this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
+        }
         this.canvasManager.drawCursor();
         showLevelInfo();
+        setStepsText();
     }
 
     @FXML

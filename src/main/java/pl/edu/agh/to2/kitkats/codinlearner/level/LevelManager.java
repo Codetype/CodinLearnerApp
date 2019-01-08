@@ -57,17 +57,25 @@ public class LevelManager {
         return (getLevelNumber() < levels.size());
     }
 
-    public void nextLevel() {
-        if (getLevelNumber() < levels.size() && levels.get(getLevelNumber()).getAccomplished()) {
+    public boolean nextLevel() {
+        if (getLevelNumber() < levels.size() - 1 && levels.get(getLevelNumber()).getAccomplished()) {
             resetLevel();
             levelNumber.set(getLevelNumber() + 1);
+            return true;
+        } else {
+//            resetLevel();
+            return false;
         }
     }
 
-    public void prevLevel() {
+    public boolean prevLevel() {
         if (getLevelNumber() > 0) {
             resetLevel();
             levelNumber.set(getLevelNumber() - 1);
+            return false;
+        } else {
+//            resetLevel();
+            return false;
         }
     }
 
