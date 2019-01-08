@@ -86,18 +86,22 @@ end
 ```
 And then called this procedure by another:
 ```
-begin square :side
+begin mySquare :side
 regular 4 side 90
 end
 ```
 ```
-square 2
+mySquare 2
 ```
 ```
-begin triangle :side
+begin myTriangle :side
 regular 3 side 120
 end
 ```
 ```
-triangle 1
+myTriangle 1
+```
+You can also call embedded procedures (trinagle, square, pentagon, hexagon), for example:
+```
+pentagon 1
 ```
