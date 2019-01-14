@@ -32,13 +32,10 @@ public class CodinOverviewController {
 
     private CommandRegistry commandRegistry;
     private LevelManager levelManager;
-    private LevelProvider levelProvider;
     private InstructionParser instructionParser;
     private CanvasManager canvasManager;
     private InstructionHistory instructionHistory;
-
-    public Arena arena;
-
+    private Arena arena;
     private CodinAppController appController;
 
     @FXML
@@ -74,17 +71,14 @@ public class CodinOverviewController {
     @FXML
     private TextArea levelInfo;
 
-    @FXML
-    private Button undoButton;
-
-    @FXML
-    private Button redoButton;
-
-    @FXML
-    private Button addLevelsButton;
-
-    @FXML
-    private HBox hbox;
+//    @FXML
+//    private Button undoButton;
+//
+//    @FXML
+//    private Button redoButton;
+//
+//    @FXML
+//    private Button addLevelsButton;
 
     @FXML
     private Text infoText;
@@ -121,7 +115,7 @@ public class CodinOverviewController {
 
 
     public void initializeLevels() {
-        levelProvider = new LevelProvider(arena.getCursor().getMoveStep());
+        LevelProvider levelProvider = new LevelProvider(arena.getCursor().getMoveStep());
         for (Level level : levelProvider.getLevels()) {
             levelManager.addLevel(level);
         }
@@ -139,8 +133,6 @@ public class CodinOverviewController {
     public void initializeDrawing() {
         this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
         this.canvasManager.drawCursor();
-
-
     }
 
     public void initializeCanvasManager(){
@@ -179,10 +171,6 @@ public class CodinOverviewController {
                     }
                 }
         );
-    }
-
-    public void initializeStepsText() {
-        setStepsText();
     }
 
     public void showLevelInfo() {
@@ -226,25 +214,24 @@ public class CodinOverviewController {
         }
     }
 
-    @FXML
-    private void handleAddLevelsAction(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                "About to reset current level progress. Continue?",
-                ButtonType.OK,
-                ButtonType.CANCEL
-        );
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            System.out.println("ok");
-            levelManager.resetLevel();
-            setStepsText();
-            canvasManager.resetCommandRegistry();
-            resetDrawing();
-//            addLevelsButton.setText("");
-//            hbox.getChildren().
-        }
-
-    }
+//    @FXML
+//    private void handleAddLevelsAction(ActionEvent event) {
+//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+//                "About to reset current level progress. Continue?",
+//                ButtonType.OK,
+//                ButtonType.CANCEL
+//        );
+//        Optional<ButtonType> result = alert.showAndWait();
+//        if (result.isPresent() && result.get() == ButtonType.OK) {
+//            System.out.println("ok");
+//            levelManager.resetLevel();
+//            setStepsText();
+//            canvasManager.resetCommandRegistry();
+//            resetDrawing();
+////            addLevelsButton.setText("");
+////            hbox.getChildren().
+//        }
+//    }
 
     @FXML
     private void handleUndoAction(ActionEvent event) {
@@ -332,13 +319,11 @@ public class CodinOverviewController {
 
             levelManager.setAccomplishment();
             levelManager.nextLevel();
-//            setStepsText();
         } else {
             alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("There were some errors in your solution. Try again...");
 
             levelManager.resetLevel();
-//            setStepsText();
         }
 
         alert.setTitle(null);
@@ -351,12 +336,14 @@ public class CodinOverviewController {
         canvasManager.resetCommandRegistry();
         canvasManager.resetDrawing();
         instructionHistory.resetIterator();
+
         if (!levelManager.isAllLevelsCompleted()) {
             canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
             canvasManager.drawCursor();
         } else {
             canvasManager.clearAll();
         }
+
         setStepsText();
         showLevelInfo();
     }
@@ -375,4 +362,3 @@ public class CodinOverviewController {
     }
 
 }
-
