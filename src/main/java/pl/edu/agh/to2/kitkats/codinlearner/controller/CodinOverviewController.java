@@ -209,28 +209,20 @@ public class CodinOverviewController {
     @FXML
     private void handlePrevLevelAction(ActionEvent event) {
         if (levelManager.prevLevel()) {
-            canvasManager.resetCommandRegistry();
+//            canvasManager.resetCommandRegistry();
+//            resetDrawing();
+//            this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
+//            this.canvasManager.drawCursor();
+//            setStepsText();
+//            showLevelInfo();
             resetDrawing();
-            this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
-            this.canvasManager.drawCursor();
-            setStepsText();
-            showLevelInfo();
         }
     }
 
     @FXML
     private void handleNextLevelAction(ActionEvent event) {
         if (levelManager.nextLevel()) {
-            canvasManager.resetCommandRegistry();
             resetDrawing();
-            if (!levelManager.isAllLevelsCompleted()) {
-                this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
-                this.canvasManager.drawCursor();
-            } else {
-                canvasManager.clearAll();
-            }
-            setStepsText();
-            showLevelInfo();
         }
     }
 
@@ -352,23 +344,21 @@ public class CodinOverviewController {
         alert.setTitle(null);
         alert.setHeaderText(null);
         alert.showAndWait();
-        canvasManager.resetCommandRegistry();
         resetDrawing();
+    }
+
+    private void resetDrawing() {
+        canvasManager.resetCommandRegistry();
+        canvasManager.resetDrawing();
+        instructionHistory.resetIterator();
         if (!levelManager.isAllLevelsCompleted()) {
-            this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
-            this.canvasManager.drawCursor();
+            canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
+            canvasManager.drawCursor();
         } else {
             canvasManager.clearAll();
         }
         setStepsText();
         showLevelInfo();
-    }
-
-
-    private void resetDrawing() {
-        this.canvasManager.resetDrawing();
-        instructionHistory.resetIterator();
-//        this.prevCommands.setText("");
     }
 
     private boolean handleOperation(ParameterizedInstruction command){
