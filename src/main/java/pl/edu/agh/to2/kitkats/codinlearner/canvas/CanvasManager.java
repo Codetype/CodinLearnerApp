@@ -61,7 +61,7 @@ public class CanvasManager {
             drawLine(command);
         }
         this.arena.getCursor().loadState();
-        System.out.println("X : " + this.arena.getCursor().getX());
+//        System.out.println("X : " + this.arena.getCursor().getX());
     }
 
     private void drawLine(ParameterizedInstruction command){

@@ -156,8 +156,8 @@ public class CodinOverviewController {
                             text = instructionHistory.next();
                         }
                     } else if (keyCode == KeyCode.ENTER && keyEvent.isControlDown() && !levelManager.isAllLevelsCompleted()) {
-                        instructionHistory.add(commandLine.getText());
-                        instructionHistory.resetIterator();
+//                        instructionHistory.add(commandLine.getText());
+//                        instructionHistory.resetIterator();
                         handleExecuteAction(null);
                     } else {
                         instructionHistory.resetIterator();
@@ -255,9 +255,15 @@ public class CodinOverviewController {
     @FXML
     private void handleExecuteAction(ActionEvent event) {
         String input = commandLine.getText();
+
+        instructionHistory.add(input);
+        instructionHistory.resetIterator();
+
         instructionParser.setMoveNumber(0);
         instructionParser.setInputType(InstructionParser.NONE_TYPE);
+
         List<ParameterizedInstruction> instructions = instructionParser.parseInstruction(input, true);
+
         prevCommands.setMinHeight(max(170, Region.USE_PREF_SIZE));
 
         if (!InstructionParser.isInputWhitespace(input)) {
@@ -306,6 +312,7 @@ public class CodinOverviewController {
         this.canvasManager.clearAll();
         this.commandRegistry.redraw();
         this.canvasManager.drawCursor();
+        commandLine.requestFocus();
     }
 
     @FXML
@@ -330,6 +337,7 @@ public class CodinOverviewController {
         alert.setHeaderText(null);
         alert.showAndWait();
         resetDrawing();
+        commandLine.requestFocus();
     }
 
     private void resetDrawing() {
