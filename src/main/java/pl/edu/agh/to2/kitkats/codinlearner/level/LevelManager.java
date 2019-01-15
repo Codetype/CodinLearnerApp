@@ -16,7 +16,6 @@ public class LevelManager {
     private IntegerProperty levelNumber;
     private List<Level> levels;
     private List<ParameterizedInstruction> parameterizedInstructions;
-//    private int currentLevelCommandNumber; // old
     private int commandNumber;
     private List<Integer> moves;
     private int moveIndex;
@@ -25,15 +24,7 @@ public class LevelManager {
         return allLevelsCompleted;
     }
 
-    public void setAllLevelsCompleted(boolean allLevelsCompleted) {
-        this.allLevelsCompleted = allLevelsCompleted;
-    }
-
     private boolean allLevelsCompleted;
-
-    public int getCommandNumber() {
-        return commandNumber;
-    }
 
     public void nextCommand() {
         commandNumber++;
@@ -47,7 +38,6 @@ public class LevelManager {
         this.levels = new ArrayList<>();
         this.levelNumber = new SimpleIntegerProperty(levelNumber);
         this.parameterizedInstructions = new ArrayList<>();
-//        this.currentLevelCommandNumber = 0;
         this.moves = new LinkedList<>();
         this.moveIndex = -1;
         this.allLevelsCompleted = false;
@@ -55,13 +45,14 @@ public class LevelManager {
 
     public boolean checkCurrentLevel(MoveGraph graph){
         boolean passed = levels.get(getLevelNumber()).check(graph);
-        if(passed) {
+        if (passed) {
             levels.get(getLevelNumber()).setAccomplished(true);
 
-//            levels.get(getLevelNumber()).addSolution(currentLevelCommandNumber);
             return true;
         }
-        else return false;
+        else {
+            return false;
+        }
     }
 
     public boolean currentLevelExists() {
@@ -72,11 +63,12 @@ public class LevelManager {
         if (getLevelNumber() < levels.size() - 1 && levels.get(getLevelNumber()).getAccomplished()) {
             resetLevel();
             levelNumber.set(getLevelNumber() + 1);
+
             return true;
         } else if (getLevelNumber() == levels.size() - 1 && levels.get(getLevelNumber()).getAccomplished()) {
             levelNumber.set(getLevelNumber() + 1);
             allLevelsCompleted = true;
-//            resetLevel();
+
             return true;
         } else {
             return false;
@@ -90,10 +82,9 @@ public class LevelManager {
         if (getLevelNumber() > 0) {
             resetLevel();
             levelNumber.set(getLevelNumber() - 1);
+
             return true;
         } else if (getLevelNumber() == 0) {
-//            levelNumber.set(getLevelNumber() - 1);
-//            resetLevel();
             return false;
         } else {
             return false;
@@ -102,7 +93,6 @@ public class LevelManager {
 
     public void resetLevel() {
         parameterizedInstructions.clear();
-//        currentLevelCommandNumber = 0;
         commandNumber = 0;
         moves.clear();
         moveIndex = -1;

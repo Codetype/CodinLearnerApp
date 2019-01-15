@@ -11,9 +11,9 @@ public class InstructionHistory {
     private KeyCode lastKeyCode;
     private String lastConsumed;
 
-    public KeyCode getLastKeyCode() {
-        return lastKeyCode;
-    }
+//    public KeyCode getLastKeyCode() {
+//        return lastKeyCode;
+//    }
 
     public void setLastKeyCode(KeyCode keyCode) {
         this.lastKeyCode = keyCode;

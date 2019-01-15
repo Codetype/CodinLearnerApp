@@ -11,7 +11,6 @@ public class Level {
     public final String taskDescription;
     public final Long repeats;
     public final Long minNumberOfMoves;
-//    private int bestSolution;
     private boolean accomplished;
 
     public Level(MoveGraph task, String taskDescription, List<ParameterizedInstruction> commands, Long repeats, Long minNumberOfMoves, boolean accomplished) {
@@ -21,17 +20,7 @@ public class Level {
         this.repeats = repeats;
         this.minNumberOfMoves = minNumberOfMoves;
         this.accomplished = accomplished;
-//        this.bestSolution = 999;
     }
-
-//    public int getBestSolution() {
-//        return bestSolution;
-//    }
-//
-//    public void addSolution(int newSolution) {
-//        if(newSolution < this.bestSolution)
-//            this.bestSolution = bestSolution;
-//    }
 
     public boolean getAccomplished(){
         return this.accomplished;
