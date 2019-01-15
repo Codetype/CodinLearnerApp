@@ -1,18 +1,13 @@
 package pl.edu.agh.to2.kitkats.codinlearner.canvas;
 
-import com.vividsolutions.jts.math.Vector2D;
 import javafx.scene.canvas.GraphicsContext;
 import pl.edu.agh.to2.kitkats.codinlearner.command.CommandRegistry;
-import pl.edu.agh.to2.kitkats.codinlearner.command.MoveCommand;
-import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
 import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 
 import java.util.List;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
+import static java.lang.Math.*;
 
 public class CanvasManager {
 

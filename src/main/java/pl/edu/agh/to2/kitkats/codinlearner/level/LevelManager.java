@@ -59,6 +59,14 @@ public class LevelManager {
         return (getLevelNumber() < levels.size());
     }
 
+    public boolean nextLevelExists() {
+        return (getLevelNumber() <= levels.size() - 1);
+    }
+
+    public boolean prevLevelExists() {
+        return (getLevelNumber() > 0);
+    }
+
     public boolean nextLevel() {
         if (getLevelNumber() < levels.size() - 1 && levels.get(getLevelNumber()).getAccomplished()) {
             resetLevel();

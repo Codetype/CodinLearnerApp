@@ -1,5 +1,6 @@
 package pl.edu.agh.to2.kitkats.codinlearner.controller;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,7 +8,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -17,16 +17,16 @@ import pl.edu.agh.to2.kitkats.codinlearner.command.MoveCommand;
 import pl.edu.agh.to2.kitkats.codinlearner.level.Level;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelManager;
 import pl.edu.agh.to2.kitkats.codinlearner.level.LevelProvider;
-import pl.edu.agh.to2.kitkats.codinlearner.model.*;
+import pl.edu.agh.to2.kitkats.codinlearner.model.Arena;
+import pl.edu.agh.to2.kitkats.codinlearner.model.Instruction;
+import pl.edu.agh.to2.kitkats.codinlearner.model.ParameterizedInstruction;
 import pl.edu.agh.to2.kitkats.codinlearner.parser.InstructionHistory;
 import pl.edu.agh.to2.kitkats.codinlearner.parser.InstructionParser;
 
-import java.util.List;
 import java.util.HashMap;
-import java.util.Optional;
+import java.util.List;
 
 import static java.lang.Math.max;
-import static java.lang.Math.min;
 
 public class CodinOverviewController {
 
@@ -71,12 +71,18 @@ public class CodinOverviewController {
     @FXML
     private TextArea levelInfo;
 
-//    @FXML
-//    private Button undoButton;
-//
-//    @FXML
-//    private Button redoButton;
-//
+    @FXML
+    private Button prevLevelButton;
+
+    @FXML
+    private Button nextLevelButton;
+
+    @FXML
+    private Button undoButton;
+
+    @FXML
+    private Button redoButton;
+
 //    @FXML
 //    private Button addLevelsButton;
 
@@ -112,8 +118,6 @@ public class CodinOverviewController {
         shadowGc.setStroke(Color.LIGHTGRAY);
     }
 
-
-
     public void initializeLevels() {
         LevelProvider levelProvider = new LevelProvider(arena.getCursor().getMoveStep());
         for (Level level : levelProvider.getLevels()) {
@@ -127,6 +131,12 @@ public class CodinOverviewController {
         );
         execButton.disableProperty().bind(Bindings.createBooleanBinding(
                 () -> !levelManager.currentLevelExists(), levelManager.levelNumberProperty())
+        );
+        prevLevelButton.disableProperty().bind(Bindings.createBooleanBinding(
+                () -> !levelManager.prevLevelExists(), levelManager.levelNumberProperty())
+        );
+        nextLevelButton.disableProperty().bind(Bindings.createBooleanBinding(
+                () -> !levelManager.nextLevelExists(), levelManager.levelNumberProperty())
         );
     }
 
@@ -156,9 +166,9 @@ public class CodinOverviewController {
                             text = instructionHistory.next();
                         }
                     } else if (keyCode == KeyCode.ENTER && keyEvent.isControlDown() && !levelManager.isAllLevelsCompleted()) {
-//                        instructionHistory.add(commandLine.getText());
-//                        instructionHistory.resetIterator();
                         handleExecuteAction(null);
+                    } else if (keyCode == KeyCode.K && keyEvent.isControlDown()) {
+                        handleCheckAction(null);
                     } else {
                         instructionHistory.resetIterator();
                     }
@@ -171,6 +181,7 @@ public class CodinOverviewController {
                     }
                 }
         );
+        Platform.runLater(() -> commandLine.requestFocus());
     }
 
     public void showLevelInfo() {
@@ -197,14 +208,9 @@ public class CodinOverviewController {
     @FXML
     private void handlePrevLevelAction(ActionEvent event) {
         if (levelManager.prevLevel()) {
-//            canvasManager.resetCommandRegistry();
-//            resetDrawing();
-//            this.canvasManager.drawShadow(this.levelManager.getCurrentLevel().commands);
-//            this.canvasManager.drawCursor();
-//            setStepsText();
-//            showLevelInfo();
             resetDrawing();
         }
+        commandLine.requestFocus();
     }
 
     @FXML
@@ -212,6 +218,7 @@ public class CodinOverviewController {
         if (levelManager.nextLevel()) {
             resetDrawing();
         }
+        commandLine.requestFocus();
     }
 
 //    @FXML
@@ -240,6 +247,7 @@ public class CodinOverviewController {
             levelManager.addMove(1);
             setStepsText();
         }
+        commandLine.requestFocus();
     }
 
     @FXML
@@ -250,6 +258,7 @@ public class CodinOverviewController {
             levelManager.previousMove();
             setStepsText();
         }
+        commandLine.requestFocus();
     }
 
     @FXML

@@ -17,6 +17,14 @@ public class CommandRegistry {
 		this.undoCommandStack = FXCollections.observableArrayList();
 	}
 
+	public boolean isUndoPossible() {
+		return commandStack.size() != 0;
+	}
+
+	public boolean isRedoPossible() {
+		return undoCommandStack.size() != 0;
+	}
+
 	public boolean redo() {
 		if(undoCommandStack.size() != 0) {
 			Command lastCommand = undoCommandStack.get(undoCommandStack.size()-1);
@@ -43,6 +51,10 @@ public class CommandRegistry {
 
 	public ObservableList<Command> getCommandStack() {
 		return commandStack;
+	}
+
+	public ObservableList<Command> getUndoCommandStack() {
+		return undoCommandStack;
 	}
 
 	public void redraw(){
