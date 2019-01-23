@@ -1,0 +1,101 @@
+{
+  "levels": [
+    {
+      "_id": 1,
+      "description": "Draw a line (length: 2)",
+      "moves": [
+        "FORWARD"
+      ],
+      "units": [
+        2
+      ],
+      "repeats": 1,
+      "minNumbersOfMove": 1
+    },
+    {
+      "_id": 2,
+      "description": "Draw a rectangle (width: 2, height: 1)",
+      "moves": [
+        "FORWARD", "LEFT", "FORWARD", "LEFT"
+      ],
+      "units": [
+        2, 90, 1, 90
+      ],
+      "repeats": 2,
+      "minNumbersOfMove": 1
+    },
+    {
+      "_id": 3,
+      "description": "Draw a square (size: 1)",
+      "moves": [
+        "FORWARD", "LEFT"
+      ],
+      "units": [
+        1, 90
+      ],
+      "repeats": 4,
+      "minNumbersOfMove": 1
+    },
+    {
+      "_id": 4,
+      "description": "Draw an equilateral triangle (size: 1)",
+      "moves": [
+        "FORWARD", "LEFT"
+      ],
+      "units": [
+        1, 120
+      ],
+      "repeats": 3,
+      "minNumbersOfMove": 1
+    },
+    {
+      "_id": 5,
+      "description": "Draw an asterisk (size: 1, arms: 5)",
+      "moves": [
+        "FORWARD", "LEFT","FORWARD","LEFT", "RIGHT"
+      ],
+      "units": [
+        1, 180, 1, 180, 72
+      ],
+      "repeats": 5,
+      "minNumbersOfMove": 1
+    },
+    {
+      "_id": 6,
+      "description": "Draw four squares using defined already procedure 'square' (size: 2)\n Hint: use 'repeate' command",
+      "moves": [
+        "FORWARD", "LEFT", "FORWARD", "LEFT", "FORWARD", "LEFT","FORWARD"
+      ],
+      "units": [
+        2, 90, 2, 90, 2, 90, 2
+      ],
+      "repeats": 4,
+      "minNumbersOfMove": 1
+    },
+    {
+      "_id": 7,
+      "description": "Draw a simple house\n triangle - 4x4x4 rectangle 3x4",
+      "moves": [
+        "FORWARD", "LEFT", "FORWARD", "LEFT", "FORWARD", "LEFT", "FORWARD", "LEFT", "FORWARD", "LEFT",
+        "FORWARD","LEFT","FORWARD","LEFT","FORWARD"
+      ],
+      "units": [
+        2, 120, 4, 120, 4, 120, 2, 180, 2, 90, 3, 90, 4, 90, 3
+      ],
+      "repeats": 1,
+      "minNumbersOfMove": 1
+    },
+    {
+      "_id": 8,
+      "description": "Draw a rosette\n Hint: try 'repeat 40 [go 2 left 180 go 2 right 270]'\n Match correct values",
+      "moves": [
+        "FORWARD", "LEFT", "FORWARD","RIGHT"
+      ],
+      "units": [
+        3, 180, 3 ,357
+      ],
+      "repeats": 120,
+      "minNumbersOfMove": 1
+    }
+  ]
+}

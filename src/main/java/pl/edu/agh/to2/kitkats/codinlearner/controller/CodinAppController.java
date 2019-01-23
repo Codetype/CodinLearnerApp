@@ -33,10 +33,12 @@ public class CodinAppController{
             controller.initializeProperties();
             controller.initializeCanvasManager();
             controller.initializeDrawing();
+            controller.initializeCommandLine();
             controller.showLevelInfo();
             // add layout to a scene and show them all
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
             primaryStage.show();
 
         } catch (IOException e) {

@@ -60,7 +60,48 @@ For example:
 ```
 go 2 left
 ``` 
+
+### Loops
 To run loop type:
 ```
 repeat 2 [ go 2 left ]
+```
+
+### Procedures
+There is posibility to write simple procedure:
+```
+begin line :length
+go length
+end
+```
+Execute by:
+```
+line 2
+```
+Or procedures with many arguments:
+```
+begin regular :n :side :angle
+repeat n [go side left angle]
+end
+```
+And then called this procedure by another:
+```
+begin mySquare :side
+regular 4 side 90
+end
+```
+```
+mySquare 2
+```
+```
+begin myTriangle :side
+regular 3 side 120
+end
+```
+```
+myTriangle 1
+```
+You can also call embedded procedures (trinagle, square, pentagon, hexagon), for example:
+```
+pentagon 1
 ```

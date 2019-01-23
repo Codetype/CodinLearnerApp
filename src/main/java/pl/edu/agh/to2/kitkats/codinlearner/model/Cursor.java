@@ -16,6 +16,11 @@ public class Cursor {
     private Vector2D moveVector;
     public final float length;
     public final float width;
+    private double savedX;
+    private double savedY;
+    private Vector2D savedAlongVector;
+    private Vector2D savedAcrossVector;
+    private Vector2D savedMoveVector;
 
     public float getMoveStep() {
         return moveStep;
@@ -144,6 +149,25 @@ public class Cursor {
         setShapePoints();
     }
 
+    public void saveStateAndReset(){
+        this.savedX = this.x;
+        this.savedY = this.y;
+        this.savedAcrossVector = new Vector2D(this.acrossVector.getX(), this.acrossVector.getY());
+        this.savedAlongVector = new Vector2D(this.alongVector.getX(), this.alongVector.getY());
+        this.savedMoveVector = new Vector2D(this.moveVector.getX(), this.moveVector.getY());
+        reset();
+        setShapePoints();
+    }
+
+    public void loadState(){
+        this.x = this.savedX;
+        this.y = this.savedY;
+        this.acrossVector = new Vector2D(this.savedAcrossVector.getX(), this.savedAcrossVector.getY());
+        this.alongVector = new Vector2D(this.savedAlongVector.getX(), this.savedAlongVector.getY());
+        this.moveVector = new Vector2D(this.savedMoveVector.getX(), this.savedMoveVector.getY());
+        setShapePoints();
+    }
+
     private ParameterizedInstruction reverseCommand(ParameterizedInstruction command){
         Instruction newInstruction = command.getInstruction().oppositeInstruction();
         int parameter = command.getParameter();
@@ -174,4 +198,11 @@ public class Cursor {
         this.y = y;
     }
 
+    public Vector2D getAlongVector() {
+        return alongVector;
+    }
+
+    public Vector2D getAcrossVector() {
+        return acrossVector;
+    }
 }

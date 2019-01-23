@@ -1,75 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="pl.edu.agh.to2.kitkats.codinlearner.controller.CodinOverviewController">
+<?import javafx.scene.layout.Region?>
+<BorderPane prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.to2.kitkats.codinlearner.controller.CodinOverviewController">
     <center>
-        <Pane prefHeight="400.0" prefWidth="600.0"
-              style="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
-            <Canvas fx:id="cursorCanvas" height="400.0" width="600.0" style="-fx-border-color:white"/>
-            <Canvas fx:id="lineCanvas" height="400.0" width="600.0"  />
+        <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
+            <Canvas fx:id="cursorCanvas" height="400.0" style="-fx-border-color:white" width="600.0" />
+            <Canvas fx:id="lineCanvas" height="400.0" width="600.0" />
+            <Canvas fx:id="shadowCanvas" height="400.0" width="600.0" />
         </Pane>
     </center>
     <right>
-        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"
-              style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
+        <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0"
+              style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"
+              BorderPane.alignment="CENTER">
             <opaqueInsets>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </opaqueInsets>
-            <children>
-                <TextArea fx:id="levelInfo" editable="false" wrapText="true"/>
-                <Button fx:id="checkButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
-                mnemonicParsing="false" onAction="#handleCheckAction" text="Check">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin>
-                </Button>
-
-
-                <!--TODO level manager-->
-            </children>
             <BorderPane.margin>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </BorderPane.margin>
+            <TextArea fx:id="levelInfo" editable="false" wrapText="true"/>
+            <Button fx:id="execButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#handleExecuteAction" text="Execute">
+                <VBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </VBox.margin>
+            </Button>
+            <Button fx:id="checkButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#handleCheckAction" text="Check">
+                <VBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </VBox.margin>
+            </Button>
+            <Region VBox.vgrow="ALWAYS"/>
+            <Text fx:id="stepsText">
+                <VBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </VBox.margin>
+            </Text>
+
+            <!--TODO level manager-->
         </VBox>
     </right>
     <bottom>
-        <VBox prefHeight="200.0" prefWidth="800.0" BorderPane.alignment="CENTER"
-                    style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
-            <children>
-                <ScrollPane  fx:id="scrollPane" fitToWidth="true" prefHeight="170">
-                    <content>
-                        <Label id="PrevCommands" fx:id="prevCommands" prefWidth="800.0"
-                               style="-fx-background-color: grey;" alignment="BOTTOM_LEFT"/>
-                    </content>
-                </ScrollPane>
-                <TextField id="CommandLine" fx:id="commandLine"  />
-                <HBox fx:id="hbox" maxHeight="-Infinity" prefHeight="39.0" prefWidth="800.0"
-                      BorderPane.alignment="TOP_LEFT">
-                    <Button fx:id="undoButton" mnemonicParsing="false" onAction="#handleUndoAction" text="Undo">
-                        <HBox.margin>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                        </HBox.margin>
-                    </Button>
-                    <Button fx:id="redoButton" mnemonicParsing="false" onAction="#handleRedoAction" text="Redo">
-                        <HBox.margin>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                        </HBox.margin>
-                    </Button>
-                    <Pane HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="addLevelsButton" mnemonicParsing="false" onAction="#handleAddLevelsAction"
-                            text="Add Levels">
-                        <HBox.margin>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                        </HBox.margin>
-                    </Button>
-                </HBox>
-            </children>
+        <VBox prefHeight="300.0" prefWidth="800.0"
+              style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"
+              BorderPane.alignment="CENTER">
+            <ScrollPane fx:id="scrollPane" fitToWidth="true" prefHeight="130">
+                <Label id="PrevCommands" fx:id="prevCommands" alignment="BOTTOM_LEFT" prefWidth="800.0"
+                       style="-fx-background-color: grey;"/>
+            </ScrollPane>
+            <TextArea id="CommandLine" fx:id="commandLine" prefHeight="130"/>
+            <HBox fx:id="infoBox" alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="12" prefWidth="800.0">
+                <Text fx:id="infoText" style="-fx-fill: #c00000;">
+                    <HBox.margin>
+                        <Insets left="5.0" right="5.0"/>
+                    </HBox.margin>
+                </Text>
+            </HBox>
+            <HBox fx:id="hbox" maxHeight="-Infinity" prefHeight="39.0" prefWidth="800.0"
+                  BorderPane.alignment="TOP_LEFT">
+                <Button fx:id="undoButton" mnemonicParsing="false" onAction="#handleUndoAction" text="Undo">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </HBox.margin>
+                </Button>
+                <Button fx:id="redoButton" mnemonicParsing="false" onAction="#handleRedoAction" text="Redo">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </HBox.margin>
+                </Button>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button fx:id="prevLevelButton" mnemonicParsing="false" onAction="#handlePrevLevelAction"
+                        text="Previous Level">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </HBox.margin>
+                </Button>
+                <Button fx:id="nextLevelButton" mnemonicParsing="false" onAction="#handleNextLevelAction"
+                        text="Next Level">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </HBox.margin>
+                </Button>
+                <!--<Button fx:id="addLevelsButton" mnemonicParsing="false" onAction="#handleAddLevelsAction" text="Add Levels">-->
+                <!--<HBox.margin>-->
+                <!--<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />-->
+                <!--</HBox.margin>-->
+                <!--</Button>-->
+            </HBox>
         </VBox>
     </bottom>
 </BorderPane>
